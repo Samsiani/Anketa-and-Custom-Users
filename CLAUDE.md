@@ -316,3 +316,13 @@ If a release is broken:
 - [ ] Assets only enqueued on relevant pages (not globally)
 - [ ] `ACU_Migration::run()` is idempotent (safe to call multiple times)
 - [ ] Rewrite rules flushed on activation and deactivation
+
+---
+
+## Changelog
+
+### v1.0.1 — 2026-02-20
+
+- **Optional email in Anketa form:** Email field is no longer required. Label updated to indicate it is optional (needed only for site registration). A dummy `@no-email.local` address is used when no email is provided so `wp_insert_user()` always receives a valid address. The dummy address is hidden on the print-anketa page.
+- **Moved signature line:** The "User Signature" row has been removed from `signature-terms.php` and moved to the very bottom of `print-anketa.php` (after the Shop row), so it appears at the end of the printed form.
+- **Conditional admin email notifications:** `maybe_send_consent_notification()` now fires only when SMS consent is `'yes'`; a `'no'` selection no longer triggers an admin email.

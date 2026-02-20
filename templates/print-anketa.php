@@ -108,7 +108,7 @@ $call_terms_link = esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type'
 
 	<div class="row">
 		<div class="label">E-mail</div>
-		<div class="value value-line"><?php echo esc_html( $email ); ?></div>
+		<div class="value value-line"><?php echo str_ends_with( $email, '@no-email.local' ) ? '' : esc_html( $email ); ?></div>
 	</div>
 
 	<div class="rules">
@@ -150,11 +150,6 @@ $call_terms_link = esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type'
 		</div>
 	</div>
 
-	<div class="row signature-row no-break">
-		<div class="label">მომხმარებლის ხელმოწერა</div>
-		<div class="value value-line"></div>
-	</div>
-
 	<div class="row">
 		<div class="label">პასუხისმგებელი პირი</div>
 		<div class="value value-line"><?php echo esc_html( $responsible ); ?></div>
@@ -168,6 +163,11 @@ $call_terms_link = esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type'
 	<div class="row">
 		<div class="label">მაღაზია</div>
 		<div class="value value-line"><?php echo esc_html( $shop ); ?></div>
+	</div>
+
+	<div class="row signature-row no-break">
+		<div class="label">მომხმარებლის ხელმოწერა</div>
+		<div class="value value-line"></div>
 	</div>
 </div>
 </body>

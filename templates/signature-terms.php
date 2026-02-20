@@ -100,10 +100,6 @@ if ( trim( $terms_html_raw ) !== '' ) {
 		</div>
 	<?php endif; ?>
 
-	<div class="row signature-row no-break" style="margin-top:12mm;">
-		<div class="label"><?php echo esc_html__( 'მომხმარებლის ხელმოწერა', 'acu' ); ?></div>
-		<div class="value value-line"></div>
-	</div>
 </div>
 </body>
 </html>

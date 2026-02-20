@@ -145,10 +145,13 @@ class ACU_Registration {
 		$phone_verified = ACU_OTP::is_phone_verified( $local_digits, $otp_token );
 
 		// Create user
-		$password = wp_generate_password( 18, true, true );
+		$password     = wp_generate_password( 18, true, true );
+		$insert_email = $data['anketa_email'] !== ''
+			? $data['anketa_email']
+			: $local_digits . '@no-email.local';
 		$user_id  = wp_insert_user( [
 			'user_login'   => $local_digits,
-			'user_email'   => $data['anketa_email'],
+			'user_email'   => $insert_email,
 			'user_pass'    => $password,
 			'first_name'   => $data['anketa_first_name'],
 			'last_name'    => $data['anketa_last_name'],
@@ -287,8 +290,8 @@ class ACU_Registration {
 				</div>
 
 				<div class="row">
-					<label class="label" for="anketa_email">E-mail *</label>
-					<div class="field"><input type="email" id="anketa_email" name="anketa_email" required value="<?php echo $v( 'anketa_email' ); ?>" /></div>
+					<label class="label" for="anketa_email">E-mail <span class="optional-note">(ოფციური, თუ საიტზე გსურთ რეგისტრაცია)</span></label>
+					<div class="field"><input type="email" id="anketa_email" name="anketa_email" value="<?php echo $v( 'anketa_email' ); ?>" /></div>
 				</div>
 
 				<div class="rules-wrap">
@@ -380,7 +383,6 @@ class ACU_Registration {
 			'anketa_last_name'   => __( 'Last name is required.', 'acu' ),
 			'anketa_dob'         => __( 'Date of birth is required.', 'acu' ),
 			'anketa_phone_local' => __( 'Phone number is required.', 'acu' ),
-			'anketa_email'       => __( 'Email is required.', 'acu' ),
 		];
 
 		foreach ( $required as $key => $message ) {

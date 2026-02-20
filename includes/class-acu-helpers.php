@@ -234,7 +234,7 @@ class ACU_Helpers {
 		}
 
 		$new_val = strtolower( $new_val );
-		if ( ! in_array( $new_val, [ 'yes', 'no' ], true ) ) {
+		if ( $new_val !== 'yes' ) {
 			return;
 		}
 
