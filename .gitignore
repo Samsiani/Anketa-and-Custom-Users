@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Composer
+vendor/
+composer.lock
+
+# Node
+node_modules/
+npm-debug.log*
+
+# WordPress build artifacts
+*.zip
+*.tar.gz
+
+# Environment / secrets
+.env
+.env.*
+
+# Log files
+*.log

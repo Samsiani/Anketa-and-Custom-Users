@@ -1,0 +1,58 @@
+/* ACU User Data Check shortcode styles */
+
+/* Container */
+.wcu-udc { max-width: 1140px; margin: 32px auto; font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; color: #111827; }
+.wcu-udc__label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; color: #111827; }
+.wcu-udc__input-group { display: flex; align-items: stretch; gap: 12px; background: #f8fafc; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 8px; }
+.wcu-udc__input { flex: 1 1 auto; border: 1px solid #d1d5db; background: #eef5ff; border-radius: 4px; padding: 10px 12px; font-size: 14px; outline: none; }
+.wcu-udc__input:focus { border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37,99,235,.25); }
+.wcu-udc__btn { background: #f1f5f9; border: 1px solid #d1d5db; border-radius: 8px; padding: 0 18px; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; align-items: center; }
+.wcu-udc__btn:hover { background: #e2e8f0; }
+.wcu-udc__notice--error { margin-top: 14px; padding: 12px 14px; border: 1px solid #fecaca; background: #fee2e2; color: #991b1b; border-radius: 10px; font-size: 13px; }
+.wcu-udc__loading { display: flex; align-items: center; gap: 10px; margin-top: 14px; font-size: 14px; }
+.wcu-spinner { width: 20px; height: 20px; border: 3px solid #cbd5e1; border-top-color: #2563eb; border-radius: 50%; animation: wcu-spin 0.8s linear infinite; }
+@keyframes wcu-spin { to { transform: rotate(360deg); } }
+
+/* Results layout */
+.wcu-udc__results { margin-top: 18px; }
+.wcu-udc-results-layout { display: flex; gap: 24px; flex-wrap: wrap; }
+.wcu-udc-panel { flex: 1 1 480px; background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; box-shadow: 0 1px 2px rgba(16,24,40,.06),0 4px 12px -2px rgba(16,24,40,.04); overflow: hidden; position: relative; }
+.wcu-udc-panel--details { background: linear-gradient(#f5f9ff,#f5f9ff) padding-box,#f5f9ff; border: 1px solid #e0e7ef; }
+.wcu-udc-panel__header { padding: 12px 18px; border-bottom: 1px solid #eceff3; background: #f1f5fa; }
+.wcu-udc-panel__header h3 { margin: 0; font-size: 15px; font-weight: 600; }
+.wcu-udc-panel__body { padding: 16px 20px; font-size: 14px; }
+.wcu-detail-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.wcu-detail-list li { display: flex; flex-wrap: wrap; gap: 6px; line-height: 1.4; }
+.wcu-dl-label { min-width: 170px; font-weight: 600; color: #475569; font-size: 13px; }
+.wcu-dl-value { font-weight: 500; color: #1f2937; }
+
+/* Badge states */
+.wcu-badge { display: inline-block; padding: 4px 10px; font-size: 12px; font-weight: 600; border-radius: 999px; line-height: 1; white-space: nowrap; }
+.wcu-badge--yes { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+.wcu-badge--no { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+.wcu-badge--unset { background: #eceff3; color: #374151; border: 1px solid #d1d5db; }
+.wcu-badge--warning { background: #fff3cd; color: #856404; border: 1px solid #ffc107; }
+
+/* Status Panel */
+.wcu-udc-panel--status { background: #fff; }
+.wcu-udc-status-body { display: flex; flex-direction: column; gap: 28px; }
+.wcu-status-section h4 { margin: 0 0 10px; font-size: 14px; font-weight: 600; color: #111827; }
+.wcu-chip-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.wcu-chip { display: inline-flex; align-items: center; line-height: 1; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 999px; border: 1px solid transparent; }
+.wcu-chip--filled { background: #e0f2fe; border-color: #bae6fd; color: #075985; }
+.wcu-chip--missing { background: #fef9c3; border-color: #fde68a; color: #92400e; }
+.wcu-empty-note { font-size: 12px; color: #64748b; font-style: italic; }
+
+/* Responsive */
+@media (max-width: 860px) {
+  .wcu-udc-results-layout { flex-direction: column; }
+}
+
+/* Accessibility focus */
+.wcu-chip:focus-visible,
+.wcu-udc__btn:focus-visible,
+.wcu-udc__input:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+
+/* Smooth fade-in for panels */
+.wcu-udc-panel { animation: wcu-fade .25s ease; }
+@keyframes wcu-fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
