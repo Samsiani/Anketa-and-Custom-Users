@@ -306,8 +306,6 @@ Push a new patch release with the fix. Do not delete and re-push tags.
   `'თქვენი ვერიფიკაციის კოდია: %s'` with the plain ASCII `'SMS Code: XXXXXX'`
   in `ACU_OTP::send_otp()`. Eliminates all multi-byte encoding risk at the
   gateway level; message is now unambiguously readable on any handset.
-- **Test script updated:** `test-sms.php` now sends `SMS Code: XXXXXX` (random
-  6-digit code) to mirror the real OTP format exactly.
 
 ### v1.0.9 — 2026-02-20
 
@@ -316,15 +314,14 @@ Push a new patch release with the fix. Do not delete and re-push tags.
   `??????` on the handset. Removed `text` from the `add_query_arg()` array and appended it
   manually: `$api_url .= '&text=' . rawurlencode($message)`. RFC 3986 `rawurlencode()`
   encodes spaces as `%20` and Georgian multi-byte sequences as `%E1%83...`, which the
-  gateway handles correctly. Updated `test-sms.php` with the same logic and an explicit
-  encoded-text echo so the encoding can be verified on each test run.
+  gateway handles correctly.
 
 ### v1.0.8 — 2026-02-20
 
 - **Fix: SMS gateway success detection:** The MS Group gateway returns `code: 0` (JSON
   integer) on success, not the string `"0000"`. Updated `ACU_SMS::send()` to treat both
   `'0'` and `'0000'` as success — `(string)$data['code'] === '0' || === '0000'`. OTP
-  codes are now delivered correctly end-to-end. Updated `test-sms.php` with the same logic.
+  codes are now delivered correctly end-to-end.
 
 ### v1.0.7 — 2026-02-20
 
