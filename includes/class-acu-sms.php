@@ -33,18 +33,24 @@ class ACU_SMS {
 
 		$phone_api = self::format_for_api( $phone_9_digits );
 
-		// NOTE: do NOT rawurlencode() $message here — add_query_arg() URL-encodes
-		// values itself. Pre-encoding causes double-encoding (%20 → %2520) which
-		// corrupts the message text sent to the gateway.
+		// Build the base URL without `text`. add_query_arg() uses urlencode()
+		// (RFC 1738: spaces → '+'), but the MS Group gateway requires RFC 3986
+		// encoding (spaces → '%20') for multi-byte UTF-8 Georgian characters.
+		// Appending with rawurlencode() manually guarantees exactly one encoding
+		// pass and the correct percent-encoded form.
 		$api_url = add_query_arg( [
 			'username'   => $creds['username'],
 			'password'   => $creds['password'],
 			'client_id'  => $creds['client_id'],
 			'service_id' => $creds['service_id'],
 			'to'         => $phone_api,
-			'text'       => $message,
 			'result'     => 'json',
 		], self::GATEWAY_URL );
+
+		$encoded_text = rawurlencode( $message );
+		$api_url     .= '&text=' . $encoded_text;
+
+		error_log( sprintf( '[ACU_SMS] Sending to %s | text (encoded): %s', $phone_api, $encoded_text ) );
 
 		$response = wp_remote_get( $api_url, [ 'timeout' => 30 ] );
 

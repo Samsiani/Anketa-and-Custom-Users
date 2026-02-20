@@ -276,6 +276,16 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.0.9 — 2026-02-20
+
+- **Fix: Georgian SMS text encoding (question marks):** `add_query_arg()` uses RFC 1738
+  `urlencode()` (spaces → `+`) which the MS Group gateway cannot decode as UTF-8, producing
+  `??????` on the handset. Removed `text` from the `add_query_arg()` array and appended it
+  manually: `$api_url .= '&text=' . rawurlencode($message)`. RFC 3986 `rawurlencode()`
+  encodes spaces as `%20` and Georgian multi-byte sequences as `%E1%83...`, which the
+  gateway handles correctly. Updated `test-sms.php` with the same logic and an explicit
+  encoded-text echo so the encoding can be verified on each test run.
+
 ### v1.0.8 — 2026-02-20
 
 - **Fix: SMS gateway success detection:** The MS Group gateway returns `code: 0` (JSON

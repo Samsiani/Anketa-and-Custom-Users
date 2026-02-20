@@ -100,21 +100,27 @@ $gateway  = 'http://bi.msg.ge/sendsms.php';
 $phone_api = '995' . $phone_digits;
 $message  = 'TEST: ACU SMS check - ' . gmdate( 'H:i:s' );
 
+// `text` is excluded from add_query_arg() and appended manually with
+// rawurlencode() so Georgian UTF-8 characters use RFC 3986 (%20 for spaces)
+// instead of RFC 1738 (+), which the MS Group gateway requires.
 $api_url = add_query_arg( [
 	'username'   => $creds['username'],
 	'password'   => $creds['password'],
 	'client_id'  => $creds['client_id'],
 	'service_id' => $creds['service_id'],
 	'to'         => $phone_api,
-	'text'       => $message,   // NOT rawurlencode() — add_query_arg handles encoding
 	'result'     => 'json',
 ], $gateway );
+
+$encoded_text = rawurlencode( $message );
+$api_url     .= '&text=' . $encoded_text;
 
 echo "--- Request ---\n";
 // Print URL with password masked
 $masked_url = preg_replace( '/password=[^&]+/', 'password=****', $api_url );
-echo "  URL  : {$masked_url}\n";
-echo "  text : {$message}\n\n";
+echo "  URL             : {$masked_url}\n";
+echo "  text (raw)      : {$message}\n";
+echo "  text (encoded)  : {$encoded_text}\n\n";
 
 // ── Send ──────────────────────────────────────────────────────────────────────
 
