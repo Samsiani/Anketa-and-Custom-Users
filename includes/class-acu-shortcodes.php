@@ -258,26 +258,28 @@ class ACU_Shortcodes {
 			: '';
 
 		$data = [
-			'email'      => $user->user_email,
-			'phone'      => ACU_Helpers::get_user_phone( $user_id ),
-			'personal'   => (string) get_user_meta( $user_id, '_acu_personal_id', true ),
-			'club_card'  => (string) get_user_meta( $user_id, '_acu_club_card_coupon', true ),
-			'sms_consent'=> ACU_Helpers::get_sms_consent( $user_id ),
+			'email'        => $user->user_email,
+			'phone'        => ACU_Helpers::get_user_phone( $user_id ),
+			'personal'     => (string) get_user_meta( $user_id, '_acu_personal_id', true ),
+			'club_card'    => (string) get_user_meta( $user_id, '_acu_club_card_coupon', true ),
+			'sms_consent'  => ACU_Helpers::get_sms_consent( $user_id ),
+			'call_consent' => ACU_Helpers::get_call_consent( $user_id ),
 		];
 
 		$labels = [
-			'email'      => 'ელ.ფოსტა',
-			'phone'      => 'ტელეფონის ნომერი',
-			'personal'   => 'პირადი ნომერი',
-			'club_card'  => 'კლუბის ბარათი',
-			'sms_consent'=> 'SMS თანხმობა',
+			'email'        => 'ელ.ფოსტა',
+			'phone'        => 'ტელეფონის ნომერი',
+			'personal'     => 'პირადი ნომერი',
+			'club_card'    => 'კლუბის ბარათი',
+			'sms_consent'  => 'SMS შეტყობინებების მიღების თანხმობა',
+			'call_consent' => 'თანხმობა სატელეფონო ზარზე',
 		];
 
 		$filled  = [];
 		$missing = [];
 
 		foreach ( $data as $key => $value ) {
-			if ( $key === 'sms_consent' ) {
+			if ( $key === 'sms_consent' || $key === 'call_consent' ) {
 				if ( $value === 'yes' || $value === 'no' ) {
 					$filled[] = $labels[ $key ];
 				} else {
@@ -298,6 +300,14 @@ class ACU_Shortcodes {
 			$sms_display = '<span class="wcu-badge wcu-badge--no">' . esc_html__( 'არ ვეთანხმები', 'acu' ) . '</span>';
 		} else {
 			$sms_display = '<span class="wcu-badge wcu-badge--unset">' . esc_html__( 'არ არის არჩეული', 'acu' ) . '</span>';
+		}
+
+		if ( $data['call_consent'] === 'yes' ) {
+			$call_display = '<span class="wcu-badge wcu-badge--yes">' . esc_html__( 'ვეთანხმები', 'acu' ) . '</span>';
+		} elseif ( $data['call_consent'] === 'no' ) {
+			$call_display = '<span class="wcu-badge wcu-badge--no">' . esc_html__( 'არ ვეთანხმები', 'acu' ) . '</span>';
+		} else {
+			$call_display = '<span class="wcu-badge wcu-badge--unset">' . esc_html__( 'არ არის არჩეული', 'acu' ) . '</span>';
 		}
 
 		ob_start();
@@ -334,6 +344,10 @@ class ACU_Shortcodes {
 						<li>
 							<span class="wcu-dl-label"><?php echo esc_html( $labels['sms_consent'] ); ?>:</span>
 							<span class="wcu-dl-value"><?php echo $sms_display; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+						</li>
+						<li>
+							<span class="wcu-dl-label"><?php echo esc_html( $labels['call_consent'] ); ?>:</span>
+							<span class="wcu-dl-value"><?php echo $call_display; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 						</li>
 					</ul>
 				</div>

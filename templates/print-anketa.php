@@ -29,7 +29,9 @@ $email       = $user->user_email;
 $card_no     = $meta( '_acu_card_no' );
 $responsible = $meta( '_acu_responsible_person' );
 $form_date   = $meta( '_acu_form_date' );
-$shop        = $meta( '_acu_shop' );
+$shop         = $meta( '_acu_shop' );
+$sms_consent  = $meta( '_sms_consent' );
+$call_consent = $meta( '_call_consent' );
 
 // Format phone: prefer "+995 9digits"
 $format_phone = function ( string $raw ): string {
@@ -68,7 +70,7 @@ $call_terms_link = esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type'
 <link rel="stylesheet" href="<?php echo esc_url( ACU_URL . 'assets/css/print.css?v=' . urlencode( ACU_VERSION ) ); ?>" media="all" />
 </head>
 <body>
-<div class="print-actions">
+<div class="print-actions" style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem;">
 	<button onclick="window.print()"><?php echo esc_html__( 'Print Anketa', 'acu' ); ?></button>
 	<a class="button button-secondary print-terms-btn" href="<?php echo $sms_terms_link; ?>"><?php echo esc_html__( 'Print SMS Terms', 'acu' ); ?></a>
 	<a class="button button-secondary print-terms-btn" href="<?php echo $call_terms_link; ?>"><?php echo esc_html__( 'Print Phone Call Terms', 'acu' ); ?></a>
@@ -180,6 +182,20 @@ $call_terms_link = esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type'
 	<div class="row">
 		<div class="label">მაღაზია</div>
 		<div class="value value-line"><?php echo esc_html( $shop ); ?></div>
+	</div>
+	<?php endif; ?>
+
+	<?php if ( $sms_consent !== '' ) : ?>
+	<div class="row">
+		<div class="label">SMS შეტყობინებების მიღების თანხმობა</div>
+		<div class="value value-line"><?php echo esc_html( $sms_consent === 'yes' ? 'დიახ' : 'არა' ); ?></div>
+	</div>
+	<?php endif; ?>
+
+	<?php if ( $call_consent !== '' ) : ?>
+	<div class="row">
+		<div class="label">თანხმობა სატელეფონო ზარზე</div>
+		<div class="value value-line"><?php echo esc_html( $call_consent === 'yes' ? 'დიახ' : 'არა' ); ?></div>
 	</div>
 	<?php endif; ?>
 

@@ -276,6 +276,18 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.1.2 — 2026-02-20
+
+- **Call consent row in search results:** `render_result_html()` now displays a
+  "თანხმობა სატელეფონო ზარზე" row with a `wcu-badge` (ვეთანხმები / არ ვეთანხმები /
+  არ არის არჩეული) immediately below the SMS consent row.
+- **Consent rows in print-anketa:** `templates/print-anketa.php` now reads `_sms_consent`
+  and `_call_consent` user meta and renders them as labeled rows (showing "დიახ" / "არა")
+  just above the signature line, but only when the value is set.
+- **Button spacing in print-anketa:** `<div class="print-actions">` now has
+  `style="display:flex;gap:0.75rem;flex-wrap:wrap;"` so the three print buttons are
+  evenly spaced and wrap cleanly on narrow screens.
+
 ### v1.1.1 — 2026-02-20
 
 - **Coupon-based search in `[user_data_check]`:** Two new search steps added to
