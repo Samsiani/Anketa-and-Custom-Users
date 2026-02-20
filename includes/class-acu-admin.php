@@ -7,7 +7,7 @@
  * - CSV import: external phone whitelist
  * - CSV export: users with phone + consent data
  * - Download import example CSV
- * - AJAX: acu_bulk_link — link club card coupons to all users (50/batch)
+ * - AJAX: acu_bulk_link — link club card coupons to all users (100/batch)
  * - AJAX: acu_test_email — send test email
  * - Settings page tools rendered via acu_settings_page_tools action
  */
@@ -180,7 +180,7 @@ class ACU_Admin {
 
 		<hr/>
 		<h2><?php esc_html_e( 'Link Club Cards to All Users', 'acu' ); ?></h2>
-		<p><?php esc_html_e( 'Scan all users and link Club Card coupons from ERP Sync by matching phone numbers. Processes 50 users per batch.', 'acu' ); ?></p>
+		<p><?php esc_html_e( 'Scan all users and link Club Card coupons from ERP Sync by matching phone numbers. Processes 100 users per batch.', 'acu' ); ?></p>
 		<p>
 			<button type="button" class="button button-primary" id="acu-bulk-link-btn"><?php esc_html_e( 'Link Club Cards to All Users', 'acu' ); ?></button>
 		</p>
@@ -442,7 +442,7 @@ class ACU_Admin {
 		}
 
 		$offset   = isset( $_POST['offset'] ) ? absint( $_POST['offset'] ) : 0;
-		$per_page = 50;
+		$per_page = 100;
 
 		$query    = new WP_User_Query( [
 			'number'  => $per_page,

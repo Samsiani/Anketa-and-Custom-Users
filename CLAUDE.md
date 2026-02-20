@@ -276,6 +276,20 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.1.3 — 2026-02-20
+
+- **Print buttons in search results card:** `render_result_html()` now shows a flex
+  action bar with "Print Anketa", "Print SMS Terms", "Print Phone Call Terms", and
+  "Edit Anketa" (cap-gated) buttons directly in the result card header. Links point to
+  `/print-anketa/?user_id=ID` and `/signature-terms/?user_id=ID&terms_type=sms|call`.
+- **SMS consent on unregistered coupon cards:** `render_coupon_result_html()` now
+  displays an "SMS თანხმობა: კი" badge row, making it explicit that the phone is on
+  the consent whitelist even though the user is not registered.
+- **External phone badge updated:** Badge text changed from "თანხმობა" → "კი" to be
+  consistent with the coupon card wording.
+- **Batch limit 50 → 100:** `ACU_Admin::ajax_bulk_link()` now processes 100 users per
+  AJAX batch instead of 50, halving the number of requests needed for a full sync.
+
 ### v1.1.2 — 2026-02-20
 
 - **Call consent row in search results:** `render_result_html()` now displays a
