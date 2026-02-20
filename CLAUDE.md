@@ -28,7 +28,7 @@
 | `includes/class-acu-auth.php` | `ACU_Auth` | Phone-number WooCommerce login (`authenticate` filter) |
 | `includes/class-acu-settings.php` | `ACU_Settings` | Unified admin settings page (Settings → Club Member Settings) |
 | `includes/class-acu-registration.php` | `ACU_Registration` | `[club_anketa_form]` shortcode + form POST processor |
-| `includes/class-acu-account.php` | `ACU_Account` | My Account hooks, WC template override, consent/phone save |
+| `includes/class-acu-account.php` | `ACU_Account` | My Account hooks, WC template override, consent/phone save, club card dashboard panel (`woocommerce_account_dashboard`) |
 | `includes/class-acu-checkout.php` | `ACU_Checkout` | Checkout consent render, OTP validation, coupon auto-apply |
 | `includes/class-acu-print.php` | `ACU_Print` | Rewrite rules + template loader for print pages |
 | `includes/class-acu-shortcodes.php` | `ACU_Shortcodes` | `[user_data_check]`, `[acm_print_terms_button]`, `[wcu_print_terms_button]` |
