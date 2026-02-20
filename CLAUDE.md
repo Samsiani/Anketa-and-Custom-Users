@@ -267,7 +267,25 @@ git push origin main
 git push origin vX.Y.Z
 ```
 
-#### Step 4 — Create a GitHub Release
+#### Step 4 — Create the GitHub Release via CLI (MANDATORY)
+
+After pushing the tag, the agent MUST automatically create the GitHub Release using the
+`gh` CLI. Never leave a pushed tag without a corresponding release.
+
+```bash
+gh release create <tag> \
+  --title "<tag> - <Short Summary>" \
+  --notes "- Change 1\n- Change 2\n- Change 3"
+```
+
+Example:
+```bash
+gh release create v1.0.2 \
+  --title "v1.0.2 - CSV Export & Print Fixes" \
+  --notes "- CSV export now only includes users with SMS or Call consent set to Yes.\n- Phone numbers normalized to 9 digits using ACU_Helpers::normalize_phone().\n- Print Anketa shows exact static rules text matching the registration form."
+```
+
+#### Step 5 — Create a GitHub Release (web UI)
 
 1. Go to `https://github.com/Samsiani/Anketa-and-Custom-Users/releases/new`
 2. Select the tag `vX.Y.Z` you just pushed
@@ -277,7 +295,7 @@ git push origin vX.Y.Z
 
 WordPress sites will detect the update within 12 hours (or immediately if an admin visits the Plugins page and WordPress forces a recheck).
 
-#### Step 5 — Verify the update is detected
+#### Step 6 — Verify the update is detected
 
 On any WordPress site with the plugin installed:
 
@@ -320,6 +338,13 @@ If a release is broken:
 ---
 
 ## Changelog
+
+### v1.0.2 — 2026-02-20
+
+- **CSV export consent filter:** Only users with SMS consent OR call consent set to 'yes' are included.
+- **CSV export phone normalization:** Phone column outputs strict 9-digit format via `ACU_Helpers::normalize_phone()`.
+- **Static rules in print anketa:** `templates/print-anketa.php` now always outputs the exact hardcoded rules text matching the registration form.
+- **CLAUDE.md:** Documented mandatory `gh release create` step in the Release & Update Workflow.
 
 ### v1.0.1 — 2026-02-20
 

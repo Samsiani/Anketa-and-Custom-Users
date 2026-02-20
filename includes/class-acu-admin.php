@@ -376,14 +376,25 @@ class ACU_Admin {
 				if ( ! $user ) {
 					continue;
 				}
+
+				$sms_consent  = ACU_Helpers::get_sms_consent( (int) $uid );
+				$call_consent = ACU_Helpers::get_call_consent( (int) $uid );
+
+				if ( $sms_consent !== 'yes' && $call_consent !== 'yes' ) {
+					continue;
+				}
+
+				$raw_phone = ACU_Helpers::get_user_phone( (int) $uid );
+				$phone_9   = ACU_Helpers::normalize_phone( $raw_phone );
+
 				fputcsv( $out, [
 					$uid,
 					$user->user_email,
 					$user->first_name,
 					$user->last_name,
-					ACU_Helpers::get_user_phone( (int) $uid ),
-					ACU_Helpers::get_sms_consent( (int) $uid ),
-					ACU_Helpers::get_call_consent( (int) $uid ),
+					$phone_9,
+					$sms_consent,
+					$call_consent,
 				] );
 			}
 			$paged++;
