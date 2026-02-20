@@ -276,6 +276,13 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.1.4 — 2026-02-20
+
+- **Edit Anketa button on print page:** `templates/print-anketa.php` now renders an
+  "Edit Anketa" button in the print-actions bar alongside the Print and Terms buttons.
+  The button auto-discovers the `[club_anketa_form]` page via a `$wpdb` query and links
+  to `?edit_user=USER_ID`. Hidden when no anketa page is found.
+
 ### v1.1.3 — 2026-02-20
 
 - **Print buttons in search results card:** `render_result_html()` now shows a flex

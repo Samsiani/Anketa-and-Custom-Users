@@ -61,6 +61,19 @@ $email_display = str_ends_with( $email, '@no-email.local' ) ? '' : $email;
 
 $sms_terms_link  = esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type' => 'sms' ],  home_url( '/signature-terms/' ) ) );
 $call_terms_link = esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type' => 'call' ], home_url( '/signature-terms/' ) ) );
+
+// Edit Anketa URL: find the page hosting [club_anketa_form].
+global $wpdb;
+$anketa_page_id = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+	"SELECT ID FROM {$wpdb->posts}
+	 WHERE post_content LIKE '%club_anketa_form%'
+	   AND post_type = 'page'
+	   AND post_status = 'publish'
+	 LIMIT 1"
+);
+$edit_anketa_url = $anketa_page_id
+	? esc_url( add_query_arg( 'edit_user', $user_id, get_permalink( (int) $anketa_page_id ) ) )
+	: '';
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
 <head>
@@ -74,6 +87,9 @@ $call_terms_link = esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type'
 	<button onclick="window.print()"><?php echo esc_html__( 'Print Anketa', 'acu' ); ?></button>
 	<a class="button button-secondary print-terms-btn" href="<?php echo $sms_terms_link; ?>"><?php echo esc_html__( 'Print SMS Terms', 'acu' ); ?></a>
 	<a class="button button-secondary print-terms-btn" href="<?php echo $call_terms_link; ?>"><?php echo esc_html__( 'Print Phone Call Terms', 'acu' ); ?></a>
+	<?php if ( $edit_anketa_url !== '' ) : ?>
+	<a class="button button-secondary print-terms-btn" href="<?php echo $edit_anketa_url; ?>"><?php echo esc_html__( 'Edit Anketa', 'acu' ); ?></a>
+	<?php endif; ?>
 </div>
 
 <div class="page">
