@@ -67,6 +67,14 @@ class ACU_SMS {
 
 		error_log( sprintf( '[ACU_SMS] Gateway response (HTTP %d) for %s: %s', $http_code, $phone_api, $body ) );
 
+		if ( strlen( $body ) > 10000 ) {
+			error_log( sprintf( '[ACU_SMS] Response body too large (%d bytes) for %s — ignoring', strlen( $body ), $phone_api ) );
+			return [
+				'success' => false,
+				'error'   => __( 'Unexpected API response.', 'acu' ),
+			];
+		}
+
 		$data = json_decode( $body, true );
 
 		if ( isset( $data['code'] ) ) {

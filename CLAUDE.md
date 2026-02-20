@@ -93,7 +93,7 @@
 | `acu_otp_{phone9}` | 300s | OTP code |
 | `acu_rate_{md5(phone9+ip)}` | 600s | OTP send rate limit counter |
 | `acu_vrate_{md5(phone9)}` | 300s | OTP verify rate limit counter (max 5 attempts) |
-| `acu_vtoken_{phone9}` | 300s | Verification token |
+| `acu_vtoken_{phone9}` | 1200s | Verification token |
 | `acu_udc_rate_{md5(ip)}` | 60s | UDC search rate limit |
 | `acu_anketa_page_id` | 3600s | Cached ID of page containing `[club_anketa_form]` |
 
@@ -277,6 +277,15 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 ---
 
 ## Changelog
+
+### v1.2.1 — 2026-02-20
+
+**Low-severity polish** — addresses all 4 Low findings from the v1.2.0 audit.
+
+- **[L1] UX: OTP verification token TTL extended 300s → 1200s.** Users who take longer than 5 minutes to fill the form no longer need to re-verify their phone. The send rate-limit window (600s) and OTP code TTL (300s) are unchanged.
+- **[L2] Fix: Replace `innerHTML` with `textContent` for error messages in `shortcode.js`.** Error/status strings injected into `#wcu-udc-error` now use `textContent` to prevent any possibility of HTML injection. The result card HTML (server-rendered, already escaped by PHP) continues to use `innerHTML`.
+- **[L3] Fix: SMS gateway response max-length guard.** `ACU_SMS::send()` now rejects response bodies larger than 10,000 bytes before attempting `json_decode()`, preventing a performance spike on malformed or unexpectedly large gateway responses.
+- **[L4] Fix: Removed `style` attributes from `ACU_Helpers::sanitize_html()` allowlist.** Inline styles can enable CSS-based data exfiltration. T&C content stored via the WP editor should use classes, not inline styles. All 34 allowed elements now permit only `class` and `id` (plus element-specific safe attributes).
 
 ### v1.2.0 — 2026-02-20
 

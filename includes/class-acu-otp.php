@@ -7,7 +7,7 @@
  * Transient TTLs:
  *  acu_otp_{phone9}          → 300s (OTP code)
  *  acu_rate_{md5(phone+ip)}  → 600s (rate limit counter)
- *  acu_vtoken_{phone9}       → 300s (verification token)
+ *  acu_vtoken_{phone9}       → 1200s (verification token)
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -20,7 +20,7 @@ class ACU_OTP {
 	const MAX_VERIFY_ATTEMPTS = 5;
 	const RATE_LIMIT_SECONDS  = 600;  // 10 min
 	const OTP_EXPIRY_SECONDS  = 300;  // 5 min
-	const TOKEN_EXPIRY        = 300;  // 5 min
+	const TOKEN_EXPIRY        = 1200; // 20 min
 
 	// -------------------------------------------------------------------------
 	// Transient key helpers

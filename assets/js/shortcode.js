@@ -6,6 +6,7 @@
     function show(el) { if (el) el.style.display = ''; }
     function hide(el) { if (el) el.style.display = 'none'; }
     function setHTML(el, html) { if (el) el.innerHTML = html; }
+    function setText(el, text) { if (el) el.textContent = text; }
 
     function submit(e) {
         e.preventDefault();
@@ -20,7 +21,7 @@
         var results = $('[data-wcu-udc-results]', root);
 
         if (query === '') {
-            setHTML(errorBox, window.acuUdc.i18n.no_query);
+            setText(errorBox, window.acuUdc.i18n.no_query);
             show(errorBox); hide(results); return;
         }
         hide(errorBox); setHTML(results, ''); show(loading);
@@ -37,10 +38,10 @@
                     hide(errorBox); setHTML(results, resp.data.html); show(results);
                 } else {
                     var msg = (resp && resp.data && resp.data.message) ? resp.data.message : (acuUdc.i18n.error || 'Error');
-                    setHTML(errorBox, msg); show(errorBox); hide(results);
+                    setText(errorBox, msg); show(errorBox); hide(results);
                 }
             } catch (err) {
-                setHTML(errorBox, acuUdc.i18n.error || 'Error'); show(errorBox); hide(results);
+                setText(errorBox, acuUdc.i18n.error || 'Error'); show(errorBox); hide(results);
             }
         };
         var body = 'action=acu_udc_search&nonce=' + encodeURIComponent(acuUdc.nonce || '') + '&query=' + encodeURIComponent(query);
