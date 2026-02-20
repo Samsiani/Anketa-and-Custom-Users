@@ -276,6 +276,13 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.0.8 — 2026-02-20
+
+- **Fix: SMS gateway success detection:** The MS Group gateway returns `code: 0` (JSON
+  integer) on success, not the string `"0000"`. Updated `ACU_SMS::send()` to treat both
+  `'0'` and `'0000'` as success — `(string)$data['code'] === '0' || === '0000'`. OTP
+  codes are now delivered correctly end-to-end. Updated `test-sms.php` with the same logic.
+
 ### v1.0.7 — 2026-02-20
 
 - **Fix: SMS OTP not being sent (critical):** Removed `rawurlencode()` from the `text` parameter

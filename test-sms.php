@@ -138,7 +138,8 @@ $data = json_decode( $body, true );
 
 if ( isset( $data['code'] ) ) {
 	$code = (string) $data['code'];
-	if ( str_starts_with( $code, '0000' ) ) {
+	// Gateway returns integer 0 (JSON) → '0', or legacy string '0000' on success.
+	if ( $code === '0' || $code === '0000' ) {
 		echo "SUCCESS: SMS accepted by gateway (code {$code}).\n";
 		echo "  message_id : " . ( $data['message_id'] ?? '(none)' ) . "\n";
 	} else {

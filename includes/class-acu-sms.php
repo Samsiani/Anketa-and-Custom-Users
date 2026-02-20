@@ -66,7 +66,8 @@ class ACU_SMS {
 		if ( isset( $data['code'] ) ) {
 			$code = (string) $data['code'];
 
-			if ( str_starts_with( $code, '0000' ) ) {
+			// Gateway returns integer 0 (JSON) → '0', or legacy string '0000' on success.
+			if ( $code === '0' || $code === '0000' ) {
 				return [
 					'success'    => true,
 					'code'       => $code,
