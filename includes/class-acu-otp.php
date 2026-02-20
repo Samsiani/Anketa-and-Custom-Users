@@ -57,11 +57,7 @@ class ACU_OTP {
 		$otp = self::generate_otp();
 		set_transient( self::otp_key( $phone_9_digits ), $otp, self::OTP_EXPIRY_SECONDS );
 
-		$message = sprintf(
-			/* translators: %s: OTP code */
-			__( 'თქვენი ვერიფიკაციის კოდია: %s', 'acu' ),
-			$otp
-		);
+		$message = 'SMS Code: ' . $otp;
 
 		$result = ACU_SMS::send( $phone_9_digits, $message );
 

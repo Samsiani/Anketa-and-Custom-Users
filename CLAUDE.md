@@ -276,6 +276,15 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.1.0 — 2026-02-20
+
+- **OTP message changed to English:** Replaced the Georgian OTP string
+  `'თქვენი ვერიფიკაციის კოდია: %s'` with the plain ASCII `'SMS Code: XXXXXX'`
+  in `ACU_OTP::send_otp()`. Eliminates all multi-byte encoding risk at the
+  gateway level; message is now unambiguously readable on any handset.
+- **Test script updated:** `test-sms.php` now sends `SMS Code: XXXXXX` (random
+  6-digit code) to mirror the real OTP format exactly.
+
 ### v1.0.9 — 2026-02-20
 
 - **Fix: Georgian SMS text encoding (question marks):** `add_query_arg()` uses RFC 1738

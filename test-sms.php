@@ -98,7 +98,7 @@ foreach ( $creds as $k => $v ) {
 
 $gateway  = 'http://bi.msg.ge/sendsms.php';
 $phone_api = '995' . $phone_digits;
-$message  = 'TEST: ACU SMS check - ' . gmdate( 'H:i:s' );
+$message  = 'SMS Code: ' . str_pad( (string) rand( 0, 999999 ), 6, '0', STR_PAD_LEFT );
 
 // `text` is excluded from add_query_arg() and appended manually with
 // rawurlencode() so Georgian UTF-8 characters use RFC 3986 (%20 for spaces)
