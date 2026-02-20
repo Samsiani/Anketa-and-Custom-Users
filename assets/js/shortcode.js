@@ -49,6 +49,10 @@
 
     function init() {
         $all('.wcu-udc__form').forEach(function (f) { f.addEventListener('submit', submit); });
+
+        // acuUdc.anketa_edit_url is the base URL of the page containing [club_anketa_form].
+        // The server already renders the "Edit Anketa" button with the correct ?edit_user=ID URL,
+        // so no additional client-side URL building is required.
     }
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

@@ -18,8 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class ACU_Registration {
 
-	private static array $errors = [];
-	private static array $old    = [];
+	private static array $errors       = [];
+	private static array $old          = [];
+	private static int   $edit_user_id = 0; // 0 = create mode; >0 = edit mode
 
 	public static function init(): void {
 		add_shortcode( 'club_anketa_form', [ self::class, 'shortcode_form' ] );
@@ -121,6 +122,19 @@ class ACU_Registration {
 			return;
 		}
 
+		// Detect edit mode
+		self::$edit_user_id = isset( $_POST['acu_edit_user_id'] ) ? absint( $_POST['acu_edit_user_id'] ) : 0;
+		if ( self::$edit_user_id > 0 ) {
+			if ( ! current_user_can( 'edit_users' ) ) {
+				self::$errors[] = __( 'You do not have permission to edit users.', 'acu' );
+				return;
+			}
+			if ( ! get_user_by( 'ID', self::$edit_user_id ) ) {
+				self::$errors[] = __( 'User not found.', 'acu' );
+				return;
+			}
+		}
+
 		// Collect and sanitize inputs
 		$data = self::collect_form_data();
 		self::$old = $data;
@@ -138,56 +152,75 @@ class ACU_Registration {
 		$call_consent = in_array( strtolower( $data['anketa_call_consent'] ), [ 'yes', 'no' ], true )
 			? strtolower( $data['anketa_call_consent'] ) : 'yes';
 
-		$local_digits = preg_replace( '/\D+/', '', (string) $data['anketa_phone_local'] );
+		$local_digits = ACU_Helpers::normalize_phone( $data['anketa_phone_local'] );
 
-		// Normalize to strict 9-digit format for storage
-		$local_digits = ACU_Helpers::normalize_phone( $local_digits );
-
-		// Check if phone was verified via OTP (optional on Anketa form)
+		// OTP verification — preserved from stored meta in edit mode, checked from token in create mode
 		$otp_token      = isset( $_POST['otp_verification_token'] ) ? sanitize_text_field( wp_unslash( $_POST['otp_verification_token'] ) ) : '';
-		$phone_verified = ACU_OTP::is_phone_verified( $local_digits, $otp_token );
+		$phone_verified = self::$edit_user_id > 0
+			? (bool) get_user_meta( self::$edit_user_id, '_acu_verified_phone', true )
+			: ACU_OTP::is_phone_verified( $local_digits, $otp_token );
 
-		// Create user
-		$password     = wp_generate_password( 18, true, true );
-		$insert_email = $data['anketa_email'] !== ''
-			? $data['anketa_email']
-			: $local_digits . '@no-email.local';
-		$user_id  = wp_insert_user( [
-			'user_login'   => $local_digits,
-			'user_email'   => $insert_email,
-			'user_pass'    => $password,
-			'first_name'   => $data['anketa_first_name'],
-			'last_name'    => $data['anketa_last_name'],
-			'display_name' => trim( $data['anketa_first_name'] . ' ' . $data['anketa_last_name'] ),
-		] );
-
-		if ( is_wp_error( $user_id ) ) {
-			self::$errors[] = $user_id->get_error_message();
-			return;
+		if ( self::$edit_user_id > 0 ) {
+			// ── Edit existing user ────────────────────────────────────────────
+			$user_id     = self::$edit_user_id;
+			$update_data = [
+				'ID'           => $user_id,
+				'first_name'   => $data['anketa_first_name'],
+				'last_name'    => $data['anketa_last_name'],
+				'display_name' => trim( $data['anketa_first_name'] . ' ' . $data['anketa_last_name'] ),
+			];
+			// Only update email if a real (non-dummy) address was supplied
+			if ( $data['anketa_email'] !== '' ) {
+				$update_data['user_email'] = $data['anketa_email'];
+			}
+			$result = wp_update_user( $update_data );
+			if ( is_wp_error( $result ) ) {
+				self::$errors[] = $result->get_error_message();
+				return;
+			}
+		} else {
+			// ── Create new user ───────────────────────────────────────────────
+			$password     = wp_generate_password( 18, true, true );
+			$insert_email = $data['anketa_email'] !== ''
+				? $data['anketa_email']
+				: $local_digits . '@no-email.local';
+			$user_id = wp_insert_user( [
+				'user_login'   => $local_digits,
+				'user_email'   => $insert_email,
+				'user_pass'    => $password,
+				'first_name'   => $data['anketa_first_name'],
+				'last_name'    => $data['anketa_last_name'],
+				'display_name' => trim( $data['anketa_first_name'] . ' ' . $data['anketa_last_name'] ),
+			] );
+			if ( is_wp_error( $user_id ) ) {
+				self::$errors[] = $user_id->get_error_message();
+				return;
+			}
 		}
 
-		// Save meta — billing_phone stored as strict 9-digit string
-		$meta_map   = [
-			'billing_phone'          => $local_digits,
-			'billing_address_1'      => $data['anketa_address'],
-			'_acu_personal_id'       => $data['anketa_personal_id'],
-			'_acu_dob'               => $data['anketa_dob'],
-			'_acu_card_no'           => $data['anketa_card_no'],
-			'_acu_responsible_person'=> $data['anketa_responsible_person'],
-			'_acu_form_date'         => $data['anketa_form_date'],
-			'_acu_shop'              => $data['anketa_shop'],
-			'_sms_consent'           => $sms_consent,
-			'_call_consent'          => $call_consent,
-			'_acu_verified_phone'    => $phone_verified ? $local_digits : '',
+		// Save / update meta — billing_phone stored as strict 9-digit string
+		$meta_map = [
+			'billing_phone'           => $local_digits,
+			'billing_address_1'       => $data['anketa_address'],
+			'_acu_personal_id'        => $data['anketa_personal_id'],
+			'_acu_dob'                => $data['anketa_dob'],
+			'_acu_card_no'            => $data['anketa_card_no'],
+			'_acu_responsible_person' => $data['anketa_responsible_person'],
+			'_acu_form_date'          => $data['anketa_form_date'],
+			'_acu_shop'               => $data['anketa_shop'],
+			'_sms_consent'            => $sms_consent,
+			'_call_consent'           => $call_consent,
+			'_acu_verified_phone'     => $phone_verified ? $local_digits : '',
 		];
 		foreach ( $meta_map as $key => $val ) {
-			if ( $val !== '' ) {
+			// Edit mode: always update (even to clear a field). Create mode: skip empty strings.
+			if ( self::$edit_user_id > 0 || $val !== '' ) {
 				update_user_meta( $user_id, $key, $val );
 			}
 		}
 
-		// Clean up OTP token after use
-		if ( $phone_verified ) {
+		// Clean up OTP token after use (create mode only)
+		if ( self::$edit_user_id === 0 && $phone_verified ) {
 			ACU_OTP::cleanup( $local_digits );
 		}
 
@@ -195,7 +228,15 @@ class ACU_Registration {
 		ACU_Helpers::link_coupon_to_user( $user_id );
 
 		// Admin notification
-		ACU_Helpers::maybe_send_consent_notification( $user_id, '', $sms_consent, 'anketa_registration' );
+		$old_sms = self::$edit_user_id > 0
+			? ACU_Helpers::get_sms_consent( self::$edit_user_id )
+			: '';
+		ACU_Helpers::maybe_send_consent_notification(
+			$user_id,
+			$old_sms,
+			$sms_consent,
+			self::$edit_user_id > 0 ? 'anketa_edit' : 'anketa_registration'
+		);
 
 		// Redirect to print page
 		$url = home_url( '/print-anketa/?user_id=' . absint( $user_id ) );
@@ -208,8 +249,38 @@ class ACU_Registration {
 	// -------------------------------------------------------------------------
 
 	public static function shortcode_form(): string {
+		// ── Edit mode detection ───────────────────────────────────────────────
+		$edit_user_id = isset( $_GET['edit_user'] ) ? absint( $_GET['edit_user'] ) : 0;
+		$edit_user    = $edit_user_id ? get_user_by( 'ID', $edit_user_id ) : false;
+		$is_edit      = (bool) $edit_user;
+
+		if ( $is_edit && ! current_user_can( 'edit_users' ) ) {
+			return '<p class="wcu-error">' . esc_html__( 'You do not have permission to edit users.', 'acu' ) . '</p>';
+		}
+
 		$errors = self::$errors;
 		$old    = self::$old;
+
+		// Pre-fill form from existing user data (first page-load only; POST values take priority on re-render after error)
+		if ( $is_edit && empty( $old ) ) {
+			$uid       = $edit_user->ID;
+			$raw_phone = (string) get_user_meta( $uid, 'billing_phone', true );
+			$old = [
+				'anketa_personal_id'        => (string) get_user_meta( $uid, '_acu_personal_id', true ),
+				'anketa_first_name'         => $edit_user->first_name,
+				'anketa_last_name'          => $edit_user->last_name,
+				'anketa_dob'                => (string) get_user_meta( $uid, '_acu_dob', true ),
+				'anketa_phone_local'        => ACU_Helpers::normalize_phone( $raw_phone ),
+				'anketa_address'            => (string) get_user_meta( $uid, 'billing_address_1', true ),
+				'anketa_email'              => str_ends_with( $edit_user->user_email, '@no-email.local' ) ? '' : $edit_user->user_email,
+				'anketa_card_no'            => (string) get_user_meta( $uid, '_acu_card_no', true ),
+				'anketa_responsible_person' => (string) get_user_meta( $uid, '_acu_responsible_person', true ),
+				'anketa_form_date'          => (string) get_user_meta( $uid, '_acu_form_date', true ),
+				'anketa_shop'               => (string) get_user_meta( $uid, '_acu_shop', true ),
+				'anketa_sms_consent'        => (string) get_user_meta( $uid, '_sms_consent', true ) ?: 'yes',
+				'anketa_call_consent'       => (string) get_user_meta( $uid, '_call_consent', true ) ?: 'yes',
+			];
+		}
 
 		$v = static function ( string $key ) use ( $old ): string {
 			return isset( $old[ $key ] ) ? esc_attr( $old[ $key ] ) : '';
@@ -224,7 +295,8 @@ class ACU_Registration {
 			$call_old = 'yes';
 		}
 
-		$rules_html = apply_filters( 'acu_anketa_rules_text', self::default_rules_html() );
+		$rules_html   = apply_filters( 'acu_anketa_rules_text', self::default_rules_html() );
+		$submit_label = $is_edit ? __( 'განახლება', 'acu' ) : 'რეგისტრაცია';
 
 		ob_start();
 		?>
@@ -240,6 +312,9 @@ class ACU_Registration {
 			<form class="club-anketa-form" method="post" action="">
 				<?php wp_nonce_field( 'acu_register', 'acu_form_nonce' ); ?>
 				<input type="hidden" name="acu_form_submitted" value="1" />
+				<?php if ( $is_edit ) : ?>
+				<input type="hidden" name="acu_edit_user_id" value="<?php echo esc_attr( $edit_user_id ); ?>" />
+				<?php endif; ?>
 				<div class="club-anketa-hp">
 					<label for="acu_security_field">Leave this empty</label>
 					<input type="text" id="acu_security_field" name="acu_security_field" value="" autocomplete="off" tabindex="-1" />
@@ -341,7 +416,7 @@ class ACU_Registration {
 				</div>
 
 				<div class="submit-row">
-					<button type="submit" class="submit-btn">რეგისტრაცია</button>
+					<button type="submit" class="submit-btn"><?php echo esc_html( $submit_label ); ?></button>
 				</div>
 			</form>
 		</div>
@@ -403,17 +478,29 @@ class ACU_Registration {
 		}
 
 		if ( $local_digits !== '' ) {
-			if ( username_exists( $local_digits ) ) {
-				self::$errors[] = __( 'This phone number is already registered.', 'acu' );
+			if ( self::$edit_user_id === 0 ) {
+				// Create mode: any existing login with this phone is a conflict
+				if ( username_exists( $local_digits ) ) {
+					self::$errors[] = __( 'This phone number is already registered.', 'acu' );
+				}
+			} else {
+				// Edit mode: conflict only if another user owns this login
+				$existing_login = get_user_by( 'login', $local_digits );
+				if ( $existing_login && (int) $existing_login->ID !== self::$edit_user_id ) {
+					self::$errors[] = __( 'This phone number is already registered.', 'acu' );
+				}
 			}
-			// Also check billing_phone meta
-			if ( ACU_Helpers::phone_exists_for_another_user( $local_digits ) ) {
+			// Check billing_phone meta, excluding the user being edited
+			if ( ACU_Helpers::phone_exists_for_another_user( $local_digits, self::$edit_user_id ) ) {
 				self::$errors[] = __( 'This phone number is already registered.', 'acu' );
 			}
 		}
 
-		if ( $data['anketa_email'] !== '' && email_exists( $data['anketa_email'] ) ) {
-			self::$errors[] = __( 'This email is already registered.', 'acu' );
+		if ( $data['anketa_email'] !== '' ) {
+			$existing_email_id = email_exists( $data['anketa_email'] );
+			if ( $existing_email_id && (int) $existing_email_id !== self::$edit_user_id ) {
+				self::$errors[] = __( 'This email is already registered.', 'acu' );
+			}
 		}
 	}
 

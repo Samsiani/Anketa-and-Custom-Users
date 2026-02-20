@@ -276,6 +276,13 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.0.6 — 2026-02-20
+
+- **Clean print output:** `templates/print-anketa.php` now suppresses any row whose value is empty or a `@no-email.local` dummy address, producing a clean printed document.
+- **Edit Anketa feature:** `[club_anketa_form]` supports edit mode via `?edit_user=USER_ID`. Pre-fills all fields from existing user data; saves via `wp_update_user()` + `update_user_meta()`. Requires `edit_users` capability.
+- **Edit button in search results:** `[user_data_check]` result card shows an "Edit Anketa" button (only for users with `edit_users` cap) linking to `[club_anketa_form]?edit_user=ID`. The anketa page is auto-discovered by searching published pages for the shortcode.
+- **Button label spacing (Task 3):** Confirmed "Print SMS Terms" and "Print Phone Call Terms" labels already have correct spacing in `print-anketa.php`. No regression introduced by new code.
+
 ### v1.0.5 — 2026-02-20
 
 - **Standardized phone storage:** `billing_phone` is now always written as a strict 9-digit string.

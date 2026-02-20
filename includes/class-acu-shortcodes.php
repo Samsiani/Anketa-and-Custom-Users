@@ -30,10 +30,27 @@ class ACU_Shortcodes {
 	public static function shortcode_user_data_check(): string {
 		wp_enqueue_style( 'acu-shortcode', ACU_URL . 'assets/css/shortcode.css', [], ACU_VERSION );
 		wp_enqueue_script( 'acu-shortcode', ACU_URL . 'assets/js/shortcode.js', [], ACU_VERSION, true );
+		// Find the page that hosts [club_anketa_form] so the Edit button has a URL.
+		// Result is cached in a static so the DB hit only happens once per request.
+		static $anketa_edit_base = null;
+		if ( $anketa_edit_base === null ) {
+			global $wpdb;
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+			$page_id = $wpdb->get_var(
+				"SELECT ID FROM {$wpdb->posts}
+				 WHERE post_content LIKE '%club_anketa_form%'
+				   AND post_type = 'page'
+				   AND post_status = 'publish'
+				 LIMIT 1"
+			);
+			$anketa_edit_base = $page_id ? get_permalink( (int) $page_id ) : '';
+		}
+
 		wp_localize_script( 'acu-shortcode', 'acuUdc', [
-			'ajax_url' => admin_url( 'admin-ajax.php' ),
-			'nonce'    => wp_create_nonce( 'acu_udc_ajax' ),
-			'i18n'     => [
+			'ajax_url'        => admin_url( 'admin-ajax.php' ),
+			'nonce'           => wp_create_nonce( 'acu_udc_ajax' ),
+			'anketa_edit_url' => $anketa_edit_base, // base URL of the anketa form page (edit_user=ID appended server-side)
+			'i18n'            => [
 				'searching' => __( 'Searching…', 'acu' ),
 				'no_query'  => __( 'Please enter a value to search.', 'acu' ),
 				'error'     => __( 'Something went wrong. Please try again.', 'acu' ),
@@ -169,6 +186,24 @@ class ACU_Shortcodes {
 	private static function render_result_html( WP_User $user ): string {
 		$user_id = $user->ID;
 
+		// Build Edit Anketa URL (requires edit_users capability check in the form itself)
+		static $anketa_edit_base = null;
+		if ( $anketa_edit_base === null ) {
+			global $wpdb;
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+			$page_id = $wpdb->get_var(
+				"SELECT ID FROM {$wpdb->posts}
+				 WHERE post_content LIKE '%club_anketa_form%'
+				   AND post_type = 'page'
+				   AND post_status = 'publish'
+				 LIMIT 1"
+			);
+			$anketa_edit_base = $page_id ? get_permalink( (int) $page_id ) : '';
+		}
+		$edit_anketa_url = $anketa_edit_base !== ''
+			? add_query_arg( 'edit_user', $user_id, $anketa_edit_base )
+			: '';
+
 		$data = [
 			'email'      => $user->user_email,
 			'phone'      => ACU_Helpers::get_user_phone( $user_id ),
@@ -219,6 +254,11 @@ class ACU_Shortcodes {
 			<div class="wcu-udc-panel wcu-udc-panel--details">
 				<div class="wcu-udc-panel__header">
 					<h3><?php esc_html_e( 'მომხმარებელი', 'acu' ); ?></h3>
+					<?php if ( $edit_anketa_url && current_user_can( 'edit_users' ) ) : ?>
+					<a class="button button-secondary wcu-edit-anketa-btn" href="<?php echo esc_url( $edit_anketa_url ); ?>" target="_blank" rel="noopener noreferrer">
+						<?php esc_html_e( 'Edit Anketa', 'acu' ); ?>
+					</a>
+					<?php endif; ?>
 				</div>
 				<div class="wcu-udc-panel__body">
 					<ul class="wcu-detail-list">

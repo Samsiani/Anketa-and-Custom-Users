@@ -54,6 +54,9 @@ $boxed = function ( string $text, int $boxes = 11 ): string {
 	return '<div class="boxes boxes-' . $boxes . '"><span>' . implode( '</span><span>', $cells ) . '</span></div>';
 };
 
+// Derived display values used for empty-checks
+$email_display = str_ends_with( $email, '@no-email.local' ) ? '' : $email;
+
 $sms_terms_link  = esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type' => 'sms' ],  home_url( '/signature-terms/' ) ) );
 $call_terms_link = esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type' => 'call' ], home_url( '/signature-terms/' ) ) );
 ?><!doctype html>
@@ -74,42 +77,56 @@ $call_terms_link = esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type'
 <div class="page">
 	<h1 class="title"><?php echo esc_html( 'გახდი შპს "ართთაიმის" ს/კ 202356672 კლუბის წევრი!' ); ?></h1>
 
+	<?php if ( $personal_id !== '' ) : ?>
 	<div class="row">
 		<div class="label">პირადი ნომერი</div>
 		<div class="value value-boxes">
 			<?php echo $boxed( $personal_id, 11 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</div>
 	</div>
+	<?php endif; ?>
 
+	<?php if ( trim( $first_name ) !== '' ) : ?>
 	<div class="row">
 		<div class="label">სახელი</div>
 		<div class="value value-line"><?php echo esc_html( $first_name ); ?></div>
 	</div>
+	<?php endif; ?>
 
+	<?php if ( trim( $last_name ) !== '' ) : ?>
 	<div class="row">
 		<div class="label">გვარი</div>
 		<div class="value value-line"><?php echo esc_html( $last_name ); ?></div>
 	</div>
+	<?php endif; ?>
 
+	<?php if ( $dob !== '' ) : ?>
 	<div class="row">
 		<div class="label">დაბადების თარიღი</div>
 		<div class="value value-line"><?php echo esc_html( $dob ); ?></div>
 	</div>
+	<?php endif; ?>
 
+	<?php if ( $phone !== '' ) : ?>
 	<div class="row">
 		<div class="label">ტელეფონის ნომერი</div>
 		<div class="value value-line"><?php echo esc_html( $phone ); ?></div>
 	</div>
+	<?php endif; ?>
 
+	<?php if ( $address_1 !== '' ) : ?>
 	<div class="row">
 		<div class="label">მისამართი</div>
 		<div class="value value-line"><?php echo esc_html( $address_1 ); ?></div>
 	</div>
+	<?php endif; ?>
 
+	<?php if ( $email_display !== '' ) : ?>
 	<div class="row">
 		<div class="label">E-mail</div>
-		<div class="value value-line"><?php echo str_ends_with( $email, '@no-email.local' ) ? '' : esc_html( $email ); ?></div>
+		<div class="value value-line"><?php echo esc_html( $email_display ); ?></div>
 	</div>
+	<?php endif; ?>
 
 	<div class="rules">
 		<div class="rules-title">წესები და პირობები</div>
@@ -136,27 +153,35 @@ $call_terms_link = esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type'
 		</div>
 	</div>
 
+	<?php if ( $card_no !== '' ) : ?>
 	<div class="row">
 		<div class="label">მივიღე ბარათი №</div>
 		<div class="value value-boxes">
 			<?php echo $boxed( $card_no, 10 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</div>
 	</div>
+	<?php endif; ?>
 
+	<?php if ( $responsible !== '' ) : ?>
 	<div class="row">
 		<div class="label">პასუხისმგებელი პირი</div>
 		<div class="value value-line"><?php echo esc_html( $responsible ); ?></div>
 	</div>
+	<?php endif; ?>
 
+	<?php if ( $form_date !== '' ) : ?>
 	<div class="row">
 		<div class="label">თარიღი</div>
 		<div class="value value-line"><?php echo esc_html( $form_date ); ?></div>
 	</div>
+	<?php endif; ?>
 
+	<?php if ( $shop !== '' ) : ?>
 	<div class="row">
 		<div class="label">მაღაზია</div>
 		<div class="value value-line"><?php echo esc_html( $shop ); ?></div>
 	</div>
+	<?php endif; ?>
 
 	<div class="row signature-row no-break">
 		<div class="label">მომხმარებლის ხელმოწერა</div>
