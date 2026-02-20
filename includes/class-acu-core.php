@@ -132,7 +132,6 @@ class ACU_Core {
 			'class-acu-print.php',
 			'class-acu-shortcodes.php',
 			'class-acu-admin.php',
-			'class-acu-github-updater.php',
 		];
 
 		foreach ( $includes as $file ) {
@@ -148,10 +147,33 @@ class ACU_Core {
 		ACU_Print::init();
 		ACU_Shortcodes::init();
 		ACU_Admin::init();
-		ACU_GitHub_Updater::init();
+		$this->init_update_checker();
 
 		// Activation notices
 		add_action( 'admin_notices', [ $this, 'show_activation_notices' ] );
+	}
+
+	// -------------------------------------------------------------------------
+	// Update checker (Plugin Update Checker v5)
+	// -------------------------------------------------------------------------
+
+	private function init_update_checker(): void {
+		$puc_path = ACU_DIR . 'vendor/plugin-update-checker/load-v5p6.php';
+		if ( ! file_exists( $puc_path ) ) {
+			return; // Library not present — fail silently.
+		}
+
+		require_once $puc_path;
+
+		$checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
+			'https://github.com/Samsiani/Anketa-and-Custom-Users/',
+			ACU_FILE,
+			'arttime-club-member'
+		);
+
+		// Use the .zip asset from each GitHub Release (includes vendor/) instead
+		// of the raw source zipball (which does NOT include vendor/).
+		$checker->getVcsApi()->enableReleaseAssets();
 	}
 
 	// -------------------------------------------------------------------------

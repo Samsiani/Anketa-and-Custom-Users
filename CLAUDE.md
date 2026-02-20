@@ -212,95 +212,36 @@ wp eval 'ACU_Migration::run();'
 
 ## GitHub Auto-Updater
 
-Module: `includes/class-acu-github-updater.php` — class `ACU_GitHub_Updater`
+Module: `vendor/plugin-update-checker/` — **Plugin Update Checker v5 (PUC)**
+by Yahnis Elsts (MIT). Initialized in `ACU_Core::init_update_checker()`.
 
-The plugin ships with a built-in update mechanism that hooks into the WordPress core update pipeline. Site admins see update notifications and can install updates through **WP Admin → Plugins** exactly like any wp.org plugin.
+PUC hooks into the WordPress update pipeline automatically. Site admins see
+update notifications in **WP Admin → Plugins** and can install updates exactly
+like any wp.org plugin. PUC also adds a native **"Check for updates"** link
+on the Plugins page — no custom AJAX needed.
 
 ### How It Works
 
-| Filter | Purpose |
-|---|---|
-| `pre_set_site_transient_update_plugins` | Injects update data when GitHub has a newer tag |
-| `plugins_api` | Populates the "View Details" modal with release notes |
-| `upgrader_source_selection` | Renames the GitHub zip folder to match the plugin slug |
-
-- GitHub API endpoint: `https://api.github.com/repos/Samsiani/Anketa-and-Custom-Users/releases/latest`
-- API response is cached in a transient (`acu_github_update_data`) for **12 hours** to avoid rate limiting
-- Version comparison: `version_compare( ACU_VERSION, $latest_tag, '<' )`
-- The download package is the release's `zipball_url`
+- GitHub Repository: `https://github.com/Samsiani/Anketa-and-Custom-Users/`
+- PUC checks the latest GitHub Release and compares its tag against `ACU_VERSION`.
+- `enableReleaseAssets()` ensures PUC downloads `arttime-club-member.zip` (the
+  compiled release asset that includes `vendor/`) instead of the raw source zipball.
 
 ### Release & Update Workflow
 
-Follow these exact steps every time you ship a new version. There is **no CI/CD pipeline** — the GitHub Release itself is the deployment artifact.
+To ship a new version, **simply merge a PR to main**. The GitHub Action fires automatically:
 
-#### Step 1 — Bump the version number
+1. Reads the current version from `arttime-club-member.php`.
+2. Increments the patch segment (e.g. `1.0.2` → `1.0.3`).
+3. Writes the new version back to `arttime-club-member.php` (header + `ACU_VERSION` constant), commits `[skip ci]`, and pushes to main.
+4. Tags the commit (e.g. `1.0.3`) and pushes the tag.
+5. Builds `arttime-club-member.zip` (with `vendor/` included).
+6. Publishes the GitHub Release with the zip attached.
+7. WordPress sites detect the update within 12 hours, or immediately when an admin visits the Plugins page.
 
-Edit **two** places in `arttime-club-member.php`:
-
-```php
-// Plugin header
-* Version: X.Y.Z
-
-// Version constant (line ~18)
-define( 'ACU_VERSION', 'X.Y.Z' );
-```
-
-Use [Semantic Versioning](https://semver.org/):
-- `PATCH` (1.0.**1**) — bug fixes only
-- `MINOR` (1.**1**.0) — new backwards-compatible features
-- `MAJOR` (**2**.0.0) — breaking changes
-
-#### Step 2 — Commit the version bump
+### Verify the update is detected
 
 ```bash
-git add arttime-club-member.php
-git commit -m "Release vX.Y.Z"
-```
-
-#### Step 3 — Create and push a Git tag
-
-The tag **must** match the version number, prefixed with `v`:
-
-```bash
-git tag vX.Y.Z
-git push origin main
-git push origin vX.Y.Z
-```
-
-#### Step 4 — Create the GitHub Release via CLI (MANDATORY)
-
-After pushing the tag, the agent MUST automatically create the GitHub Release using the
-`gh` CLI. Never leave a pushed tag without a corresponding release.
-
-```bash
-gh release create <tag> \
-  --title "<tag> - <Short Summary>" \
-  --notes "- Change 1\n- Change 2\n- Change 3"
-```
-
-Example:
-```bash
-gh release create v1.0.2 \
-  --title "v1.0.2 - CSV Export & Print Fixes" \
-  --notes "- CSV export now only includes users with SMS or Call consent set to Yes.\n- Phone numbers normalized to 9 digits using ACU_Helpers::normalize_phone().\n- Print Anketa shows exact static rules text matching the registration form."
-```
-
-#### Step 5 — Create a GitHub Release (web UI)
-
-1. Go to `https://github.com/Samsiani/Anketa-and-Custom-Users/releases/new`
-2. Select the tag `vX.Y.Z` you just pushed
-3. Set **Release title** to `vX.Y.Z`
-4. Write release notes in the description (markdown supported — shown in the WP "View Details" modal)
-5. Click **Publish release**
-
-WordPress sites will detect the update within 12 hours (or immediately if an admin visits the Plugins page and WordPress forces a recheck).
-
-#### Step 6 — Verify the update is detected
-
-On any WordPress site with the plugin installed:
-
-```bash
-# Force WordPress to clear the update transient and recheck
 wp transient delete acu_github_update_data
 wp plugin list --status=active --fields=name,version,update
 ```
@@ -309,17 +250,13 @@ Or in WP Admin: **Dashboard → Updates → Check Again**.
 
 ### Rollback
 
-If a release is broken:
-1. Delete the GitHub Release (keeps the tag)
-2. The updater will fall back to the previous cached response for up to 12 hours, then see no update
-3. If sites already updated, push a new patch release (e.g. `v1.0.2`) with the fix
+Push a new patch release with the fix. Do not delete and re-push tags.
 
 ### Important Rules
 
-- **Never push a tag without a corresponding GitHub Release.** The updater reads from `/releases/latest`, not tags.
-- **Tag format must be `vX.Y.Z`** (the updater strips the leading `v` with `ltrim()`).
-- **Do not delete and re-push tags.** Create a new patch version instead.
-- The transient key `acu_github_update_data` can be manually cleared on any site to force an immediate recheck.
+- **Never push a tag without the GitHub Action having run.** PUC reads from `/releases/latest`.
+- **Tag format:** Any format works (`1.0.4` or `v1.0.4`) — PUC strips the leading `v`.
+- **`vendor/` must be committed** to the repo so the Action can include it in the zip.
 
 ---
 
@@ -338,6 +275,14 @@ If a release is broken:
 ---
 
 ## Changelog
+
+### v1.0.3 — 2026-02-20
+
+- **Migrated to Plugin Update Checker v5:** Replaced hand-rolled `ACU_GitHub_Updater`
+  with the industry-standard PUC library. Updates now use the compiled release asset
+  ZIP (vendor/ included) instead of the raw GitHub source zipball.
+- **GitHub Actions CI/CD:** Added `.github/workflows/release.yml` — merging a PR to
+  main automatically builds `arttime-club-member.zip` and publishes the GitHub Release.
 
 ### v1.0.2 — 2026-02-20
 
