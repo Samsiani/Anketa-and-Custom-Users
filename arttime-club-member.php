@@ -3,7 +3,7 @@
  * Plugin Name:       Anketa and Custom Users
  * Plugin URI:        https://github.com/Samsiani/Anketa-and-Custom-Users
  * Description:       Unified club membership plugin: Anketa registration form, SMS OTP verification, phone-based login, WooCommerce custom fields (personal ID, consents, club card), user data search, CSV tools, and ERP coupon linking.
- * Version:           1.0.2
+ * Version:           1.0.3
  * Author:            Samsiani
  * Text Domain:       acu
  * Requires at least: 6.3
