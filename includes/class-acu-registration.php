@@ -311,6 +311,15 @@ class ACU_Registration {
 		ob_start();
 		?>
 		<div class="club-anketa-form-wrap">
+			<?php if ( $is_edit ) : ?>
+			<div class="acu-edit-actions" style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.25rem;">
+				<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( 'edit_user', $edit_user_id, get_permalink() ) ); ?>"><?php esc_html_e( 'Edit Anketa', 'acu' ); ?></a>
+				<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( 'user_id', $edit_user_id, home_url( '/print-anketa/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print Anketa', 'acu' ); ?></a>
+				<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( [ 'user_id' => $edit_user_id, 'terms_type' => 'sms' ], home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print SMS Terms', 'acu' ); ?></a>
+				<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( [ 'user_id' => $edit_user_id, 'terms_type' => 'call' ], home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print Phone Call Terms', 'acu' ); ?></a>
+			</div>
+			<?php endif; ?>
+
 			<?php if ( ! empty( $errors ) ) : ?>
 				<div class="club-anketa-errors" role="alert">
 					<?php foreach ( $errors as $e ) : ?>

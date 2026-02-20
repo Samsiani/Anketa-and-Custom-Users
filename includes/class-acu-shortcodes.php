@@ -317,14 +317,9 @@ class ACU_Shortcodes {
 			<div class="wcu-udc-panel wcu-udc-panel--details">
 				<div class="wcu-udc-panel__header">
 					<h3><?php esc_html_e( 'მომხმარებელი', 'acu' ); ?></h3>
-					<div class="wcu-panel-actions" style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
-						<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( 'user_id', $user_id, home_url( '/print-anketa/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print Anketa', 'acu' ); ?></a>
-						<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type' => 'sms' ], home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print SMS Terms', 'acu' ); ?></a>
-						<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type' => 'call' ], home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print Phone Call Terms', 'acu' ); ?></a>
-						<?php if ( $edit_anketa_url && current_user_can( 'edit_users' ) ) : ?>
-						<a class="button button-secondary wcu-edit-anketa-btn" href="<?php echo esc_url( $edit_anketa_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Edit Anketa', 'acu' ); ?></a>
-						<?php endif; ?>
-					</div>
+					<?php if ( $edit_anketa_url && current_user_can( 'edit_users' ) ) : ?>
+					<a class="button button-secondary wcu-edit-anketa-btn" href="<?php echo esc_url( $edit_anketa_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Edit Anketa', 'acu' ); ?></a>
+					<?php endif; ?>
 				</div>
 				<div class="wcu-udc-panel__body">
 					<ul class="wcu-detail-list">

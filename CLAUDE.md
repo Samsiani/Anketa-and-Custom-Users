@@ -276,6 +276,19 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.1.5 — 2026-02-20
+
+- **Refactor: Print buttons moved to Anketa form.** Separated search (navigation) from
+  management (printing/editing):
+  - `[user_data_check]` result cards no longer show Print buttons. Registered users see
+    only the "Edit Anketa" button (cap-gated `edit_users`); unregistered coupon users
+    see only "Register (Anketa)".
+  - `[club_anketa_form]` in edit mode now renders a management button bar above the form
+    with: "Edit Anketa" (reload), "Print Anketa", "Print SMS Terms", "Print Phone Call Terms".
+    All buttons use `display:flex;gap:0.75rem;flex-wrap:wrap` for proper spacing and
+    responsiveness. Print links use the correct existing URL paths:
+    `/print-anketa/?user_id=ID` and `/signature-terms/?user_id=ID&terms_type=sms|call`.
+
 ### v1.1.4 — 2026-02-20
 
 - **Edit Anketa button on print page:** `templates/print-anketa.php` now renders an
