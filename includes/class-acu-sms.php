@@ -33,26 +33,34 @@ class ACU_SMS {
 
 		$phone_api = self::format_for_api( $phone_9_digits );
 
+		// NOTE: do NOT rawurlencode() $message here — add_query_arg() URL-encodes
+		// values itself. Pre-encoding causes double-encoding (%20 → %2520) which
+		// corrupts the message text sent to the gateway.
 		$api_url = add_query_arg( [
 			'username'   => $creds['username'],
 			'password'   => $creds['password'],
 			'client_id'  => $creds['client_id'],
 			'service_id' => $creds['service_id'],
 			'to'         => $phone_api,
-			'text'       => rawurlencode( $message ),
+			'text'       => $message,
 			'result'     => 'json',
 		], self::GATEWAY_URL );
 
 		$response = wp_remote_get( $api_url, [ 'timeout' => 30 ] );
 
 		if ( is_wp_error( $response ) ) {
+			error_log( sprintf( '[ACU_SMS] HTTP error sending OTP to %s: %s', $phone_api, $response->get_error_message() ) );
 			return [
 				'success' => false,
 				'error'   => $response->get_error_message(),
 			];
 		}
 
-		$body = wp_remote_retrieve_body( $response );
+		$body      = wp_remote_retrieve_body( $response );
+		$http_code = wp_remote_retrieve_response_code( $response );
+
+		error_log( sprintf( '[ACU_SMS] Gateway response (HTTP %d) for %s: %s', $http_code, $phone_api, $body ) );
+
 		$data = json_decode( $body, true );
 
 		if ( isset( $data['code'] ) ) {
@@ -72,10 +80,13 @@ class ACU_SMS {
 				'0008' => __( 'Insufficient SMS balance.', 'acu' ),
 			];
 
+			$error_text = $error_messages[ $code ] ?? __( 'SMS sending failed.', 'acu' );
+			error_log( sprintf( '[ACU_SMS] Gateway error code %s for %s: %s', $code, $phone_api, $error_text ) );
+
 			return [
 				'success' => false,
 				'code'    => $code,
-				'error'   => $error_messages[ $code ] ?? __( 'SMS sending failed.', 'acu' ),
+				'error'   => $error_text,
 			];
 		}
 
@@ -86,6 +97,8 @@ class ACU_SMS {
 				'message_id' => trim( str_replace( '0000-', '', $body ) ),
 			];
 		}
+
+		error_log( sprintf( '[ACU_SMS] Unexpected API response for %s: %s', $phone_api, $body ) );
 
 		return [
 			'success' => false,

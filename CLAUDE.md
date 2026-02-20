@@ -276,6 +276,22 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.0.7 — 2026-02-20
+
+- **Fix: SMS OTP not being sent (critical):** Removed `rawurlencode()` from the `text` parameter
+  in `ACU_SMS::send()`. `add_query_arg()` URL-encodes values itself; pre-encoding caused
+  double-encoding (e.g. `%20` → `%2520`), corrupting the message text and causing the MS Group
+  gateway to reject or silently drop the request. Georgian OTP text is now transmitted correctly.
+- **Error logging:** Added `error_log()` calls in `ACU_SMS::send()` to capture HTTP errors,
+  full gateway response body (with HTTP status code), and gateway error codes for easier
+  server-side debugging.
+- **OTP module:** Fixed stale `acm_` prefix in `class-acu-otp.php` docblock (should be `acu_`).
+  Verified rate-limiter logic — `check_rate_limit()` correctly allows requests when under the
+  3-attempt threshold and does not prematurely block.
+- **AJAX endpoints:** Verified `acu_send_otp` / `acu_verify_otp` are registered for both
+  logged-in (`wp_ajax_`) and anonymous (`wp_ajax_nopriv_`) users, and that nonce action
+  `acu_sms_nonce` matches the localized value from `enqueue_scripts()`.
+
 ### v1.0.6 — 2026-02-20
 
 - **Clean print output:** `templates/print-anketa.php` now suppresses any row whose value is empty or a `@no-email.local` dummy address, producing a clean printed document.

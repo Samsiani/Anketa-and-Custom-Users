@@ -5,9 +5,9 @@
  * All transient keys use acu_ prefix to avoid collision with legacy otp_ keys.
  *
  * Transient TTLs:
- *  acm_otp_{phone9}          → 300s (OTP code)
- *  acm_rate_{md5(phone+ip)}  → 600s (rate limit counter)
- *  acm_vtoken_{phone9}       → 300s (verification token)
+ *  acu_otp_{phone9}          → 300s (OTP code)
+ *  acu_rate_{md5(phone+ip)}  → 600s (rate limit counter)
+ *  acu_vtoken_{phone9}       → 300s (verification token)
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
