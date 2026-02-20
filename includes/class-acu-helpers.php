@@ -351,11 +351,14 @@ class ACU_Helpers {
 			)
 		);
 
+		// _erp_sync_allowed_phones is a comma-separated list of phone numbers.
+		// Normalize each entry individually before comparing.
 		foreach ( $post_ids as $post_id ) {
-			$meta_phone      = get_post_meta( (int) $post_id, '_erp_sync_allowed_phones', true );
-			$meta_normalized = self::normalize_phone( (string) $meta_phone );
-			if ( $meta_normalized !== '' && $meta_normalized === $normalized ) {
-				return get_the_title( (int) $post_id );
+			$meta_raw = (string) get_post_meta( (int) $post_id, '_erp_sync_allowed_phones', true );
+			foreach ( array_map( 'trim', explode( ',', $meta_raw ) ) as $raw_phone ) {
+				if ( self::normalize_phone( $raw_phone ) === $normalized ) {
+					return get_the_title( (int) $post_id );
+				}
 			}
 		}
 

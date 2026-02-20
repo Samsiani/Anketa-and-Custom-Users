@@ -153,7 +153,60 @@ class ACU_Shortcodes {
 			}
 		}
 
-		// 5. External phone whitelist — format-agnostic REPLACE match
+		// 5. ERP coupon — phone query: check _erp_sync_allowed_phones across all coupons.
+		//    Fires when a phone-like query found no registered WP user above.
+		if ( ! $result && ACU_Helpers::is_phone_like( $query ) ) {
+			$norm = ACU_Helpers::normalize_phone( $query );
+			if ( strlen( $norm ) === 9 ) {
+				$coupon_code = ACU_Helpers::find_coupon_by_phone( $norm );
+				if ( $coupon_code !== false ) {
+					// Confirm whether a WP user actually exists for this phone.
+					global $wpdb;
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					$uid = $wpdb->get_var( $wpdb->prepare(
+						"SELECT user_id FROM {$wpdb->usermeta}
+						 WHERE meta_key = 'billing_phone'
+						 AND REPLACE(REPLACE(REPLACE(meta_value, ' ', ''), '-', ''), '+995', '') LIKE %s
+						 LIMIT 1",
+						$norm
+					) );
+					if ( $uid ) {
+						$result = get_user_by( 'id', (int) $uid );
+					} else {
+						// Phone is in a coupon but user is not registered — show bridge card.
+						wp_send_json_success( [ 'html' => self::render_coupon_result_html( $norm, $coupon_code ) ] );
+					}
+				}
+			}
+		}
+
+		// 6. ERP coupon — code query: find a coupon post by title, extract phones from
+		//    _erp_sync_allowed_phones, then resolve to a WP user or show register bridge.
+		if ( ! $result ) {
+			$coupon_data = self::find_coupon_data_by_code( $query );
+			if ( $coupon_data !== null ) {
+				global $wpdb;
+				foreach ( $coupon_data['phones'] as $norm_phone ) {
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					$uid = $wpdb->get_var( $wpdb->prepare(
+						"SELECT user_id FROM {$wpdb->usermeta}
+						 WHERE meta_key = 'billing_phone'
+						 AND REPLACE(REPLACE(REPLACE(meta_value, ' ', ''), '-', ''), '+995', '') LIKE %s
+						 LIMIT 1",
+						$norm_phone
+					) );
+					if ( $uid ) {
+						$result = get_user_by( 'id', (int) $uid );
+						break;
+					}
+				}
+				if ( ! $result && ! empty( $coupon_data['phones'] ) ) {
+					wp_send_json_success( [ 'html' => self::render_coupon_result_html( $coupon_data['phones'][0], $coupon_data['code'] ) ] );
+				}
+			}
+		}
+
+		// 7. External phone whitelist — format-agnostic REPLACE match
 		if ( ! $result && ACU_Helpers::is_phone_like( $query ) ) {
 			$norm = ACU_Helpers::normalize_phone( $query );
 			if ( $norm !== '' && strlen( $norm ) === 9 ) {
@@ -352,6 +405,129 @@ class ACU_Shortcodes {
 						<strong><?php esc_html_e( 'ინფორმაცია:', 'acu' ); ?></strong>
 						<?php esc_html_e( 'ნომერი ნაპოვნია SMS თანხმობის ბაზაში, მაგრამ არ არის რეგისტრირებული საიტზე.', 'acu' ); ?>
 					</div>
+				</div>
+			</div>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
+
+	// -------------------------------------------------------------------------
+	// Private helpers — coupon search
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Find a published shop_coupon by title (coupon code) and return its normalized
+	 * phone list from _erp_sync_allowed_phones.
+	 *
+	 * WooCommerce stores coupon codes as post_title. Search is case-insensitive.
+	 *
+	 * @return array{code: string, phones: list<string>}|null
+	 */
+	private static function find_coupon_data_by_code( string $code ): array|null {
+		if ( $code === '' ) {
+			return null;
+		}
+
+		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+		$row = $wpdb->get_row( $wpdb->prepare(
+			"SELECT p.ID, p.post_title
+			 FROM {$wpdb->posts} p
+			 WHERE p.post_type   = 'shop_coupon'
+			   AND p.post_status = 'publish'
+			   AND LOWER(p.post_title) = LOWER(%s)
+			 LIMIT 1",
+			$code
+		) );
+
+		if ( ! $row ) {
+			return null;
+		}
+
+		$meta_raw = (string) get_post_meta( (int) $row->ID, '_erp_sync_allowed_phones', true );
+		if ( $meta_raw === '' ) {
+			return null;
+		}
+
+		$phones = [];
+		foreach ( array_map( 'trim', explode( ',', $meta_raw ) ) as $raw_phone ) {
+			$norm = ACU_Helpers::normalize_phone( $raw_phone );
+			if ( strlen( $norm ) === 9 ) {
+				$phones[] = $norm;
+			}
+		}
+
+		return ! empty( $phones )
+			? [ 'code' => (string) $row->post_title, 'phones' => $phones ]
+			: null;
+	}
+
+	/**
+	 * Render a result card for a phone found via a coupon but not registered as a WP user.
+	 * Shows an "Register (Anketa)" button that pre-fills the phone in the Anketa form.
+	 */
+	private static function render_coupon_result_html( string $phone, string $coupon_code ): string {
+		static $anketa_base = null;
+		if ( $anketa_base === null ) {
+			global $wpdb;
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+			$page_id = $wpdb->get_var(
+				"SELECT ID FROM {$wpdb->posts}
+				 WHERE post_content LIKE '%club_anketa_form%'
+				   AND post_type   = 'page'
+				   AND post_status = 'publish'
+				 LIMIT 1"
+			);
+			$anketa_base = $page_id ? get_permalink( (int) $page_id ) : '';
+		}
+
+		$register_url = $anketa_base !== ''
+			? add_query_arg( 'prefill_phone', rawurlencode( $phone ), $anketa_base )
+			: '';
+
+		ob_start();
+		?>
+		<div class="wcu-udc-results-layout">
+			<div class="wcu-udc-panel wcu-udc-panel--details">
+				<div class="wcu-udc-panel__header">
+					<h3>
+						<?php esc_html_e( 'Unregistered User', 'acu' ); ?>
+						<small style="font-weight:normal;font-size:0.8em;margin-left:0.5em;">
+							(<?php echo esc_html(
+								sprintf(
+									/* translators: %s: coupon code */
+									__( 'Found via Coupon: %s', 'acu' ),
+									$coupon_code
+								)
+							); ?>)
+						</small>
+					</h3>
+					<?php if ( $register_url && current_user_can( 'edit_users' ) ) : ?>
+					<a class="button button-secondary wcu-edit-anketa-btn"
+					   href="<?php echo esc_url( $register_url ); ?>"
+					   target="_blank" rel="noopener noreferrer">
+						<?php esc_html_e( 'Register (Anketa)', 'acu' ); ?>
+					</a>
+					<?php endif; ?>
+				</div>
+				<div class="wcu-udc-panel__body">
+					<ul class="wcu-detail-list">
+						<li>
+							<span class="wcu-dl-label"><?php esc_html_e( 'ტელეფონის ნომერი', 'acu' ); ?>:</span>
+							<span class="wcu-dl-value"><?php echo esc_html( $phone ); ?></span>
+						</li>
+						<li>
+							<span class="wcu-dl-label"><?php esc_html_e( 'კლუბის ბარათი', 'acu' ); ?>:</span>
+							<span class="wcu-dl-value"><?php echo esc_html( $coupon_code ); ?></span>
+						</li>
+						<li>
+							<span class="wcu-dl-label"><?php esc_html_e( 'სტატუსი', 'acu' ); ?>:</span>
+							<span class="wcu-dl-value">
+								<span class="wcu-badge wcu-badge--warning"><?php esc_html_e( 'არ არის რეგისტრირებული', 'acu' ); ?></span>
+							</span>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>

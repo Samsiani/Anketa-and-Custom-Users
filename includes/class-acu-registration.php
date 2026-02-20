@@ -282,6 +282,16 @@ class ACU_Registration {
 			];
 		}
 
+		// Pre-fill phone from URL — coupon registration bridge (?prefill_phone=XXXXXXXXX).
+		// Only applied in create mode and only when the field hasn't been filled yet
+		// (e.g. POST re-render after a validation error takes priority).
+		if ( ! $is_edit && isset( $_GET['prefill_phone'] ) ) {
+			$prefill_phone = ACU_Helpers::normalize_phone( sanitize_text_field( wp_unslash( $_GET['prefill_phone'] ) ) );
+			if ( $prefill_phone !== '' && empty( $old['anketa_phone_local'] ) ) {
+				$old['anketa_phone_local'] = $prefill_phone;
+			}
+		}
+
 		$v = static function ( string $key ) use ( $old ): string {
 			return isset( $old[ $key ] ) ? esc_attr( $old[ $key ] ) : '';
 		};

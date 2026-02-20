@@ -276,6 +276,30 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.1.1 — 2026-02-20
+
+- **Coupon-based search in `[user_data_check]`:** Two new search steps added to
+  `ACU_Shortcodes::ajax_udc_search()`:
+  - **Step 5 (phone → coupon):** When a phone-like query finds no registered WP user,
+    the handler now searches `_erp_sync_allowed_phones` across all `shop_coupon` posts
+    via `ACU_Helpers::find_coupon_by_phone()`. If the phone is in a coupon but the user
+    is unregistered, a "Found via Coupon: CODE" card is shown.
+  - **Step 6 (code → coupon):** When the query string matches a coupon `post_title`
+    (case-insensitive), phones are extracted from `_erp_sync_allowed_phones`, normalized,
+    and resolved to a WP user. If no user exists, the same "Unregistered User" card is shown.
+- **`ACU_Helpers::find_coupon_by_phone()` bug fix:** The confirmation loop previously
+  called `normalize_phone()` on the entire comma-separated meta value (e.g.
+  `"599111222,599333444"`), which never produced a valid 9-digit match. Fixed to split
+  by comma and normalize each entry individually.
+- **Registration bridge for unregistered coupon users:** The "Unregistered User" result
+  card includes a **"Register (Anketa)"** button (cap-gated `edit_users`) that links to
+  the `[club_anketa_form]` page with `?prefill_phone=XXXXXXXXX`. The Anketa form now
+  reads this GET param and pre-fills the phone field, with POST values taking priority
+  on re-render after a validation error.
+- **New private helpers in `ACU_Shortcodes`:**
+  - `find_coupon_data_by_code( string $code ): array|null`
+  - `render_coupon_result_html( string $phone, string $coupon_code ): string`
+
 ### v1.1.0 — 2026-02-20
 
 - **OTP message changed to English:** Replaced the Georgian OTP string
