@@ -15,7 +15,7 @@ if ( ! $user ) {
 }
 
 // Staff-only: print pages expose full user PII
-if ( ! current_user_can( 'edit_users' ) ) {
+if ( ! ACU_Helpers::current_user_can_manage_members() ) {
 	status_header( 403 );
 	wp_die( esc_html__( 'Access denied.', 'acu' ) );
 }

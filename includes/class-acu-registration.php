@@ -491,7 +491,14 @@ class ACU_Registration {
 			self::$errors[] = __( 'Please enter a valid email address.', 'acu' );
 		}
 
-		if ( $data['anketa_personal_id'] !== '' && ! ACU_Helpers::validate_personal_id( $data['anketa_personal_id'] ) ) {
+		// Validate personal ID format — skip in edit mode if the value hasn't changed
+		// (prevents blocking staff from saving other fields when legacy dirty data exists).
+		$stored_pid  = self::$edit_user_id > 0
+			? (string) get_user_meta( self::$edit_user_id, '_acu_personal_id', true )
+			: '';
+		$pid_changed = $data['anketa_personal_id'] !== $stored_pid;
+		if ( $data['anketa_personal_id'] !== '' && $pid_changed
+			&& ! ACU_Helpers::validate_personal_id( $data['anketa_personal_id'] ) ) {
 			self::$errors[] = __( 'Personal ID must be exactly 11 digits.', 'acu' );
 		}
 

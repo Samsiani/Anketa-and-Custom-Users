@@ -278,6 +278,13 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.2.2 — 2026-02-20
+
+**Safety fixes from post-release audit.**
+
+- **Fix: Shop Manager staff unblocked from print templates and search.** Replaced bare `current_user_can('edit_users')` checks (which only Administrators pass) with `ACU_Helpers::current_user_can_manage_members()` across all 5 guard sites: `print-anketa.php`, `signature-terms.php`, `ajax_udc_search()`, the Edit Anketa button, and the Register button. The helper accepts either `edit_users` OR `manage_woocommerce`, so WooCommerce Shop Managers can now access all staff functionality without needing full admin rights.
+- **Fix: Personal ID validation skips unchanged values in edit mode.** The 11-digit format check now compares the submitted value against the currently stored meta. If staff open a user's Anketa form without touching the personal ID field, the existing (potentially legacy/dirty) value passes through unchanged. Validation still fires in create mode (always) and in edit mode when the staff actively edits the field.
+
 ### v1.2.1 — 2026-02-20
 
 **Low-severity polish** — addresses all 4 Low findings from the v1.2.0 audit.

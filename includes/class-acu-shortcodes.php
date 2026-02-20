@@ -74,7 +74,7 @@ class ACU_Shortcodes {
 	public static function ajax_udc_search(): void {
 		check_ajax_referer( 'acu_udc_ajax', 'nonce' );
 
-		if ( ! current_user_can( 'edit_users' ) ) {
+		if ( ! ACU_Helpers::current_user_can_manage_members() ) {
 			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'acu' ) ] );
 		}
 
@@ -297,7 +297,7 @@ class ACU_Shortcodes {
 			<div class="wcu-udc-panel wcu-udc-panel--details">
 				<div class="wcu-udc-panel__header">
 					<h3><?php esc_html_e( 'მომხმარებელი', 'acu' ); ?></h3>
-					<?php if ( $edit_anketa_url && current_user_can( 'edit_users' ) ) : ?>
+					<?php if ( $edit_anketa_url && ACU_Helpers::current_user_can_manage_members() ) : ?>
 					<a class="button button-secondary wcu-edit-anketa-btn" href="<?php echo esc_url( $edit_anketa_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Edit Anketa', 'acu' ); ?></a>
 					<?php endif; ?>
 				</div>
@@ -484,7 +484,7 @@ class ACU_Shortcodes {
 							); ?>)
 						</small>
 					</h3>
-					<?php if ( $register_url && current_user_can( 'edit_users' ) ) : ?>
+					<?php if ( $register_url && ACU_Helpers::current_user_can_manage_members() ) : ?>
 					<a class="button button-secondary wcu-edit-anketa-btn"
 					   href="<?php echo esc_url( $register_url ); ?>"
 					   target="_blank" rel="noopener noreferrer">

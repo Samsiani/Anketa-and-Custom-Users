@@ -17,7 +17,7 @@ $terms_type = isset( $_GET['terms_type'] ) ? sanitize_key( $_GET['terms_type'] )
 $anketa_url = esc_url( add_query_arg( 'user_id', $user_id, home_url( '/print-anketa/' ) ) );
 
 // Staff-only: print pages expose full user PII
-if ( ! current_user_can( 'edit_users' ) ) {
+if ( ! ACU_Helpers::current_user_can_manage_members() ) {
 	status_header( 403 );
 	wp_die( esc_html__( 'Access denied.', 'acu' ) );
 }

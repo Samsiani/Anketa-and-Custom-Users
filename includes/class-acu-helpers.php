@@ -389,6 +389,19 @@ class ACU_Helpers {
 	}
 
 	// -------------------------------------------------------------------------
+	// Capability check
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Returns true if the current user can manage club members.
+	 * Accepts both full Administrators (edit_users) and WooCommerce
+	 * Shop Managers (manage_woocommerce) so staff don't need admin rights.
+	 */
+	public static function current_user_can_manage_members(): bool {
+		return current_user_can( 'edit_users' ) || current_user_can( 'manage_woocommerce' );
+	}
+
+	// -------------------------------------------------------------------------
 	// Page discovery
 	// -------------------------------------------------------------------------
 
