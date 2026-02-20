@@ -456,9 +456,38 @@ class ACU_Admin {
 		$total     = $query->get_total();
 		$linked    = 0;
 
-		foreach ( $user_ids as $uid ) {
-			if ( ACU_Helpers::link_coupon_to_user( (int) $uid ) ) {
-				$linked++;
+		if ( ! empty( $user_ids ) ) {
+			// Batch-fetch billing_phone for all users in one query (reduces N+1 to 1 + N coupon queries)
+			global $wpdb;
+			$placeholders = implode( ',', array_fill( 0, count( $user_ids ), '%d' ) );
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$phone_rows = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT user_id, meta_value FROM {$wpdb->usermeta}
+					 WHERE meta_key = 'billing_phone'
+					   AND user_id IN ({$placeholders})
+					   AND meta_value != ''",
+					$user_ids
+				),
+				ARRAY_A
+			);
+
+			// Build map: user_id → normalized phone
+			$uid_to_phone = [];
+			foreach ( $phone_rows as $row ) {
+				$norm = ACU_Helpers::normalize_phone( $row['meta_value'] );
+				if ( strlen( $norm ) === 9 ) {
+					$uid_to_phone[ (int) $row['user_id'] ] = $norm;
+				}
+			}
+
+			// Find and link coupons (one coupon query per user with a phone)
+			foreach ( $uid_to_phone as $uid => $phone ) {
+				$coupon_code = ACU_Helpers::find_coupon_by_phone( $phone );
+				if ( $coupon_code !== false ) {
+					update_user_meta( $uid, '_acu_club_card_coupon', $coupon_code );
+					$linked++;
+				}
 			}
 		}
 

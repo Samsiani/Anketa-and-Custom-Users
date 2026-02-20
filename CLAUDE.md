@@ -40,7 +40,7 @@
 |---|---|---|---|---|
 | `acu_send_otp` | `acu_sms_nonce` | `nonce` | `ACU_OTP::ajax_send_otp()` | none |
 | `acu_verify_otp` | `acu_sms_nonce` | `nonce` | `ACU_OTP::ajax_verify_otp()` | none |
-| `acu_udc_search` | `acu_udc_ajax` | `nonce` | `ACU_Shortcodes::ajax_udc_search()` | none |
+| `acu_udc_search` | `acu_udc_ajax` | `nonce` | `ACU_Shortcodes::ajax_udc_search()` | edit_users |
 | `acu_bulk_link` | `acu_bulk_link` | `_nonce` | `ACU_Admin::ajax_bulk_link()` | manage_options |
 | `acu_test_email` | `acu_test_email` | `_nonce` | `ACU_Admin::ajax_test_email()` | manage_options |
 
@@ -91,9 +91,11 @@
 | Key Pattern | TTL | Purpose |
 |---|---|---|
 | `acu_otp_{phone9}` | 300s | OTP code |
-| `acu_rate_{md5(phone9+ip)}` | 600s | OTP rate limit counter |
+| `acu_rate_{md5(phone9+ip)}` | 600s | OTP send rate limit counter |
+| `acu_vrate_{md5(phone9)}` | 300s | OTP verify rate limit counter (max 5 attempts) |
 | `acu_vtoken_{phone9}` | 300s | Verification token |
 | `acu_udc_rate_{md5(ip)}` | 60s | UDC search rate limit |
+| `acu_anketa_page_id` | 3600s | Cached ID of page containing `[club_anketa_form]` |
 
 ## Database Table
 
@@ -275,6 +277,20 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 ---
 
 ## Changelog
+
+### v1.2.0 — 2026-02-20
+
+**Enterprise Stability & Security Hardening** — addresses 3 Critical + 4 High + 3 Medium findings from security audit.
+
+- **[C1] Fix: Auth gate on print-anketa.php.** Added `edit_users` capability check immediately after the user-not-found guard. Unauthenticated or unprivileged visitors now receive HTTP 403 instead of full PII (name, DOB, phone, personal ID, email, address). Resolves GDPR exposure via URL enumeration.
+- **[C2] Fix: Auth gate on signature-terms.php.** Same `edit_users` check added to the terms print template.
+- **[C3] Fix: Remove nopriv AJAX handler for `acu_udc_search`.** Removed `wp_ajax_nopriv_acu_udc_search` registration; added `current_user_can('edit_users')` guard inside `ajax_udc_search()`. Unauthenticated callers receive "Permission denied" JSON error.
+- **[H1] Fix: OTP verify rate limit.** Added `MAX_VERIFY_ATTEMPTS = 5` constant and transient-based counter `acu_vrate_{md5(phone9)}` in `ajax_verify_otp()`. Blocks brute-force of 6-digit codes; counter cleared on successful verification.
+- **[H2] Fix: Personal ID format validated on form submit.** `ACU_Helpers::validate_personal_id()` (enforces `/^\d{11}$/`) is now called in `validate_form_data()`. Submitting a non-11-digit personal ID produces a validation error.
+- **[H3] Fix: N+1 eliminated in ajax_bulk_link().** Replaced per-user `link_coupon_to_user()` calls with a single batch `$wpdb` query that fetches all `billing_phone` metas for the current batch, then loops for coupon matching. Reduces ~200 queries per 100-user batch to 1 + N coupon queries.
+- **[M1] Refactor: Extracted `ACU_Helpers::find_anketa_page_id()`.** The four duplicate `$wpdb->get_var()` calls that locate the `[club_anketa_form]` page are replaced with a single static helper that caches the result in a transient (`acu_anketa_page_id`, 1-hour TTL). Cache is flushed on plugin activation.
+- **[M2] Fix: `get_client_ip()` now validates with `filter_var(FILTER_VALIDATE_IP)`.** Replaced `sanitize_text_field()` with proper IP validation that also handles comma-separated `X-Forwarded-For` headers, rejecting spoofed non-IP values.
+- **[M3] Fix: DOB format validated on form submit.** Date of birth must parse as `Y-m-d`, `d/m/Y`, or `d.m.Y`; malformed values (e.g. `"31-02-2025"`) now produce a validation error.
 
 ### v1.1.8 — 2026-02-20
 

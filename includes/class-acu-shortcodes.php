@@ -19,8 +19,7 @@ class ACU_Shortcodes {
 		add_shortcode( 'acm_print_terms_button', [ self::class, 'shortcode_print_terms_button' ] );
 		add_shortcode( 'wcu_print_terms_button', [ self::class, 'shortcode_print_terms_button' ] ); // compat
 
-		add_action( 'wp_ajax_acu_udc_search',        [ self::class, 'ajax_udc_search' ] );
-		add_action( 'wp_ajax_nopriv_acu_udc_search', [ self::class, 'ajax_udc_search' ] );
+		add_action( 'wp_ajax_acu_udc_search', [ self::class, 'ajax_udc_search' ] );
 	}
 
 	// -------------------------------------------------------------------------
@@ -31,20 +30,8 @@ class ACU_Shortcodes {
 		wp_enqueue_style( 'acu-shortcode', ACU_URL . 'assets/css/shortcode.css', [], ACU_VERSION );
 		wp_enqueue_script( 'acu-shortcode', ACU_URL . 'assets/js/shortcode.js', [], ACU_VERSION, true );
 		// Find the page that hosts [club_anketa_form] so the Edit button has a URL.
-		// Result is cached in a static so the DB hit only happens once per request.
-		static $anketa_edit_base = null;
-		if ( $anketa_edit_base === null ) {
-			global $wpdb;
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-			$page_id = $wpdb->get_var(
-				"SELECT ID FROM {$wpdb->posts}
-				 WHERE post_content LIKE '%club_anketa_form%'
-				   AND post_type = 'page'
-				   AND post_status = 'publish'
-				 LIMIT 1"
-			);
-			$anketa_edit_base = $page_id ? get_permalink( (int) $page_id ) : '';
-		}
+		$page_id          = ACU_Helpers::find_anketa_page_id();
+		$anketa_edit_base = $page_id ? get_permalink( $page_id ) : '';
 
 		wp_localize_script( 'acu-shortcode', 'acuUdc', [
 			'ajax_url'        => admin_url( 'admin-ajax.php' ),
@@ -86,6 +73,10 @@ class ACU_Shortcodes {
 
 	public static function ajax_udc_search(): void {
 		check_ajax_referer( 'acu_udc_ajax', 'nonce' );
+
+		if ( ! current_user_can( 'edit_users' ) ) {
+			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'acu' ) ] );
+		}
 
 		// Rate limiting: 10 requests per 60 seconds per IP
 		$rate_key = 'acu_udc_rate_' . md5( ACU_Helpers::get_client_ip() );
@@ -240,19 +231,8 @@ class ACU_Shortcodes {
 		$user_id = $user->ID;
 
 		// Build Edit Anketa URL (requires edit_users capability check in the form itself)
-		static $anketa_edit_base = null;
-		if ( $anketa_edit_base === null ) {
-			global $wpdb;
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-			$page_id = $wpdb->get_var(
-				"SELECT ID FROM {$wpdb->posts}
-				 WHERE post_content LIKE '%club_anketa_form%'
-				   AND post_type = 'page'
-				   AND post_status = 'publish'
-				 LIMIT 1"
-			);
-			$anketa_edit_base = $page_id ? get_permalink( (int) $page_id ) : '';
-		}
+		$anketa_page_id  = ACU_Helpers::find_anketa_page_id();
+		$anketa_edit_base = $anketa_page_id ? get_permalink( $anketa_page_id ) : '';
 		$edit_anketa_url = $anketa_edit_base !== ''
 			? add_query_arg( 'edit_user', $user_id, $anketa_edit_base )
 			: '';
@@ -480,19 +460,8 @@ class ACU_Shortcodes {
 	 * Shows an "Register (Anketa)" button that pre-fills the phone in the Anketa form.
 	 */
 	private static function render_coupon_result_html( string $phone, string $coupon_code ): string {
-		static $anketa_base = null;
-		if ( $anketa_base === null ) {
-			global $wpdb;
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-			$page_id = $wpdb->get_var(
-				"SELECT ID FROM {$wpdb->posts}
-				 WHERE post_content LIKE '%club_anketa_form%'
-				   AND post_type   = 'page'
-				   AND post_status = 'publish'
-				 LIMIT 1"
-			);
-			$anketa_base = $page_id ? get_permalink( (int) $page_id ) : '';
-		}
+		$anketa_page_id = ACU_Helpers::find_anketa_page_id();
+		$anketa_base    = $anketa_page_id ? get_permalink( $anketa_page_id ) : '';
 
 		$register_url = $anketa_base !== ''
 			? add_query_arg( 'prefill_phone', rawurlencode( $phone ), $anketa_base )

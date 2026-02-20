@@ -16,10 +16,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class ACU_OTP {
 
-	const MAX_ATTEMPTS       = 3;
-	const RATE_LIMIT_SECONDS = 600;  // 10 min
-	const OTP_EXPIRY_SECONDS = 300;  // 5 min
-	const TOKEN_EXPIRY       = 300;  // 5 min
+	const MAX_ATTEMPTS        = 3;
+	const MAX_VERIFY_ATTEMPTS = 5;
+	const RATE_LIMIT_SECONDS  = 600;  // 10 min
+	const OTP_EXPIRY_SECONDS  = 300;  // 5 min
+	const TOKEN_EXPIRY        = 300;  // 5 min
 
 	// -------------------------------------------------------------------------
 	// Transient key helpers
@@ -205,9 +206,19 @@ class ACU_OTP {
 			wp_send_json_error( [ 'message' => __( 'Invalid phone or code format.', 'acu' ) ] );
 		}
 
+		// Rate limiting: max 5 verify attempts per OTP window
+		$verify_rate_key = 'acu_vrate_' . md5( $phone_digits );
+		$verify_hits     = (int) get_transient( $verify_rate_key );
+		if ( $verify_hits >= self::MAX_VERIFY_ATTEMPTS ) {
+			wp_send_json_error( [ 'message' => __( 'Too many attempts. Please request a new code.', 'acu' ) ] );
+		}
+		set_transient( $verify_rate_key, $verify_hits + 1, self::OTP_EXPIRY_SECONDS );
+
 		$result = self::verify_otp( $phone_digits, $code );
 
 		if ( $result['success'] ) {
+			// Clear verify rate limit on successful verification
+			delete_transient( $verify_rate_key );
 			wp_send_json_success( $result );
 		} else {
 			wp_send_json_error( [ 'message' => $result['message'] ] );

@@ -491,6 +491,19 @@ class ACU_Registration {
 			self::$errors[] = __( 'Please enter a valid email address.', 'acu' );
 		}
 
+		if ( $data['anketa_personal_id'] !== '' && ! ACU_Helpers::validate_personal_id( $data['anketa_personal_id'] ) ) {
+			self::$errors[] = __( 'Personal ID must be exactly 11 digits.', 'acu' );
+		}
+
+		if ( $data['anketa_dob'] !== '' ) {
+			$dob_parsed = DateTime::createFromFormat( 'Y-m-d', $data['anketa_dob'] )
+						?: DateTime::createFromFormat( 'd/m/Y', $data['anketa_dob'] )
+						?: DateTime::createFromFormat( 'd.m.Y', $data['anketa_dob'] );
+			if ( $dob_parsed === false ) {
+				self::$errors[] = __( 'Date of birth format is invalid.', 'acu' );
+			}
+		}
+
 		$local_digits = preg_replace( '/\D+/', '', (string) $data['anketa_phone_local'] );
 		if ( ! preg_match( '/^\d{9}$/', $local_digits ) ) {
 			self::$errors[] = __( 'Phone number must be exactly 9 digits.', 'acu' );

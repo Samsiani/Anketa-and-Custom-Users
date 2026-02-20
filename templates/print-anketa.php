@@ -14,6 +14,12 @@ if ( ! $user ) {
 	wp_die( esc_html__( 'User not found.', 'acu' ) );
 }
 
+// Staff-only: print pages expose full user PII
+if ( ! current_user_can( 'edit_users' ) ) {
+	status_header( 403 );
+	wp_die( esc_html__( 'Access denied.', 'acu' ) );
+}
+
 $meta = function ( string $key, string $default = '' ) use ( $user_id ): string {
 	$v = (string) get_user_meta( $user_id, $key, true );
 	return $v !== '' ? $v : $default;
@@ -63,14 +69,7 @@ $sms_terms_link  = esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type'
 $call_terms_link = esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type' => 'call' ], home_url( '/signature-terms/' ) ) );
 
 // Edit Anketa URL: find the page hosting [club_anketa_form].
-global $wpdb;
-$anketa_page_id = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-	"SELECT ID FROM {$wpdb->posts}
-	 WHERE post_content LIKE '%club_anketa_form%'
-	   AND post_type = 'page'
-	   AND post_status = 'publish'
-	 LIMIT 1"
-);
+$anketa_page_id = ACU_Helpers::find_anketa_page_id();
 $edit_anketa_url = $anketa_page_id
 	? esc_url( add_query_arg( 'edit_user', $user_id, get_permalink( (int) $anketa_page_id ) ) )
 	: '';

@@ -308,15 +308,20 @@ class ACU_Helpers {
 	// -------------------------------------------------------------------------
 
 	public static function get_client_ip(): string {
-		$ip = '';
-		if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
-			$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ) );
-		} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
-			$ip = sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
-		} elseif ( ! empty( $_SERVER['REMOTE_ADDR'] ) ) {
-			$ip = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) );
+		$candidates = [
+			isset( $_SERVER['HTTP_CLIENT_IP'] )       ? wp_unslash( $_SERVER['HTTP_CLIENT_IP'] )       : '',
+			isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ? wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) : '',
+			isset( $_SERVER['REMOTE_ADDR'] )           ? wp_unslash( $_SERVER['REMOTE_ADDR'] )           : '',
+		];
+		foreach ( $candidates as $candidate ) {
+			// X-Forwarded-For can be a comma-separated list; take the first entry
+			$candidate = trim( explode( ',', (string) $candidate )[0] );
+			$ip        = filter_var( $candidate, FILTER_VALIDATE_IP );
+			if ( $ip !== false ) {
+				return $ip;
+			}
 		}
-		return $ip;
+		return '';
 	}
 
 	// -------------------------------------------------------------------------
@@ -381,6 +386,31 @@ class ACU_Helpers {
 
 		update_user_meta( $user_id, '_acu_club_card_coupon', $coupon_code );
 		return true;
+	}
+
+	// -------------------------------------------------------------------------
+	// Page discovery
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Returns the ID of the published page containing [club_anketa_form].
+	 * Result is cached in a transient for 1 hour.
+	 */
+	public static function find_anketa_page_id(): int {
+		$cached = get_transient( 'acu_anketa_page_id' );
+		if ( $cached !== false ) {
+			return (int) $cached;
+		}
+		global $wpdb;
+		$id = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+			"SELECT ID FROM {$wpdb->posts}
+			 WHERE post_content LIKE '%club_anketa_form%'
+			   AND post_type = 'page'
+			   AND post_status = 'publish'
+			 LIMIT 1"
+		);
+		set_transient( 'acu_anketa_page_id', $id, HOUR_IN_SECONDS );
+		return $id;
 	}
 
 	// -------------------------------------------------------------------------

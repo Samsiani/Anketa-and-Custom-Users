@@ -51,6 +51,9 @@ class ACU_Core {
 
 		update_option( 'acu_db_version', self::DB_VERSION );
 
+		// Flush cached page discovery so find_anketa_page_id() re-queries after activation
+		delete_transient( 'acu_anketa_page_id' );
+
 		// Show one-time admin notice
 		set_transient( 'acu_activation_notice', true, 30 );
 	}

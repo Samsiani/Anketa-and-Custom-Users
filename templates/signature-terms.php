@@ -16,6 +16,12 @@ $user_id    = isset( $_GET['user_id'] ) ? absint( $_GET['user_id'] ) : 0;
 $terms_type = isset( $_GET['terms_type'] ) ? sanitize_key( $_GET['terms_type'] ) : '';
 $anketa_url = esc_url( add_query_arg( 'user_id', $user_id, home_url( '/print-anketa/' ) ) );
 
+// Staff-only: print pages expose full user PII
+if ( ! current_user_can( 'edit_users' ) ) {
+	status_header( 403 );
+	wp_die( esc_html__( 'Access denied.', 'acu' ) );
+}
+
 // Determine content and title based on terms_type
 $is_specific = false;
 
