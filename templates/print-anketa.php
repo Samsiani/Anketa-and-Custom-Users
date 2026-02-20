@@ -201,14 +201,14 @@ $edit_anketa_url = $anketa_page_id
 	</div>
 	<?php endif; ?>
 
-	<?php if ( $sms_consent !== '' ) : ?>
+	<?php if ( $sms_consent === 'yes' || $sms_consent === 'no' ) : ?>
 	<div class="row">
 		<div class="label">SMS შეტყობინებების მიღების თანხმობა</div>
 		<div class="value value-line"><?php echo esc_html( $sms_consent === 'yes' ? 'დიახ' : 'არა' ); ?></div>
 	</div>
 	<?php endif; ?>
 
-	<?php if ( $call_consent !== '' ) : ?>
+	<?php if ( $call_consent === 'yes' || $call_consent === 'no' ) : ?>
 	<div class="row">
 		<div class="label">თანხმობა სატელეფონო ზარზე</div>
 		<div class="value value-line"><?php echo esc_html( $call_consent === 'yes' ? 'დიახ' : 'არა' ); ?></div>

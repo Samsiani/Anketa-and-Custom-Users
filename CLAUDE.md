@@ -276,6 +276,13 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.1.7 — 2026-02-20
+
+- **Fix: Consent rows hidden when blank in print template.** Changed the guards in
+  `templates/print-anketa.php` from `!== ''` to explicit `=== 'yes' || === 'no'` checks.
+  Any empty, null, or unexpected meta value causes the entire row to be omitted from the
+  printed document — only rows with a confirmed 'yes' or 'no' value are rendered.
+
 ### v1.1.5 — 2026-02-20
 
 - **Refactor: Print buttons moved to Anketa form.** Separated search (navigation) from
