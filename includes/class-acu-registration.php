@@ -140,6 +140,9 @@ class ACU_Registration {
 
 		$local_digits = preg_replace( '/\D+/', '', (string) $data['anketa_phone_local'] );
 
+		// Normalize to strict 9-digit format for storage
+		$local_digits = ACU_Helpers::normalize_phone( $local_digits );
+
 		// Check if phone was verified via OTP (optional on Anketa form)
 		$otp_token      = isset( $_POST['otp_verification_token'] ) ? sanitize_text_field( wp_unslash( $_POST['otp_verification_token'] ) ) : '';
 		$phone_verified = ACU_OTP::is_phone_verified( $local_digits, $otp_token );
@@ -163,10 +166,9 @@ class ACU_Registration {
 			return;
 		}
 
-		// Save meta
-		$full_phone = '+995 ' . $local_digits;
+		// Save meta — billing_phone stored as strict 9-digit string
 		$meta_map   = [
-			'billing_phone'          => $full_phone,
+			'billing_phone'          => $local_digits,
 			'billing_address_1'      => $data['anketa_address'],
 			'_acu_personal_id'       => $data['anketa_personal_id'],
 			'_acu_dob'               => $data['anketa_dob'],

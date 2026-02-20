@@ -276,6 +276,19 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.0.5 — 2026-02-20
+
+- **Standardized phone storage:** `billing_phone` is now always written as a strict 9-digit string.
+  `ACU_Helpers::normalize_phone()` is applied in `ACU_Registration::maybe_process_submission()`,
+  `ACU_Account::created_customer()`, and `ACU_Account::save_account_details()` before any
+  `update_user_meta()` call. The old `+995 XXXXXXXXX` format is no longer written to the DB.
+- **Format-agnostic phone search:** `[user_data_check]` AJAX handler uses raw `$wpdb` queries
+  with SQL `REPLACE()` to strip spaces, dashes, and `+995` from `meta_value` at query time,
+  so legacy rows stored in any format are found correctly.
+- **External phone table search** updated with the same `REPLACE()` logic.
+- **CI fix:** corrected `release.yml` sed regex for `ACU_VERSION` constant (trailing space before
+  `);` was preventing the constant from being auto-bumped in previous workflow runs).
+
 ### v1.0.3 — 2026-02-20
 
 - **Migrated to Plugin Update Checker v5:** Replaced hand-rolled `ACU_GitHub_Updater`

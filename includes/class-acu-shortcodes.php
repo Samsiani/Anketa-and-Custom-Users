@@ -90,18 +90,22 @@ class ACU_Shortcodes {
 			$result = get_user_by( 'email', $query );
 		}
 
-		// 2. Phone
+		// 2. Phone — format-agnostic: SQL REPLACE strips spaces, dashes, +995 before comparing.
+		//    Handles legacy rows stored as "+995 599620303", "599-62-03-03", etc.
 		if ( ! $result && ACU_Helpers::is_phone_like( $query ) ) {
 			$norm = ACU_Helpers::normalize_phone( $query );
 			if ( $norm !== '' ) {
-				$users = get_users( [
-					'meta_key'    => 'billing_phone',
-					'meta_value'  => $norm,
-					'number'      => 1,
-					'count_total' => false,
-				] );
-				if ( ! empty( $users ) ) {
-					$result = $users[0];
+				global $wpdb;
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$user_ids = $wpdb->get_col( $wpdb->prepare(
+					"SELECT user_id FROM {$wpdb->usermeta}
+					 WHERE meta_key = 'billing_phone'
+					 AND REPLACE(REPLACE(REPLACE(meta_value, ' ', ''), '-', ''), '+995', '') LIKE %s
+					 LIMIT 1",
+					$norm
+				) );
+				if ( ! empty( $user_ids ) ) {
+					$result = get_user_by( 'id', (int) $user_ids[0] );
 				}
 			}
 		}
@@ -132,14 +136,19 @@ class ACU_Shortcodes {
 			}
 		}
 
-		// 5. External phone whitelist
+		// 5. External phone whitelist — format-agnostic REPLACE match
 		if ( ! $result && ACU_Helpers::is_phone_like( $query ) ) {
 			$norm = ACU_Helpers::normalize_phone( $query );
 			if ( $norm !== '' && strlen( $norm ) === 9 ) {
 				global $wpdb;
 				$table = $wpdb->prefix . 'acu_external_phones';
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				$found = $wpdb->get_var( $wpdb->prepare( "SELECT phone FROM {$table} WHERE phone = %s LIMIT 1", $norm ) );
+				$found = $wpdb->get_var( $wpdb->prepare(
+					"SELECT phone FROM {$table}
+					 WHERE REPLACE(REPLACE(REPLACE(phone, ' ', ''), '-', ''), '+995', '') = %s
+					 LIMIT 1",
+					$norm
+				) );
 				if ( $found ) {
 					wp_send_json_success( [ 'html' => self::render_external_phone_html( $norm ) ] );
 				}

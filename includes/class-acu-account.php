@@ -157,7 +157,8 @@ class ACU_Account {
 
 	public static function created_customer( int $customer_id ): void {
 		if ( isset( $_POST['billing_phone'] ) ) {
-			update_user_meta( $customer_id, 'billing_phone', (string) wp_unslash( $_POST['billing_phone'] ) );
+			$phone = ACU_Helpers::normalize_phone( sanitize_text_field( wp_unslash( $_POST['billing_phone'] ) ) );
+			update_user_meta( $customer_id, 'billing_phone', $phone );
 		}
 		if ( isset( $_POST['_acu_personal_id'] ) ) {
 			update_user_meta( $customer_id, '_acu_personal_id', sanitize_text_field( wp_unslash( $_POST['_acu_personal_id'] ) ) );
@@ -195,7 +196,8 @@ class ACU_Account {
 
 	public static function save_account_details( int $user_id ): void {
 		if ( isset( $_POST['account_phone'] ) ) {
-			update_user_meta( $user_id, 'billing_phone', sanitize_text_field( wp_unslash( $_POST['account_phone'] ) ) );
+			$phone = ACU_Helpers::normalize_phone( sanitize_text_field( wp_unslash( $_POST['account_phone'] ) ) );
+			update_user_meta( $user_id, 'billing_phone', $phone );
 		}
 		if ( isset( $_POST['account_personal_id'] ) ) {
 			update_user_meta( $user_id, '_acu_personal_id', sanitize_text_field( wp_unslash( $_POST['account_personal_id'] ) ) );

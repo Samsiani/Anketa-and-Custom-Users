@@ -53,7 +53,7 @@ jobs:
           sed -i -E "s/^( \* Version:[[:space:]]+).+$/\1${NEW}/" arttime-club-member.php
 
           # Update the ACU_VERSION constant.
-          sed -i -E "s/(define\( 'ACU_VERSION', ')[^']+('\);)/\1${NEW}\2/" arttime-club-member.php
+          sed -i -E "s/(define\( 'ACU_VERSION', ')[^']+(' \);)/\1${NEW}\2/" arttime-club-member.php
 
       # ── Commit version bump back to main ──────────────────────────────────
 
