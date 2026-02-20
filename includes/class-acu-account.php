@@ -39,6 +39,9 @@ class ACU_Account {
 		add_filter( 'woocommerce_form_field_tel', [ self::class, 'modify_phone_field_html' ], 20, 4 );
 		add_action( 'woocommerce_after_edit_address_form_billing', [ self::class, 'after_billing_address_form' ] );
 		add_action( 'woocommerce_save_account_details_errors', [ self::class, 'validate_account_phone' ], 10, 1 );
+
+		// My Account dashboard — club card info panel
+		add_action( 'woocommerce_account_dashboard', [ self::class, 'render_dashboard_club_card' ] );
 	}
 
 	// -------------------------------------------------------------------------
@@ -324,6 +327,45 @@ class ACU_Account {
 		check_ajax_referer( 'acu_dismiss_consent', 'nonce' );
 		// Banner is dismissed client-side; no persistent server state needed.
 		wp_send_json_success();
+	}
+
+	// -------------------------------------------------------------------------
+	// Validate phone on account save
+	// -------------------------------------------------------------------------
+
+	// -------------------------------------------------------------------------
+	// My Account dashboard: club card info
+	// -------------------------------------------------------------------------
+
+	public static function render_dashboard_club_card(): void {
+		$user_id     = get_current_user_id();
+		$coupon_code = (string) get_user_meta( $user_id, '_acu_club_card_coupon', true );
+
+		if ( $coupon_code === '' ) {
+			return;
+		}
+
+		// Load the WC coupon to get the current discount amount.
+		$coupon   = new WC_Coupon( $coupon_code );
+		$amount   = $coupon->get_amount();
+		$discount = $amount > 0 ? (float) $amount : 0.0;
+
+		if ( $discount > 0 ) {
+			$text = sprintf(
+				/* translators: 1: club card coupon code, 2: discount percentage */
+				esc_html__( 'თქვენი კლუბის ბარათის ნომერი: %1$s, ფასდაკლება: %2$s%%', 'acu' ),
+				esc_html( $coupon_code ),
+				esc_html( wc_format_decimal( $discount, 0 ) )
+			);
+		} else {
+			$text = sprintf(
+				/* translators: %s: club card coupon code */
+				esc_html__( 'თქვენი კლუბის ბარათის ნომერი: %s', 'acu' ),
+				esc_html( $coupon_code )
+			);
+		}
+
+		echo '<p class="acu-club-card-info" style="margin-top:20px;font-weight:bold;padding:10px;background:#f8f8f8;border-left:4px solid #000;">' . $text . '</p>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	// -------------------------------------------------------------------------

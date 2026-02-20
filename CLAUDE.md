@@ -276,6 +276,16 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.1.8 — 2026-02-20
+
+- **Feat: Club card info on My Account dashboard.** Added
+  `ACU_Account::render_dashboard_club_card()` hooked into `woocommerce_account_dashboard`.
+  Reads `_acu_club_card_coupon` meta for the logged-in user; if set, instantiates
+  `WC_Coupon` to get the current discount amount and renders a styled info bar:
+  `"თქვენი კლუბის ბარათის ნომერი: CODE, ფასდაკლება: X%"`.
+  If the coupon exists but has no amount, shows only the card number. If no coupon is
+  linked, nothing is rendered.
+
 ### v1.1.7 — 2026-02-20
 
 - **Fix: Consent rows hidden when blank in print template.** Changed the guards in
