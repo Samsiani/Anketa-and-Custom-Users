@@ -278,6 +278,12 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.2.7 — 2026-02-24
+
+**[user_data_check] coupon card: show discount amount.**
+
+- **Feat: Discount amount on unregistered coupon user card.** `render_coupon_result_html()` now displays the coupon discount percentage next to the club card code (e.g. `0920222735 — 10%`), matching the existing behaviour in `render_result_html()` for registered users. Uses `WC_Coupon::get_amount()`; falls back to code-only if WooCommerce is unavailable or discount is zero.
+
 ### v1.2.6 — 2026-02-24
 
 **SMS/Call consent logic fix for unregistered coupon users.**

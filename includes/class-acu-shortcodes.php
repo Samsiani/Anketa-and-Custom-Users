@@ -501,6 +501,18 @@ class ACU_Shortcodes {
 		) );
 		$has_sms_consent = ! empty( $in_whitelist );
 
+		// Build coupon display: code + discount amount if available.
+		if ( function_exists( 'wc_get_coupon_id_by_code' ) ) {
+			$coupon          = new WC_Coupon( $coupon_code );
+			$discount_amount = $coupon->get_amount();
+			$coupon_display  = esc_html( $coupon_code );
+			if ( $discount_amount > 0 ) {
+				$coupon_display .= ' &mdash; <strong>' . esc_html( $discount_amount . '%' ) . '</strong>';
+			}
+		} else {
+			$coupon_display = esc_html( $coupon_code );
+		}
+
 		ob_start();
 		?>
 		<div class="wcu-udc-results-layout">
@@ -534,7 +546,7 @@ class ACU_Shortcodes {
 						</li>
 						<li>
 							<span class="wcu-dl-label"><?php esc_html_e( 'კლუბის ბარათი', 'acu' ); ?>:</span>
-							<span class="wcu-dl-value"><?php echo esc_html( $coupon_code ); ?></span>
+							<span class="wcu-dl-value"><?php echo $coupon_display; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 						</li>
 						<li>
 							<span class="wcu-dl-label"><?php esc_html_e( 'სტატუსი', 'acu' ); ?>:</span>
