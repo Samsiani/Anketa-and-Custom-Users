@@ -278,6 +278,15 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.2.12 — 2026-02-24
+
+**WC Registration: password field + inset phone verify button.**
+
+- **Feat: Password field added to WC registration form.** `registration_form_fields()` now renders an optional `<input type="password" name="password">` field side-by-side with the email field (each takes one grid column). WooCommerce core processes `$_POST['password']` automatically — if WC is set to auto-generate, user input is silently ignored; if set to manual, the entered password is used. Password field is never pre-populated on error re-render (security best practice).
+- **Feat: Inset verify button inside phone input.** The Verify button (injected by `sms-verification.js` into `.wc-phone-verify-group`) is now absolutely positioned over the right side of the phone input instead of appearing below it. Phone input gets `padding-right: 88px` to prevent text from sliding under the button. The verified checkmark icon uses the same absolute container. Changes scoped to `.acu-phone-field .phone-verify-container` — does not affect checkout or account edit phone fields.
+- **Fix: Email field no longer spans full grid width.** Removed `style="grid-column:1/-1;"` from the email field so it fills exactly one column (same as all other grid fields), making room for the adjacent password field.
+- **CSS: `input[type="password"]` added to `.acu-field` selectors.** Password fields inside `.acu-field` now receive the same border, padding, font, and focus styles as text/email/tel inputs.
+
 ### v1.2.11 — 2026-02-24
 
 **Fix: WooCommerce registration — optional email field + auto-generate dummy address.**

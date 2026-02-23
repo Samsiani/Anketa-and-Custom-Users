@@ -568,7 +568,8 @@ body.club-anketa-modal-open { overflow: hidden !important; }
 .acu-field input[type="text"],
 .acu-field input[type="email"],
 .acu-field input[type="date"],
-.acu-field input[type="tel"] {
+.acu-field input[type="tel"],
+.acu-field input[type="password"] {
   width: 100%;
   border: 1px solid #d1d5db;
   border-radius: 0;
@@ -583,11 +584,13 @@ body.club-anketa-modal-open { overflow: hidden !important; }
 .acu-field input[type="text"]::placeholder,
 .acu-field input[type="email"]::placeholder,
 .acu-field input[type="date"]::placeholder,
-.acu-field input[type="tel"]::placeholder { color: #c4c9d4; }
+.acu-field input[type="tel"]::placeholder,
+.acu-field input[type="password"]::placeholder { color: #c4c9d4; }
 .acu-field input[type="text"]:focus,
 .acu-field input[type="email"]:focus,
 .acu-field input[type="date"]:focus,
-.acu-field input[type="tel"]:focus {
+.acu-field input[type="tel"]:focus,
+.acu-field input[type="password"]:focus {
   outline: none;
   border-color: var(--acu-border-focus);
   box-shadow: 0 0 0 3px rgba(0,0,0,.06);
@@ -1044,22 +1047,19 @@ body.club-anketa-modal-open { overflow: hidden !important; }
   margin-top: 0;
 }
 
-/* WC phone verify group inside .acu-phone-field — column layout (same as anketa form) */
+/* WC phone verify group inside .acu-phone-field — inset verify button on right side of input */
 .acu-phone-field .wc-phone-verify-group,
 .acu-phone-field .phone-verify-group {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 7px !important;
+  position: relative !important;
+  display: block !important;
   width: 100% !important;
-  align-items: stretch !important;
-  position: static !important;
 }
-/* The phone input itself inside the WC verify group */
+/* The phone input — right padding reserves space for the inset button */
 .acu-phone-field .wc-phone-verify-group input[type="tel"],
 .acu-phone-field .phone-verify-group input[type="tel"] {
   border: 1px solid #d1d5db !important;
   border-radius: 0;
-  padding: 9px 11px !important;
+  padding: 9px 88px 9px 11px !important;
   font-size: 13.5px !important;
   width: 100% !important;
   box-sizing: border-box !important;
@@ -1070,47 +1070,50 @@ body.club-anketa-modal-open { overflow: hidden !important; }
   border-color: var(--acu-border-focus) !important;
   box-shadow: 0 0 0 3px rgba(0,0,0,.06) !important;
 }
-/* Verify container inside acu-phone-field */
+/* Verify container — absolutely overlaid on the right side of the input */
 .acu-phone-field .phone-verify-container {
+  position: absolute !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
   display: flex !important;
   align-items: center !important;
-  gap: 10px !important;
-  position: static !important;
+  gap: 4px !important;
+  padding: 0 6px !important;
+  width: auto !important;
   transform: none !important;
-  width: 100% !important;
 }
 .acu-phone-field .phone-verify-container .phone-verify-btn {
-  display: inline-flex !important;
-  align-items: center;
-  gap: 6px;
-  padding: 9px 18px !important;
-  font-size: 13px !important;
+  padding: 5px 12px !important;
+  font-size: 12px !important;
   font-weight: 700 !important;
   border-radius: 0;
   background: #111;
   color: #fff;
   border: none;
   cursor: pointer;
-  transition: background .15s, transform .1s;
-  white-space: nowrap;
-  flex: 0 0 auto !important;
-  width: auto !important;
+  transition: background .15s;
+  white-space: nowrap !important;
   font-family: var(--acu-font);
+  line-height: 1.4 !important;
 }
-.acu-phone-field .phone-verify-container .phone-verify-btn:hover  { background: #333; }
+.acu-phone-field .phone-verify-container .phone-verify-btn:hover  { background: #333 !important; }
 .acu-phone-field .phone-verify-container .phone-verify-btn:active { transform: scale(.98); }
 .acu-phone-field .phone-verify-container .phone-verified-icon {
+  display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
   color: #15803d;
-  font-size: 12.5px;
-  font-weight: 600;
-  font-family: var(--acu-font);
-  background: #f0fdf4;
-  border: 1px solid #86efac;
+  background: transparent;
+  border: none;
   border-radius: 0;
-  padding: 7px 12px;
+  padding: 2px;
   width: auto;
   height: auto;
   flex: 0 0 auto;
+}
+.acu-phone-field .phone-verify-container .phone-verified-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: #15803d;
 }

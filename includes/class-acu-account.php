@@ -138,11 +138,16 @@ class ACU_Account {
 						<input type="tel" class="input-text" name="billing_phone" id="reg_billing_phone" value="<?php echo $phone; ?>"
 							placeholder="<?php esc_attr_e( 'e.g. 599 123 456', 'acu' ); ?>" inputmode="tel" />
 					</div>
-					<div class="acu-field" style="grid-column:1/-1;">
+					<div class="acu-field">
 						<label for="reg_email"><?php esc_html_e( 'Email address', 'acu' ); ?> <span class="acu-optional"><?php esc_html_e( 'optional', 'acu' ); ?></span></label>
 						<input type="email" class="input-text" name="email" id="reg_email"
 							value="<?php echo $email_val; ?>"
 							autocomplete="email" placeholder="<?php esc_attr_e( 'e.g. name@example.com', 'acu' ); ?>" />
+					</div>
+					<div class="acu-field">
+						<label for="reg_password"><?php esc_html_e( 'Password', 'acu' ); ?> <span class="acu-optional"><?php esc_html_e( 'optional', 'acu' ); ?></span></label>
+						<input type="password" class="input-text" name="password" id="reg_password"
+							autocomplete="new-password" placeholder="<?php esc_attr_e( 'Leave blank to auto-generate', 'acu' ); ?>" />
 					</div>
 				</div>
 			</div>
