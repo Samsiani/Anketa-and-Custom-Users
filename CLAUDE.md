@@ -278,6 +278,12 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.2.9 — 2026-02-24
+
+**CSS: phone verify warning margin fix.**
+
+- **Fix: `.phone-verify-warning` bottom margin.** Added `12px` bottom margin so the "ტელეფონის ვერიფიკაცია სავალდებულოა" warning has a visible gap before the submit/update button.
+
 ### v1.2.8 — 2026-02-24
 
 **Security fix: Anketa form accessible to unauthenticated users.**
