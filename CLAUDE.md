@@ -278,6 +278,12 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.2.8 — 2026-02-24
+
+**Security fix: Anketa form accessible to unauthenticated users.**
+
+- **[CRITICAL] Fix: Unregistered visitors could create WP users via `[club_anketa_form]`.** `shortcode_form()` only checked capability in edit mode (`?edit_user=`); in create mode there was no auth check, so anyone could load the form. `maybe_process_submission()` had the same gap — capability was only verified in edit mode, leaving the create-mode POST handler completely open. Both locations now gate on `ACU_Helpers::current_user_can_manage_members()` as the first check. Non-staff users see an error message in the shortcode and the POST handler silently returns.
+
 ### v1.2.7 — 2026-02-24
 
 **[user_data_check] coupon card: show discount amount.**

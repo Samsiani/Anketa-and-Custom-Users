@@ -122,6 +122,11 @@ class ACU_Registration {
 			return;
 		}
 
+		// Auth gate — staff only (both create and edit mode)
+		if ( ! ACU_Helpers::current_user_can_manage_members() ) {
+			return;
+		}
+
 		// Detect edit mode
 		self::$edit_user_id = isset( $_POST['acu_edit_user_id'] ) ? absint( $_POST['acu_edit_user_id'] ) : 0;
 		if ( self::$edit_user_id > 0 ) {
@@ -249,6 +254,11 @@ class ACU_Registration {
 	// -------------------------------------------------------------------------
 
 	public static function shortcode_form(): string {
+		// ── Auth gate — staff only ────────────────────────────────────────────
+		if ( ! ACU_Helpers::current_user_can_manage_members() ) {
+			return '<p class="wcu-error">' . esc_html__( 'You do not have permission to access this form.', 'acu' ) . '</p>';
+		}
+
 		// ── Edit mode detection ───────────────────────────────────────────────
 		$edit_user_id = isset( $_GET['edit_user'] ) ? absint( $_GET['edit_user'] ) : 0;
 		$edit_user    = $edit_user_id ? get_user_by( 'ID', $edit_user_id ) : false;
