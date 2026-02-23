@@ -278,6 +278,21 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.2.4 — 2026-02-23
+
+**UI polish — registration & account forms.**
+
+- **Fix: Remove all `border-radius` from fields, buttons, sections, modals.** Set CSS variables `--acu-radius` and `--acu-radius-sm` to `0`; zeroed all explicit `border-radius` values in `frontend.css` and `account.css`.
+- **Fix: Verified phone icon always visible.** Removed `display: inline-flex !important` from `.acu-phone-verify-row .phone-verified-icon` and `.acu-phone-field .phone-verify-container .phone-verified-icon` — the `!important` was overriding the JS `style="display:none;"`. Icon now only appears after active OTP verification in the current session (`sessionVerifiedPhone`).
+- **Fix: PHP server-side icon pre-render removed.** `ACU_Account::modify_phone_field_html()` no longer renders the verified icon as visible on page load based on stored meta; icon always starts hidden and JS controls visibility.
+- **Fix: Anketa phone field layout.** Changed `.acu-phone-wrap.phone-verify-group` from column to row layout — prefix `+995`, phone input, and verify button are now all inline with a 6px gap. Prefix made smaller (`min-width: 44px`, `font-size: 12px`).
+- **Remove: Print Terms button.** Removed from `form-edit-account.php` (My Account edit page) and `class-acu-account.php` (WC registration form).
+- **Fix: Verification badge → plain text.** `acu-verify-badge` span changed to `acu-optional` on WC registration form phone field.
+- **Fix: Terms checkbox link.** "terms and conditions" text in the checkbox label is now a hyperlink to the T&C URL; the separate "Read full T&C" link and "Print Terms" button removed from WC registration form.
+- **Fix: `acu-field-hint` text-align center.** Added `text-align: center` to `.acu-field-hint` in `frontend.css`.
+- **Fix: Password fields vertical alignment.** Added `align-items: end` to `.acu-grid-3` and flex column layout to `.acu-grid-3 .form-row` so all three password inputs align at the same height regardless of label line count. Same fix applied via inline styles on `form-edit-account.php`.
+- **Remove: Phone hint text.** Removed `<small class="acu-field-hint">9-digit…</small>` from anketa registration form (`class-acu-registration.php`) and WC registration form (`class-acu-account.php`).
+
 ### v1.2.2 — 2026-02-20
 
 **Safety fixes from post-release audit.**

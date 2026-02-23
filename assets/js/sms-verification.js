@@ -164,11 +164,11 @@
         var $verifiedIcon = $container.find('.phone-verified-icon');
         if ($verifyBtn.length === 0 && $verifiedIcon.length === 0) return;
 
-        var norm     = normalizePhone(currentPhone);
-        var valid    = norm.length === 9;
-        var verified = isPhoneVerified(norm);
+        var norm           = normalizePhone(currentPhone);
+        var valid          = norm.length === 9;
+        var sessionVerified = valid && norm === sessionVerifiedPhone;
 
-        if (verified && valid) {
+        if (sessionVerified) {
             $verifyBtn.hide(); $verifiedIcon.show();
             $container.addClass('phone-verified').removeClass('phone-unverified');
         } else if (valid) {

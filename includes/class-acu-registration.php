@@ -310,13 +310,14 @@ class ACU_Registration {
 
 		ob_start();
 		?>
-		<div class="club-anketa-form-wrap">
+		<div class="acu-form-wrap club-anketa-form-wrap">
+
 			<?php if ( $is_edit ) : ?>
-			<div class="acu-edit-actions" style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1.25rem;">
+			<div class="acu-edit-actions">
 				<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( 'edit_user', $edit_user_id, get_permalink() ) ); ?>"><?php esc_html_e( 'Edit Anketa', 'acu' ); ?></a>
 				<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( 'user_id', $edit_user_id, home_url( '/print-anketa/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print Anketa', 'acu' ); ?></a>
 				<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( [ 'user_id' => $edit_user_id, 'terms_type' => 'sms' ], home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print SMS Terms', 'acu' ); ?></a>
-				<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( [ 'user_id' => $edit_user_id, 'terms_type' => 'call' ], home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print Phone Call Terms', 'acu' ); ?></a>
+				<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( [ 'user_id' => $edit_user_id, 'terms_type' => 'call' ], home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print Call Terms', 'acu' ); ?></a>
 			</div>
 			<?php endif; ?>
 
@@ -334,108 +335,170 @@ class ACU_Registration {
 				<?php if ( $is_edit ) : ?>
 				<input type="hidden" name="acu_edit_user_id" value="<?php echo esc_attr( $edit_user_id ); ?>" />
 				<?php endif; ?>
+				<input type="hidden" name="otp_verification_token" value="" class="otp-verification-token" />
 				<div class="club-anketa-hp">
 					<label for="acu_security_field">Leave this empty</label>
 					<input type="text" id="acu_security_field" name="acu_security_field" value="" autocomplete="off" tabindex="-1" />
 				</div>
 
-				<div class="row">
-					<label class="label" for="anketa_personal_id">პირადი ნომერი *</label>
-					<div class="field"><input type="text" id="anketa_personal_id" name="anketa_personal_id" required value="<?php echo $v( 'anketa_personal_id' ); ?>" /></div>
+				<!-- ── Section: Personal Info ── -->
+				<div class="acu-section">
+					<div class="acu-section__header">
+						<span class="acu-section__icon">
+							<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+						</span>
+						<span class="acu-section__label">პირადი ინფორმაცია</span>
+					</div>
+					<div class="acu-grid-2">
+						<div class="acu-field">
+							<label for="anketa_personal_id">პირადი ნომერი <span class="acu-required" aria-hidden="true">*</span></label>
+							<input type="text" id="anketa_personal_id" name="anketa_personal_id" required
+								placeholder="11-ნიშნა კოდი"
+								value="<?php echo $v( 'anketa_personal_id' ); ?>" />
+						</div>
+						<div class="acu-field">
+							<label for="anketa_first_name">სახელი <span class="acu-required" aria-hidden="true">*</span></label>
+							<input type="text" id="anketa_first_name" name="anketa_first_name" required value="<?php echo $v( 'anketa_first_name' ); ?>" />
+						</div>
+						<div class="acu-field">
+							<label for="anketa_last_name">გვარი <span class="acu-required" aria-hidden="true">*</span></label>
+							<input type="text" id="anketa_last_name" name="anketa_last_name" required value="<?php echo $v( 'anketa_last_name' ); ?>" />
+						</div>
+						<div class="acu-field">
+							<label for="anketa_dob">დაბადების თარიღი <span class="acu-required" aria-hidden="true">*</span></label>
+							<input type="date" id="anketa_dob" name="anketa_dob" required value="<?php echo $v( 'anketa_dob' ); ?>" />
+						</div>
+					</div>
 				</div>
 
-				<div class="row">
-					<label class="label" for="anketa_first_name">სახელი *</label>
-					<div class="field"><input type="text" id="anketa_first_name" name="anketa_first_name" required value="<?php echo $v( 'anketa_first_name' ); ?>" /></div>
-				</div>
-
-				<div class="row">
-					<label class="label" for="anketa_last_name">გვარი *</label>
-					<div class="field"><input type="text" id="anketa_last_name" name="anketa_last_name" required value="<?php echo $v( 'anketa_last_name' ); ?>" /></div>
-				</div>
-
-				<div class="row">
-					<label class="label" for="anketa_dob">დაბადების თარიღი *</label>
-					<div class="field"><input type="date" id="anketa_dob" name="anketa_dob" required value="<?php echo $v( 'anketa_dob' ); ?>" /></div>
-				</div>
-
-				<div class="row">
-					<label class="label">ტელეფონის ნომერი *</label>
-					<div class="field">
-						<div class="phone-group phone-verify-group">
-							<input class="phone-prefix" type="text" value="+995" readonly aria-label="Country code +995" />
-							<input class="phone-local" type="tel" id="anketa_phone_local" name="anketa_phone_local"
-								inputmode="numeric" pattern="[0-9]{9}" maxlength="9" placeholder="599620303"
-								required value="<?php echo $v( 'anketa_phone_local' ); ?>" />
-							<div class="phone-verify-container">
-								<button type="button" class="phone-verify-btn" aria-label="<?php esc_attr_e( 'Verify phone', 'acu' ); ?>">
-									<?php esc_html_e( 'Verify', 'acu' ); ?>
-								</button>
-								<span class="phone-verified-icon" style="display:none;" aria-label="<?php esc_attr_e( 'Phone verified', 'acu' ); ?>">
-									<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-								</span>
+				<!-- ── Section: Contact ── -->
+				<div class="acu-section">
+					<div class="acu-section__header">
+						<span class="acu-section__icon">
+							<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.72 16.92z"/></svg>
+						</span>
+						<span class="acu-section__label">საკონტაქტო ინფორმაცია</span>
+					</div>
+					<div class="acu-grid-1">
+						<div class="acu-field acu-phone-field">
+							<div class="acu-phone-label-row">
+								<label for="anketa_phone_local">ტელეფონის ნომერი <span class="acu-required" aria-hidden="true">*</span></label>
+								<span class="acu-verify-badge">ვერიფიკაცია სავალდებულოა</span>
+							</div>
+							<div class="acu-phone-wrap phone-verify-group">
+								<div class="acu-phone-input-row phone-group">
+									<input class="phone-prefix" type="text" value="+995" readonly tabindex="-1" aria-hidden="true" />
+									<input class="phone-local" type="tel" id="anketa_phone_local" name="anketa_phone_local"
+										inputmode="numeric" pattern="[0-9]{9}" maxlength="9" placeholder="599 000 000"
+										required value="<?php echo $v( 'anketa_phone_local' ); ?>" />
+								</div>
+								<div class="acu-phone-verify-row phone-verify-container">
+									<button type="button" class="phone-verify-btn" aria-label="<?php esc_attr_e( 'Verify phone number via SMS', 'acu' ); ?>">
+										<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.72 16.92z"/></svg>
+										SMS-ით ვერიფიკაცია
+									</button>
+									<span class="phone-verified-icon" style="display:none;" aria-label="<?php esc_attr_e( 'Phone verified', 'acu' ); ?>">
+										<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+										ტელეფონი დადასტურებულია
+									</span>
+								</div>
 							</div>
 						</div>
-						<small class="help-text">9-ციფრიანი ნომერი, მაგ: 599620303</small>
+						<div class="acu-grid-2">
+							<div class="acu-field">
+								<label for="anketa_address">მისამართი <span class="acu-optional">ოფციური</span></label>
+								<input type="text" id="anketa_address" name="anketa_address" value="<?php echo $v( 'anketa_address' ); ?>" />
+							</div>
+							<div class="acu-field">
+								<label for="anketa_email">E-mail <span class="acu-optional">ოფციური</span></label>
+								<input type="email" id="anketa_email" name="anketa_email"
+									placeholder="საიტზე რეგისტრაციისთვის"
+									value="<?php echo $v( 'anketa_email' ); ?>" />
+							</div>
+						</div>
 					</div>
 				</div>
 
-				<div class="row">
-					<label class="label" for="anketa_address">მისამართი</label>
-					<div class="field"><input type="text" id="anketa_address" name="anketa_address" value="<?php echo $v( 'anketa_address' ); ?>" /></div>
-				</div>
-
-				<div class="row">
-					<label class="label" for="anketa_email">E-mail <span class="optional-note">(ოფციური, თუ საიტზე გსურთ რეგისტრაცია)</span></label>
-					<div class="field"><input type="email" id="anketa_email" name="anketa_email" value="<?php echo $v( 'anketa_email' ); ?>" /></div>
-				</div>
-
-				<div class="rules-wrap">
-					<div class="rules-title">წესები და პირობები</div>
-					<div class="rules-text"><?php echo wp_kses_post( $rules_html ); ?></div>
-				</div>
-
-				<div class="row">
-					<label class="label" for="anketa_card_no">მივიღე ბარათი №</label>
-					<div class="field"><input type="text" id="anketa_card_no" name="anketa_card_no" value="<?php echo $v( 'anketa_card_no' ); ?>" /></div>
-				</div>
-
-				<!-- SMS consent -->
-				<div class="row club-anketa-sms-consent" data-context="registration">
-					<span class="label">SMS შეტყობინებების მიღების თანხმობა</span>
-					<div class="field sms-consent-options">
-						<label style="margin-right:12px;"><input type="radio" name="anketa_sms_consent" value="yes" <?php checked( $sms_old, 'yes' ); ?> /> დიახ</label>
-						<label><input type="radio" name="anketa_sms_consent" value="no" <?php checked( $sms_old, 'no' ); ?> /> არა</label>
+				<!-- ── Section: Club Card (staff fields) ── -->
+				<div class="acu-section">
+					<div class="acu-section__header">
+						<span class="acu-section__icon">
+							<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+						</span>
+						<span class="acu-section__label">კლუბის ბარათი</span>
 					</div>
-					<input type="hidden" name="otp_verification_token" value="" class="otp-verification-token" />
-				</div>
-
-				<!-- Call consent -->
-				<div class="row club-anketa-sms-consent" data-context="registration">
-					<span class="label"><?php esc_html_e( 'თანხმობა სატელეფონო ზარზე', 'acu' ); ?></span>
-					<div class="field sms-consent-options">
-						<label style="margin-right:12px;"><input type="radio" name="anketa_call_consent" value="yes" <?php checked( $call_old, 'yes' ); ?> /> <?php esc_html_e( 'დიახ', 'acu' ); ?></label>
-						<label><input type="radio" name="anketa_call_consent" value="no" <?php checked( $call_old, 'no' ); ?> /> <?php esc_html_e( 'არა', 'acu' ); ?></label>
+					<div class="acu-grid-2">
+						<div class="acu-field">
+							<label for="anketa_card_no">მივიღე ბარათი № <span class="acu-optional">ოფციური</span></label>
+							<input type="text" id="anketa_card_no" name="anketa_card_no" value="<?php echo $v( 'anketa_card_no' ); ?>" />
+						</div>
+						<div class="acu-field">
+							<label for="anketa_responsible_person">პასუხისმგებელი პირი <span class="acu-optional">ოფციური</span></label>
+							<input type="text" id="anketa_responsible_person" name="anketa_responsible_person" value="<?php echo $v( 'anketa_responsible_person' ); ?>" />
+						</div>
+						<div class="acu-field">
+							<label for="anketa_form_date">თარიღი <span class="acu-optional">ოფციური</span></label>
+							<input type="date" id="anketa_form_date" name="anketa_form_date" value="<?php echo $v( 'anketa_form_date' ); ?>" />
+						</div>
+						<div class="acu-field">
+							<label for="anketa_shop">მაღაზია <span class="acu-optional">ოფციური</span></label>
+							<input type="text" id="anketa_shop" name="anketa_shop" value="<?php echo $v( 'anketa_shop' ); ?>" />
+						</div>
 					</div>
 				</div>
 
-				<div class="row">
-					<label class="label" for="anketa_responsible_person">პასუხისმგებელი პირი</label>
-					<div class="field"><input type="text" id="anketa_responsible_person" name="anketa_responsible_person" value="<?php echo $v( 'anketa_responsible_person' ); ?>" /></div>
+				<!-- ── Section: Rules ── -->
+				<div class="acu-section">
+					<div class="acu-section__header">
+						<span class="acu-section__icon">
+							<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+						</span>
+						<span class="acu-section__label">წესები და პირობები</span>
+					</div>
+					<div class="acu-rules-block rules-wrap">
+						<div class="rules-text"><?php echo wp_kses_post( $rules_html ); ?></div>
+					</div>
 				</div>
 
-				<div class="row">
-					<label class="label" for="anketa_form_date">თარიღი</label>
-					<div class="field"><input type="date" id="anketa_form_date" name="anketa_form_date" value="<?php echo $v( 'anketa_form_date' ); ?>" /></div>
+				<!-- ── Section: Consent ── -->
+				<div class="acu-section">
+					<div class="acu-section__header">
+						<span class="acu-section__icon">
+							<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+						</span>
+						<span class="acu-section__label">თანხმობა</span>
+					</div>
+
+					<div class="acu-consent-row club-anketa-sms-consent" data-context="registration">
+						<span class="acu-consent-label">
+							<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline;vertical-align:-1px;margin-right:5px;flex-shrink:0"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+							SMS შეტყობინებების მიღება
+						</span>
+						<div class="acu-consent-toggle">
+							<input type="radio" name="anketa_sms_consent" id="acu_sms_yes" value="yes" <?php checked( $sms_old, 'yes' ); ?> />
+							<label for="acu_sms_yes">დიახ</label>
+							<input type="radio" name="anketa_sms_consent" id="acu_sms_no" value="no" <?php checked( $sms_old, 'no' ); ?> />
+							<label for="acu_sms_no">არა</label>
+						</div>
+					</div>
+
+					<div class="acu-consent-row club-anketa-sms-consent" data-context="registration">
+						<span class="acu-consent-label">
+							<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline;vertical-align:-1px;margin-right:5px;flex-shrink:0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.72 16.92z"/></svg>
+							<?php esc_html_e( 'თანხმობა სატელეფონო ზარზე', 'acu' ); ?>
+						</span>
+						<div class="acu-consent-toggle">
+							<input type="radio" name="anketa_call_consent" id="acu_call_yes" value="yes" <?php checked( $call_old, 'yes' ); ?> />
+							<label for="acu_call_yes"><?php esc_html_e( 'დიახ', 'acu' ); ?></label>
+							<input type="radio" name="anketa_call_consent" id="acu_call_no" value="no" <?php checked( $call_old, 'no' ); ?> />
+							<label for="acu_call_no"><?php esc_html_e( 'არა', 'acu' ); ?></label>
+						</div>
+					</div>
 				</div>
 
-				<div class="row">
-					<label class="label" for="anketa_shop">მაღაზია</label>
-					<div class="field"><input type="text" id="anketa_shop" name="anketa_shop" value="<?php echo $v( 'anketa_shop' ); ?>" /></div>
-				</div>
-
-				<div class="submit-row">
-					<button type="submit" class="submit-btn"><?php echo esc_html( $submit_label ); ?></button>
+				<!-- ── Submit ── -->
+				<div class="acu-submit-row">
+					<button type="submit" class="acu-submit-btn submit-btn"><?php echo esc_html( $submit_label ); ?></button>
 				</div>
 			</form>
 		</div>

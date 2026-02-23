@@ -1,16 +1,67 @@
 /* ACU Account page styles */
-.wcu-fieldset { margin-bottom: 24px; }
-.wcu-fieldset > legend { font-weight: 600; margin-bottom: 10px; display: block; }
-.wcu-grid { display: grid; grid-template-columns: 1fr; gap: 14px 16px; }
+.wcu-fieldset { margin-bottom: 16px; }
+.wcu-fieldset > legend { font-weight: 600; margin-bottom: 8px; display: block; font-size: 13px; }
+.wcu-grid { display: grid; grid-template-columns: 1fr; gap: 10px 14px; }
 .wcu-half { width: 100%; }
-@media (min-width: 640px) { .wcu-grid { grid-template-columns: 1fr 1fr; } }
-.wcu-help { display: block; color: #6b7280; font-size: 12px; margin-top: 4px; }
-.wcu-inline-control { display: inline-flex; align-items: center; gap: 16px; flex-wrap: wrap; font-weight: 600; }
+@media (min-width: 600px) { .wcu-grid { grid-template-columns: 1fr 1fr; } }
+.wcu-help { display: block; color: #6b7280; font-size: 11.5px; margin-top: 3px; line-height: 1.4; }
+.wcu-inline-control { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; font-weight: 600; }
 .wcu-grid > .wcu-inline-control { grid-column: 1 / -1; width: 100%; justify-content: center; text-align: center; }
 .wcu-inline-control--center { justify-content: center; text-align: center; width: 100%; }
-.wcu-inline-control--highlight { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px; }
-.wcu-inline-control__label { font-weight: 700; }
-.wcu-radio-inline { display: inline-flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.wcu-radio-inline label { display: inline-flex; align-items: center; gap: 6px; margin: 0; font-weight: 600; }
-.wcu-terms-details summary { font-weight: 600; cursor: pointer; }
-.wcu-terms-body { max-height: 40vh; overflow: auto; padding: 8px; border-left: 3px solid rgba(0,0,0,.04); background: #fff; }
+.wcu-inline-control--highlight { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0; padding: 10px 14px; }
+.wcu-inline-control__label { font-weight: 700; font-size: 13px; }
+.wcu-radio-inline { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.wcu-radio-inline label { display: inline-flex; align-items: center; gap: 5px; margin: 0; font-weight: 600; font-size: 13px; }
+.wcu-terms-details summary { font-weight: 600; cursor: pointer; font-size: 12.5px; }
+.wcu-terms-body { max-height: 35vh; overflow: auto; padding: 8px; border-left: 3px solid rgba(0,0,0,.04); background: #fff; font-size: 12.5px; }
+
+/* ---- Club Card Banner (My Account dashboard) ---- */
+.acu-card-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #111;
+  border-radius: 0;
+  padding: 16px 20px;
+  margin: 0 0 24px;
+  background: #fff;
+  font-family: "Noto Sans Georgian","DejaVu Sans","Segoe UI",Roboto,Arial,sans-serif;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.acu-card-banner__left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.acu-card-banner__icon {
+  font-size: 22px;
+  color: #111;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.acu-card-banner__title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 2px;
+}
+.acu-card-banner__code {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: #111;
+}
+.acu-card-banner__right { flex-shrink: 0; }
+.acu-card-banner__badge {
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 700;
+  border: 2px solid #111;
+  border-radius: 0;
+  color: #111;
+  letter-spacing: .04em;
+}

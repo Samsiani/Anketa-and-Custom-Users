@@ -28,7 +28,7 @@
   color: #8b0000;
   padding: 12px;
   margin: 0 0 16px;
-  border-radius: 4px;
+  border-radius: 0;
   font-size: 14px;
 }
 .club-anketa-form { display: block; }
@@ -50,7 +50,7 @@
   width: 100%;
   padding: 11px 12px;
   border: 1px solid #999;
-  border-radius: 4px;
+  border-radius: 0;
   background: #fff;
   font: 15px/1.4 var(--anketa-font-stack);
   transition: border-color .15s, box-shadow .15s;
@@ -73,7 +73,7 @@
   color: #000;
   border: 1px solid #999;
   border-right: none;
-  border-radius: 4px 0 0 4px;
+  border-radius: 0;
   font: 15px/1.4 var(--anketa-font-stack);
   pointer-events: none;
   user-select: none;
@@ -84,12 +84,12 @@
   min-width: 0;
   border: 1px solid #999;
   border-left: none;
-  border-radius: 0 4px 4px 0;
+  border-radius: 0;
   padding: 11px 12px;
   font: 15px/1.4 var(--anketa-font-stack);
 }
 .phone-local:focus { border-color: var(--phone-focus); box-shadow: 0 0 0 3px rgba(0,0,0,.08); }
-.phone-group.phone-verify-group .phone-local { border-radius: 0 !important; border-right: 1px solid #999 !important; }
+.phone-group.phone-verify-group .phone-local { border-radius: 0; border-right: 1px solid #999 !important; }
 
 /* ---- Phone verify group (Flexbox side-by-side) ---- */
 .phone-verify-group {
@@ -113,7 +113,7 @@
   display: block !important;
   box-sizing: border-box !important;
 }
-.phone-verify-group:not(.phone-group) .phone-local { border-radius: 4px !important; }
+.phone-verify-group:not(.phone-group) .phone-local { border-radius: 0; }
 .phone-verify-container {
   flex: 0 0 auto !important;
   position: static !important;
@@ -132,7 +132,7 @@
   background: #111;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 0;
   padding: 6px 14px;
   font-size: 13px;
   font-weight: 600;
@@ -151,7 +151,7 @@
   height: 12px;
   margin-left: 6px;
   border: 2px solid #fff;
-  border-radius: 50%;
+  border-radius: 0;
   border-top-color: transparent;
   animation: acu-spin 0.8s linear infinite;
 }
@@ -164,7 +164,7 @@
   justify-content: center;
   color: #2e7d32;
   background: #e8f5e9;
-  border-radius: 50%;
+  border-radius: 0;
   width: 28px;
   height: 28px;
   padding: 4px;
@@ -207,7 +207,7 @@
   margin: 8px 0 0;
   padding: 8px 12px;
   background: #ffebee;
-  border-radius: 4px;
+  border-radius: 0;
   border-left: 3px solid #c62828;
 }
 .submit-btn.verification-blocked,
@@ -219,7 +219,7 @@ button[type="submit"].verification-blocked { opacity: 0.6; cursor: not-allowed; 
   border: 1px solid #bbb;
   padding: 12px 14px;
   margin: 24px 0;
-  border-radius: 4px;
+  border-radius: 0;
   background: #fafafa;
 }
 .club-anketa-form .rules-title { font-weight: 700; margin-bottom: 8px; font-size: 15px; }
@@ -234,7 +234,7 @@ button[type="submit"].verification-blocked { opacity: 0.6; cursor: not-allowed; 
   background: #111;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 0;
   cursor: pointer;
   letter-spacing: .5px;
   word-spacing: normal;
@@ -251,17 +251,17 @@ button[type="submit"].verification-blocked { opacity: 0.6; cursor: not-allowed; 
 }
 
 /* ---- Inline consent controls (checkout + account) ---- */
-.wcu-banner { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: 10px; margin: 12px 0 18px; border: 1px solid #e5e7eb; background: #fff; box-shadow: 0 4px 14px rgba(0,0,0,.05); }
+.wcu-banner { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border-radius: 0; margin: 12px 0 18px; border: 1px solid #e5e7eb; background: #fff; box-shadow: 0 4px 14px rgba(0,0,0,.05); }
 .wcu-banner--info { border-color: #bfdbfe; background: #eff6ff; }
 .wcu-banner--subtle { border-color: #e5e7eb; background: #f9fafb; }
 .wcu-banner__content { color: #1f2937; font-size: 14px; }
 .wcu-banner__actions { display: flex; align-items: center; gap: 8px; }
-.wcu-banner__dismiss { appearance: none; background: transparent; color: #6b7280; border: none; cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 6px; border-radius: 6px; }
+.wcu-banner__dismiss { appearance: none; background: transparent; color: #6b7280; border: none; cursor: pointer; font-size: 18px; line-height: 1; padding: 2px 6px; border-radius: 0; }
 .wcu-banner__dismiss:hover { background: rgba(0,0,0,.05); color: #374151; }
 .wcu-help { display: block; color: #6b7280; font-size: 12px; margin-top: 4px; }
 .wcu-inline-control { display: inline-flex; align-items: center; gap: 16px; flex-wrap: wrap; font-weight: 600; }
 .wcu-inline-control--center { justify-content: center; text-align: center; width: 100%; }
-.wcu-inline-control--highlight { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px; }
+.wcu-inline-control--highlight { background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 0; padding: 12px 16px; }
 .wcu-inline-control__label { font-weight: 700; }
 .wcu-radio-inline { display: inline-flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 .wcu-radio-inline label { display: inline-flex; align-items: center; gap: 6px; margin: 0; font-weight: 600; }
@@ -327,7 +327,7 @@ body.club-anketa-modal-open { overflow: hidden !important; }
   position: relative !important;
   z-index: 2 !important;
   background: #fff !important;
-  border-radius: 12px !important;
+  border-radius: 0;
   box-shadow: 0 20px 60px rgba(0,0,0,0.3) !important;
   width: 100% !important;
   max-width: 420px !important;
@@ -350,7 +350,7 @@ body.club-anketa-modal-open { overflow: hidden !important; }
   width: 32px !important; height: 32px !important;
   border: none !important;
   background: #f5f5f5 !important;
-  border-radius: 50% !important;
+  border-radius: 0;
   font-size: 24px !important;
   line-height: 1 !important;
   cursor: pointer !important;
@@ -389,7 +389,7 @@ body.club-anketa-modal-open { overflow: hidden !important; }
 .otp-digit {
   width: 48px !important; height: 56px !important;
   border: 2px solid #ddd !important;
-  border-radius: 8px !important;
+  border-radius: 0;
   text-align: center !important;
   font-size: 24px !important; font-weight: 700 !important;
   font-family: var(--anketa-font-stack);
@@ -400,7 +400,7 @@ body.club-anketa-modal-open { overflow: hidden !important; }
 }
 .otp-digit:focus { outline: none; border-color: #111; background: #fff; box-shadow: 0 0 0 3px rgba(0,0,0,.08); }
 .otp-digit:not(:placeholder-shown) { border-color: #111; background: #fff; }
-.otp-message { text-align: center; padding: 10px 12px; border-radius: 6px; font-size: 14px; min-height: 20px; margin-bottom: 12px; }
+.otp-message { text-align: center; padding: 10px 12px; border-radius: 0; font-size: 14px; min-height: 20px; margin-bottom: 12px; }
 .otp-message:empty { display: none; }
 .otp-message.success { background: #e8f5e9; color: #2e7d32; }
 .otp-message.error { background: #ffebee; color: #c62828; }
@@ -416,7 +416,7 @@ body.club-anketa-modal-open { overflow: hidden !important; }
   padding: 14px 24px;
   font-size: 16px; font-weight: 600;
   background: #111; color: #fff;
-  border: none; border-radius: 8px;
+  border: none; border-radius: 0;
   cursor: pointer;
   font-family: var(--anketa-font-stack);
   transition: background 0.15s, transform 0.1s;
@@ -434,11 +434,683 @@ body.club-anketa-modal-open { overflow: hidden !important; }
 }
 @media (max-width: 480px) {
   .club-anketa-modal { padding: 8px !important; }
-  .club-anketa-modal-content { border-radius: 8px !important; max-width: 100% !important; }
+  .club-anketa-modal-content { border-radius: 0; max-width: 100% !important; }
   .club-anketa-modal-header { padding: 20px 16px 12px !important; }
   .club-anketa-modal-header h3 { font-size: 18px !important; }
   .club-anketa-modal-body { padding: 16px !important; }
   .otp-input-container { gap: 6px !important; }
-  .otp-digit { width: 42px !important; height: 50px !important; font-size: 20px !important; border-radius: 6px !important; }
+  .otp-digit { width: 42px !important; height: 50px !important; font-size: 20px !important; border-radius: 0; }
   .club-anketa-modal-footer { padding: 12px 16px 20px !important; }
+}
+
+/* ==========================================================================
+   ACU Design System v2 — Minimal/Neutral palette (compact edition)
+   All selectors below are NEW. Existing .club-anketa-form .row/.label/.field
+   classes are kept above for WC checkout backward-compatibility.
+   ========================================================================== */
+
+/* ---- Design tokens ---- */
+:root {
+  --acu-bg:           #fff;
+  --acu-surface:      #fff;
+  --acu-border:       #e5e7eb;
+  --acu-border-focus: #111;
+  --acu-text:         #111827;
+  --acu-text-muted:   #6b7280;
+  --acu-text-label:   #374151;
+  --acu-accent:       #111;
+  --acu-accent-hover: #333;
+  --acu-success:      #16a34a;
+  --acu-error:        #dc2626;
+  --acu-required:     #ef4444;
+  --acu-radius-sm:    0;
+  --acu-radius:       0;
+  --acu-shadow:       0 1px 2px rgba(0,0,0,.05);
+  --acu-font:         "Noto Sans Georgian","DejaVu Sans","Segoe UI",Roboto,Arial,sans-serif;
+}
+
+/* ---- Form wrap ---- */
+.acu-form-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  font-family: var(--acu-font);
+}
+
+/* ---- Section card ---- */
+.acu-section {
+  background: var(--acu-surface);
+  border: 1px solid var(--acu-border);
+  border-radius: 0;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  box-shadow: var(--acu-shadow);
+  box-sizing: border-box;
+}
+
+/* ---- Section header ---- */
+.acu-section__header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-bottom: 1px solid var(--acu-border);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+.acu-section__icon {
+  display: flex;
+  align-items: center;
+  color: #b0b7c3;
+  flex-shrink: 0;
+}
+.acu-section__label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #b0b7c3;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---- Grid layouts ---- */
+.acu-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 14px;
+}
+@media (max-width: 600px) {
+  .acu-grid-2 { grid-template-columns: 1fr; }
+}
+.acu-grid-1 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.acu-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px 14px;
+  align-items: end;
+}
+/* Make form-row items in acu-grid-3 stretch so labels align top and inputs align bottom */
+.acu-grid-3 .form-row {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin: 0;
+}
+.acu-grid-3 .form-row > label {
+  flex: 1;
+  margin-bottom: 4px;
+}
+@media (max-width: 640px) {
+  .acu-grid-3 { grid-template-columns: 1fr; }
+}
+
+/* ---- Field ---- */
+.acu-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.acu-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--acu-text-label);
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+.acu-required { color: var(--acu-required); font-size: 11px; font-weight: 700; }
+.acu-optional { font-size: 11px; font-weight: 400; color: var(--acu-text-muted); }
+.acu-field input[type="text"],
+.acu-field input[type="email"],
+.acu-field input[type="date"],
+.acu-field input[type="tel"] {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 0;
+  padding: 8px 10px;
+  font-size: 13.5px;
+  font-family: var(--acu-font);
+  background: #fff;
+  box-sizing: border-box;
+  transition: border-color .15s, box-shadow .15s;
+  color: var(--acu-text);
+}
+.acu-field input[type="text"]::placeholder,
+.acu-field input[type="email"]::placeholder,
+.acu-field input[type="date"]::placeholder,
+.acu-field input[type="tel"]::placeholder { color: #c4c9d4; }
+.acu-field input[type="text"]:focus,
+.acu-field input[type="email"]:focus,
+.acu-field input[type="date"]:focus,
+.acu-field input[type="tel"]:focus {
+  outline: none;
+  border-color: var(--acu-border-focus);
+  box-shadow: 0 0 0 3px rgba(0,0,0,.06);
+}
+.acu-field input.acu-valid   { border-color: var(--acu-success); }
+.acu-field input.acu-invalid { border-color: var(--acu-error); }
+.acu-field-hint {
+  font-size: 11px;
+  color: var(--acu-text-muted);
+  margin: 0;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* ---- Phone field v2 — 2-row layout (input above, verify button below) ---- */
+.acu-phone-field { gap: 5px !important; }
+
+.acu-phone-label-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.acu-phone-label-row label { margin: 0; }
+
+/* "Verification required" amber badge */
+.acu-verify-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #92400e;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 0;
+  padding: 2px 7px;
+  white-space: nowrap;
+  line-height: 1.6;
+}
+
+/* Phone wrap — single inline row: [+995][input][verify btn] */
+.acu-phone-wrap.phone-verify-group {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 6px !important;
+  width: 100% !important;
+  align-items: center !important;
+  position: static !important;
+}
+
+/* Input row: +995 | number — takes remaining space */
+.acu-phone-input-row.phone-group {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: stretch;
+}
+.acu-phone-input-row .phone-prefix {
+  flex: 0 0 auto;
+  min-width: 44px;
+  text-align: center;
+  border: 1px solid #d1d5db;
+  border-right: none;
+  border-radius: 0;
+  padding: 9px 6px;
+  font-size: 12px;
+  background: #f9fafb;
+  color: #6b7280;
+  pointer-events: none;
+  user-select: none;
+  font-family: var(--acu-font);
+  box-sizing: border-box;
+}
+.acu-phone-input-row .phone-local {
+  flex: 1 1 auto;
+  border: 1px solid #d1d5db;
+  border-radius: 0;
+  padding: 9px 11px;
+  font-size: 13.5px;
+  font-family: var(--acu-font);
+  color: var(--acu-text);
+  box-sizing: border-box;
+  min-width: 0;
+  transition: border-color .15s, box-shadow .15s;
+}
+.acu-phone-input-row .phone-local:focus {
+  outline: none;
+  border-color: var(--acu-border-focus);
+  box-shadow: 0 0 0 3px rgba(0,0,0,.06);
+  position: relative;
+  z-index: 1;
+}
+
+/* Verify button / icon — auto width, sits inline */
+.acu-phone-verify-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  position: static !important;
+  transform: none !important;
+  width: auto !important;
+  flex: 0 0 auto !important;
+}
+.acu-phone-verify-row .phone-verify-btn {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: .02em;
+  border-radius: 0;
+  background: #111;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background .15s, transform .1s;
+  white-space: nowrap;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  font-family: var(--acu-font);
+}
+.acu-phone-verify-row .phone-verify-btn svg { flex-shrink: 0; }
+.acu-phone-verify-row .phone-verify-btn:hover  { background: #333; }
+.acu-phone-verify-row .phone-verify-btn:active { transform: scale(.98); }
+.acu-phone-verify-row .phone-verify-btn:disabled,
+.acu-phone-verify-row .phone-verify-btn.loading { background: #9ca3af; cursor: not-allowed; }
+
+/* Verified state — pill with green bg and text (display controlled by JS) */
+.acu-phone-verify-row .phone-verified-icon {
+  align-items: center;
+  gap: 6px;
+  color: #15803d;
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: var(--acu-font);
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 0;
+  padding: 7px 12px;
+  width: auto;
+  height: auto;
+  flex: 0 0 auto;
+}
+
+/* Input border color when verified / unverified */
+.phone-verify-group.phone-verified   .acu-phone-input-row .phone-local { border-color: #86efac; background: #f0fdf4; }
+.phone-verify-group.phone-unverified .acu-phone-input-row .phone-local { border-color: #fca5a5; }
+
+/* ---- Consent row ---- */
+.acu-consent-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #f3f4f6;
+  gap: 12px;
+}
+.acu-consent-row:last-child { border-bottom: none; }
+.acu-consent-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111;
+  flex: 1;
+  line-height: 1.4;
+}
+
+/* ---- Consent pill toggle ---- */
+.acu-consent-toggle {
+  display: inline-flex;
+  border: 1px solid #d1d5db;
+  border-radius: 0;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.acu-consent-toggle input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.acu-consent-toggle label {
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #fff;
+  color: #9ca3af;
+  transition: background .12s, color .12s;
+  user-select: none;
+  margin: 0;
+  line-height: 1.5;
+}
+.acu-consent-toggle label:not(:last-child) {
+  border-right: 1px solid #d1d5db;
+}
+.acu-consent-toggle input[type="radio"]:checked + label {
+  background: #111;
+  color: #fff;
+}
+
+/* ---- Rules block ---- */
+.acu-rules-block {
+  background: #fafafa;
+  border: 1px solid var(--acu-border);
+  border-radius: 0;
+  padding: 12px 16px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.acu-rules-block p,
+.acu-rules-block li { font-size: 13px; line-height: 1.6; color: #374151; }
+.acu-rules-block strong { color: #111; }
+.acu-rules-block ul,
+.acu-rules-block ol { margin: 6px 0 6px 18px; padding: 0; }
+.acu-rules-block li { margin-bottom: 3px; }
+
+/* ---- Edit mode action bar ---- */
+.acu-edit-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  padding: 10px 14px;
+  background: #f9fafb;
+  border: 1px solid var(--acu-border);
+  border-radius: 0;
+}
+.acu-edit-actions .button,
+.acu-edit-actions .button-secondary {
+  font-size: 12px !important;
+  padding: 5px 11px !important;
+  border-radius: 0;
+  font-weight: 600 !important;
+  line-height: 1.5 !important;
+}
+
+/* ---- Submit row ---- */
+.acu-submit-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+.acu-submit-btn {
+  padding: 11px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  background: var(--acu-accent);
+  color: #fff;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  font-family: var(--acu-font);
+  transition: background .15s, transform .1s;
+  width: 100%;
+  box-sizing: border-box;
+}
+@media (min-width: 600px) { .acu-submit-btn { width: auto; min-width: 150px; } }
+.acu-submit-btn:hover  { background: var(--acu-accent-hover); }
+.acu-submit-btn:active { transform: scale(.98); }
+
+/* ---- OTP Modal improvements ---- */
+.club-anketa-modal-header {
+  background: linear-gradient(180deg, #fafafa, #fff) !important;
+}
+.club-anketa-modal-header .otp-phone-display {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: #111 !important;
+  direction: ltr;
+  unicode-bidi: embed;
+}
+.otp-digit {
+  width: 48px !important;
+  height: 56px !important;
+  border-radius: 0;
+  font-size: 22px !important;
+}
+.otp-message.success::before { content: "✓  "; }
+.otp-message.error::before   { content: "✗  "; }
+.otp-verify-btn {
+  letter-spacing: .04em !important;
+  border-radius: 0;
+  font-size: 14px !important;
+}
+
+/* ---- WC account page input styling inside acu-section ---- */
+.acu-section .input-text,
+.acu-section input[type="text"].input-text,
+.acu-section input[type="email"].input-text,
+.acu-section input[type="tel"].input-text,
+.acu-section input[type="password"].input-text {
+  border: 1px solid #d1d5db !important;
+  border-radius: 0;
+  padding: 8px 10px !important;
+  font-size: 13.5px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  transition: border-color .15s, box-shadow .15s !important;
+  color: var(--acu-text) !important;
+  background: #fff !important;
+}
+.acu-section .input-text::placeholder { color: #c4c9d4; }
+.acu-section .input-text:focus {
+  outline: none !important;
+  border-color: var(--acu-border-focus) !important;
+  box-shadow: 0 0 0 3px rgba(0,0,0,.06) !important;
+}
+.acu-section .form-row { margin: 0; padding: 0; }
+.acu-section .form-row > label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--acu-text-label);
+  margin-bottom: 4px;
+  display: block;
+}
+.acu-section .wcu-grid { gap: 10px 14px; }
+
+/* ---- T&C section ---- */
+.acu-tc-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.acu-tc-row > label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #111;
+  margin: 0;
+}
+.acu-tc-row > label input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  cursor: pointer;
+  accent-color: #111;
+  margin: 0;
+}
+.acu-tc-row .wcu-terms-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.acu-tc-row .wcu-link {
+  font-size: 12px;
+  color: #374151;
+  text-decoration: underline;
+  font-weight: 500;
+}
+.acu-tc-row .button {
+  font-size: 12px !important;
+  padding: 4px 10px !important;
+  border-radius: 0;
+}
+.acu-tc-row .wcu-terms-details summary { font-size: 12px; font-weight: 600; }
+.acu-tc-row .wcu-terms-body { font-size: 12.5px; }
+
+/* ---- Club card row ---- */
+.acu-club-card-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.acu-club-card-row > label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #111;
+  margin: 0;
+}
+.acu-club-card-row > label input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  accent-color: #111;
+  margin: 0;
+}
+.acu-club-card-row .wcu-help {
+  font-size: 11px;
+  color: var(--acu-text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* ---- Account page: save button row ---- */
+.acu-save-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 14px;
+  border-top: 1px solid var(--acu-border);
+  margin-top: 4px;
+}
+.acu-save-btn {
+  padding: 10px 24px;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  font-family: var(--acu-font);
+  transition: background .15s, transform .1s;
+  min-width: 130px;
+}
+.acu-save-btn:hover  { background: #333; }
+.acu-save-btn:active { transform: scale(.98); }
+
+/* ---- Password sub-section divider ---- */
+.acu-pw-divider {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--acu-border);
+}
+.acu-pw-divider-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #b0b7c3;
+  margin: 0 0 10px;
+}
+
+/* ---- Inline club card layout (checkbox + input side-by-side) ---- */
+.acu-club-card-inline {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  align-items: start;
+}
+@media (max-width: 480px) {
+  .acu-club-card-inline { grid-template-columns: 1fr; gap: 8px; }
+}
+
+/* ---- WC Registration form — section cards wrapper ---- */
+.acu-reg-fields {
+  margin-bottom: 4px;
+}
+.acu-reg-fields .acu-section {
+  margin-top: 0;
+}
+
+/* WC phone verify group inside .acu-phone-field — column layout (same as anketa form) */
+.acu-phone-field .wc-phone-verify-group,
+.acu-phone-field .phone-verify-group {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 7px !important;
+  width: 100% !important;
+  align-items: stretch !important;
+  position: static !important;
+}
+/* The phone input itself inside the WC verify group */
+.acu-phone-field .wc-phone-verify-group input[type="tel"],
+.acu-phone-field .phone-verify-group input[type="tel"] {
+  border: 1px solid #d1d5db !important;
+  border-radius: 0;
+  padding: 9px 11px !important;
+  font-size: 13.5px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  transition: border-color .15s, box-shadow .15s !important;
+}
+.acu-phone-field .wc-phone-verify-group input[type="tel"]:focus,
+.acu-phone-field .phone-verify-group input[type="tel"]:focus {
+  border-color: var(--acu-border-focus) !important;
+  box-shadow: 0 0 0 3px rgba(0,0,0,.06) !important;
+}
+/* Verify container inside acu-phone-field */
+.acu-phone-field .phone-verify-container {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  position: static !important;
+  transform: none !important;
+  width: 100% !important;
+}
+.acu-phone-field .phone-verify-container .phone-verify-btn {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  border-radius: 0;
+  background: #111;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background .15s, transform .1s;
+  white-space: nowrap;
+  flex: 0 0 auto !important;
+  width: auto !important;
+  font-family: var(--acu-font);
+}
+.acu-phone-field .phone-verify-container .phone-verify-btn:hover  { background: #333; }
+.acu-phone-field .phone-verify-container .phone-verify-btn:active { transform: scale(.98); }
+.acu-phone-field .phone-verify-container .phone-verified-icon {
+  align-items: center;
+  gap: 6px;
+  color: #15803d;
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: var(--acu-font);
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 0;
+  padding: 7px 12px;
+  width: auto;
+  height: auto;
+  flex: 0 0 auto;
 }
