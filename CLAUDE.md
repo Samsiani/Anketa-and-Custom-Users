@@ -278,6 +278,13 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.2.10 — 2026-02-24
+
+**Security fix + CSS polish.**
+
+- **[CRITICAL] Fix: Unregistered visitors could create WP users via `[club_anketa_form]`.** `shortcode_form()` only checked capability in edit mode; create mode had no auth guard. `maybe_process_submission()` had the same gap — the POST handler was fully open in create mode. Both now call `ACU_Helpers::current_user_can_manage_members()` as the first check. Non-staff users see an error message in the shortcode; the POST handler silently returns.
+- **Fix: `.phone-verify-warning` bottom margin.** Added `12px` bottom margin so the verification required message has a visible gap before the submit/update button.
+
 ### v1.2.9 — 2026-02-24
 
 **CSS: phone verify warning margin fix.**
