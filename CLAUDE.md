@@ -278,6 +278,13 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.2.5 — 2026-02-24
+
+**[user_data_check] result card enhancements.**
+
+- **Feat: Full name in search result card.** `render_result_html()` now reads `first_name` + `last_name` from the WP user object and displays them as the first row ("სახელი და გვარი") in the detail list.
+- **Feat: Club card discount amount.** When a user has a linked coupon, the club card row now shows the coupon code followed by the discount percentage (e.g. `12345678 — 10%`). Uses `WC_Coupon::get_amount()`; falls back to code-only display if WooCommerce is unavailable or discount is zero.
+
 ### v1.2.4 — 2026-02-23
 
 **UI polish — registration & account forms.**

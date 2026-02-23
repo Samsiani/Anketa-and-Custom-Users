@@ -237,16 +237,33 @@ class ACU_Shortcodes {
 			? add_query_arg( 'edit_user', $user_id, $anketa_edit_base )
 			: '';
 
+		$full_name  = trim( $user->first_name . ' ' . $user->last_name );
+		$club_card  = (string) get_user_meta( $user_id, '_acu_club_card_coupon', true );
+
+		// Build club card display: code + discount amount if available
+		if ( $club_card !== '' && function_exists( 'wc_get_coupon_id_by_code' ) ) {
+			$coupon          = new WC_Coupon( $club_card );
+			$discount_amount = $coupon->get_amount();
+			$club_card_display = esc_html( $club_card );
+			if ( $discount_amount > 0 ) {
+				$club_card_display .= ' &mdash; <strong>' . esc_html( $discount_amount . '%' ) . '</strong>';
+			}
+		} else {
+			$club_card_display = $club_card !== '' ? esc_html( $club_card ) : '';
+		}
+
 		$data = [
+			'full_name'    => $full_name,
 			'email'        => $user->user_email,
 			'phone'        => ACU_Helpers::get_user_phone( $user_id ),
 			'personal'     => (string) get_user_meta( $user_id, '_acu_personal_id', true ),
-			'club_card'    => (string) get_user_meta( $user_id, '_acu_club_card_coupon', true ),
+			'club_card'    => $club_card,
 			'sms_consent'  => ACU_Helpers::get_sms_consent( $user_id ),
 			'call_consent' => ACU_Helpers::get_call_consent( $user_id ),
 		];
 
 		$labels = [
+			'full_name'    => 'სახელი და გვარი',
 			'email'        => 'ელ.ფოსტა',
 			'phone'        => 'ტელეფონის ნომერი',
 			'personal'     => 'პირადი ნომერი',
@@ -304,6 +321,10 @@ class ACU_Shortcodes {
 				<div class="wcu-udc-panel__body">
 					<ul class="wcu-detail-list">
 						<li>
+							<span class="wcu-dl-label"><?php echo esc_html( $labels['full_name'] ); ?>:</span>
+							<span class="wcu-dl-value"><?php echo $data['full_name'] ? esc_html( $data['full_name'] ) : '<em>' . esc_html__( 'არ არის', 'acu' ) . '</em>'; ?></span>
+						</li>
+						<li>
 							<span class="wcu-dl-label"><?php echo esc_html( $labels['email'] ); ?>:</span>
 							<span class="wcu-dl-value"><?php echo $data['email'] ? esc_html( $data['email'] ) : '<em>' . esc_html__( 'არ არის', 'acu' ) . '</em>'; ?></span>
 						</li>
@@ -317,7 +338,7 @@ class ACU_Shortcodes {
 						</li>
 						<li>
 							<span class="wcu-dl-label"><?php echo esc_html( $labels['club_card'] ); ?>:</span>
-							<span class="wcu-dl-value"><?php echo $data['club_card'] ? esc_html( $data['club_card'] ) : '<em>' . esc_html__( 'არ არის', 'acu' ) . '</em>'; ?></span>
+							<span class="wcu-dl-value"><?php echo $club_card_display ? $club_card_display : '<em>' . esc_html__( 'არ არის', 'acu' ) . '</em>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 						</li>
 						<li>
 							<span class="wcu-dl-label"><?php echo esc_html( $labels['sms_consent'] ); ?>:</span>
