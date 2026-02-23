@@ -42,6 +42,11 @@ class ACU_Account {
 
 		// My Account dashboard — club card info panel
 		add_action( 'woocommerce_account_dashboard', [ self::class, 'render_dashboard_club_card' ] );
+
+		// WC registration: auto-fill email from phone (must run before WC processes the POST)
+		add_action( 'init', [ self::class, 'maybe_set_registration_email' ], 5 );
+		// WC registration: validate phone format + uniqueness
+		add_action( 'woocommerce_register_post', [ self::class, 'validate_registration_fields' ], 10, 3 );
 	}
 
 	// -------------------------------------------------------------------------
@@ -94,6 +99,8 @@ class ACU_Account {
 		$call_consent = isset( $_POST['_call_consent'] )       ? strtolower( (string) wp_unslash( $_POST['_call_consent'] ) ) : 'yes';
 		if ( ! in_array( $sms_consent,  [ 'yes', 'no' ], true ) ) $sms_consent  = 'yes';
 		if ( ! in_array( $call_consent, [ 'yes', 'no' ], true ) ) $call_consent = 'yes';
+		$email_raw = isset( $_POST['email'] ) ? (string) wp_unslash( $_POST['email'] ) : '';
+		$email_val = str_ends_with( $email_raw, '@no-email.local' ) ? '' : esc_attr( sanitize_email( $email_raw ) );
 
 		$terms_html = ACU_Helpers::get_terms_content_html();
 		$terms_url  = ACU_Helpers::get_terms_url();
@@ -130,6 +137,12 @@ class ACU_Account {
 						</div>
 						<input type="tel" class="input-text" name="billing_phone" id="reg_billing_phone" value="<?php echo $phone; ?>"
 							placeholder="<?php esc_attr_e( 'e.g. 599 123 456', 'acu' ); ?>" inputmode="tel" />
+					</div>
+					<div class="acu-field" style="grid-column:1/-1;">
+						<label for="reg_email"><?php esc_html_e( 'Email address', 'acu' ); ?> <span class="acu-optional"><?php esc_html_e( 'optional', 'acu' ); ?></span></label>
+						<input type="email" class="input-text" name="email" id="reg_email"
+							value="<?php echo $email_val; ?>"
+							autocomplete="email" placeholder="<?php esc_attr_e( 'e.g. name@example.com', 'acu' ); ?>" />
 					</div>
 				</div>
 			</div>
@@ -200,10 +213,85 @@ class ACU_Account {
 	}
 
 	// -------------------------------------------------------------------------
+	// WC registration: auto-fill email + username from phone
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Runs on 'init' priority 5 — before WC_Form_Handler::process_registration() (priority 20).
+	 * If no email is supplied in the WC registration POST, generates a dummy address from the
+	 * phone number so WooCommerce's email-required validation does not block registration.
+	 */
+	public static function maybe_set_registration_email(): void {
+		// phpcs:disable WordPress.Security.NonceVerification.Missing
+		if ( ! isset( $_POST['register'], $_POST['woocommerce-register-nonce'] ) ) {
+			return;
+		}
+
+		$phone = isset( $_POST['billing_phone'] )
+			? ACU_Helpers::normalize_phone( sanitize_text_field( wp_unslash( $_POST['billing_phone'] ) ) )
+			: '';
+
+		if ( strlen( $phone ) !== 9 ) {
+			return;
+		}
+
+		if ( empty( $_POST['email'] ) ) {
+			$_POST['email'] = $phone . '@no-email.local';
+		}
+
+		// If WC is set to require a manually entered username, provide the phone as fallback.
+		if ( 'no' === get_option( 'woocommerce_registration_generate_username' ) && empty( $_POST['username'] ) ) {
+			$_POST['username'] = $phone;
+		}
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
+	}
+
+	// -------------------------------------------------------------------------
+	// WC registration: server-side phone validation
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Fires as part of WC's registration validation pipeline.
+	 * Validates phone format and checks it is not already in use.
+	 *
+	 * @param string    $username         Supplied username (may be empty if auto-generated).
+	 * @param string    $email            Email address (already set, possibly dummy).
+	 * @param \WP_Error $validation_errors Error bag — add errors here to block registration.
+	 */
+	public static function validate_registration_fields( string $username, string $email, \WP_Error $validation_errors ): void {
+		// phpcs:disable WordPress.Security.NonceVerification.Missing
+		$phone = isset( $_POST['billing_phone'] )
+			? ACU_Helpers::normalize_phone( sanitize_text_field( wp_unslash( $_POST['billing_phone'] ) ) )
+			: '';
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
+
+		if ( $phone === '' || strlen( $phone ) !== 9 ) {
+			$validation_errors->add( 'phone_required', __( 'A valid 9-digit phone number is required.', 'acu' ) );
+			return;
+		}
+
+		if ( ACU_Helpers::phone_exists_for_another_user( $phone, 0 ) ) {
+			$validation_errors->add( 'phone_exists', __( 'This phone number is already registered.', 'acu' ) );
+		}
+	}
+
+	// -------------------------------------------------------------------------
 	// WC customer created (registration)
 	// -------------------------------------------------------------------------
 
 	public static function created_customer( int $customer_id ): void {
+		// Name fields (not handled by WC core for custom forms)
+		$name_update = [ 'ID' => $customer_id ];
+		if ( isset( $_POST['account_first_name'] ) ) {
+			$name_update['first_name'] = sanitize_text_field( wp_unslash( $_POST['account_first_name'] ) );
+		}
+		if ( isset( $_POST['account_last_name'] ) ) {
+			$name_update['last_name'] = sanitize_text_field( wp_unslash( $_POST['account_last_name'] ) );
+		}
+		if ( count( $name_update ) > 1 ) {
+			wp_update_user( $name_update );
+		}
+
 		if ( isset( $_POST['billing_phone'] ) ) {
 			$phone = ACU_Helpers::normalize_phone( sanitize_text_field( wp_unslash( $_POST['billing_phone'] ) ) );
 			update_user_meta( $customer_id, 'billing_phone', $phone );

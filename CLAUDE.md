@@ -278,6 +278,17 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.2.11 — 2026-02-24
+
+**Fix: WooCommerce registration — optional email field + auto-generate dummy address.**
+
+- **Fix: Users could not complete WC registration after phone verification.** Root cause: `form-login.php` had no email field, and WooCommerce's `process_registration()` requires `$_POST['email']`. When email was missing, WC returned a validation error, the page reloaded, the JS OTP state (`sessionVerifiedPhone`) was lost, and the submit button became permanently disabled.
+- **Feat: Optional email field added to WC registration form.** A full-width `<input type="email" name="email">` field is now rendered in the Account Details grid after the phone field. The label marks it as optional.
+- **Feat: Auto-generated dummy email.** `ACU_Account::maybe_set_registration_email()` (runs on `init` priority 5, before WC's priority 20) fills `$_POST['email']` with `{phone9}@no-email.local` when the field is left empty, satisfying WC's email requirement without forcing the user to enter one.
+- **Fix: Dummy email filtered out on form re-render.** If a validation error causes the form to re-render with a `@no-email.local` address in POST, the email field shows blank (not the auto-generated address) so users are not confused.
+- **Feat: Server-side phone validation on registration.** `ACU_Account::validate_registration_fields()` (hooked to `woocommerce_register_post`) now validates: (1) phone must be 9 digits, (2) phone must not already be registered to another user. Clear error messages are shown for both cases.
+- **Fix: First name / last name now saved on WC registration.** `ACU_Account::created_customer()` now calls `wp_update_user()` with `first_name` and `last_name` from `account_first_name` / `account_last_name` POST fields. WooCommerce core does not handle these custom field names automatically.
+
 ### v1.2.10 — 2026-02-24
 
 **Security fix + CSS polish.**
