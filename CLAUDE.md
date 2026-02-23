@@ -278,6 +278,14 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.2.6 — 2026-02-24
+
+**SMS/Call consent logic fix for unregistered coupon users.**
+
+- **Fix: `render_coupon_result_html()` no longer hardcodes SMS consent as "yes".** Previously, any phone found only via a coupon's `_erp_sync_allowed_phones` list was shown with an "SMS კი" badge — incorrect, because coupon allowed-phones do not imply SMS marketing consent. The function now queries `wp_acu_external_phones` to determine actual SMS consent: badge shows "კი" if the phone is in the whitelist, "არა" otherwise.
+- **No change to call consent display.** Call consent is only available from registered WP user meta (`_call_consent`). Unregistered coupon users never show a call consent row — this was already correct and is unchanged.
+- **`render_external_phone_html()` unchanged.** Phones routed through this function are by definition in the external SMS whitelist, so "SMS კი" remains hardcoded and correct.
+
 ### v1.2.5 — 2026-02-24
 
 **[user_data_check] result card enhancements.**

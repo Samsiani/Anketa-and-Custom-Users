@@ -488,6 +488,19 @@ class ACU_Shortcodes {
 			? add_query_arg( 'prefill_phone', rawurlencode( $phone ), $anketa_base )
 			: '';
 
+		// SMS consent: check external phone whitelist (coupon phones do NOT imply consent).
+		// Call consent: not available for unregistered users — never shown here.
+		global $wpdb;
+		$ext_table   = $wpdb->prefix . 'acu_external_phones';
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$in_whitelist = $wpdb->get_var( $wpdb->prepare(
+			"SELECT phone FROM {$ext_table}
+			 WHERE REPLACE(REPLACE(REPLACE(phone, ' ', ''), '-', ''), '+995', '') = %s
+			 LIMIT 1",
+			$phone
+		) );
+		$has_sms_consent = ! empty( $in_whitelist );
+
 		ob_start();
 		?>
 		<div class="wcu-udc-results-layout">
@@ -532,7 +545,11 @@ class ACU_Shortcodes {
 						<li>
 							<span class="wcu-dl-label"><?php esc_html_e( 'SMS თანხმობა', 'acu' ); ?>:</span>
 							<span class="wcu-dl-value">
-								<span class="wcu-badge wcu-badge--yes"><?php esc_html_e( 'კი', 'acu' ); ?></span>
+								<?php if ( $has_sms_consent ) : ?>
+									<span class="wcu-badge wcu-badge--yes"><?php esc_html_e( 'კი', 'acu' ); ?></span>
+								<?php else : ?>
+									<span class="wcu-badge wcu-badge--no"><?php esc_html_e( 'არა', 'acu' ); ?></span>
+								<?php endif; ?>
 							</span>
 						</li>
 					</ul>
