@@ -43,6 +43,7 @@ class ACU_Print {
 		if ( $page === 'anketa' ) {
 			$file = ACU_DIR . 'templates/print-anketa.php';
 			if ( file_exists( $file ) ) {
+				nocache_headers();
 				return $file;
 			}
 		}
@@ -50,6 +51,7 @@ class ACU_Print {
 		if ( $page === 'signature-terms' ) {
 			$file = ACU_DIR . 'templates/signature-terms.php';
 			if ( file_exists( $file ) ) {
+				nocache_headers();
 				return $file;
 			}
 		}
