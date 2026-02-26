@@ -2,15 +2,15 @@
 :root {
   --a4-width: 210mm;
   --a4-height: 297mm;
-  --page-pad: 14mm;
+  --page-pad: 9mm;
   --text: #000;
   --line: #000;
-  --label-w: 72mm;
-  --gap: 6mm;
-  --box-size: 15px;
+  --label-w: 66mm;
+  --gap: 4mm;
+  --box-size: 13px;
   --underline-thick: 1px;
   --font: "Noto Sans Georgian","DejaVu Sans","Segoe UI",Roboto,Arial,sans-serif;
-  --anketa-word-spacing: 0.15em;
+  --anketa-word-spacing: 0.12em;
 }
 
 html, body {
@@ -53,15 +53,15 @@ html, body {
   box-shadow: 0 0 6px rgba(0,0,0,.15);
   color: var(--text);
   padding: var(--page-pad);
-  font-size: 14px;
-  line-height: 1.34;
+  font-size: 11.5px;
+  line-height: 1.25;
 }
 
 .title {
-  font-size: 18px;
+  font-size: 13.5px;
   text-align: center;
   font-weight: 700;
-  margin: 0 0 10mm;
+  margin: 0 0 4mm;
   letter-spacing: .5px;
   word-spacing: .25em;
 }
@@ -71,23 +71,23 @@ html, body {
   grid-template-columns: var(--label-w) 1fr;
   gap: var(--gap);
   align-items: center;
-  margin: 5mm 0;
+  margin: 2mm 0;
   page-break-inside: avoid;
   break-inside: avoid;
 }
 
 .label {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 11.5px;
   word-spacing: var(--anketa-word-spacing);
 }
 
 .value-line {
-  min-height: 7mm;
+  min-height: 5mm;
   border-bottom: var(--underline-thick) solid var(--line);
   display: flex;
   align-items: flex-end;
-  padding-bottom: 2mm;
+  padding-bottom: 1mm;
   font-weight: 500;
 }
 
@@ -104,13 +104,14 @@ html, body {
   height: var(--box-size);
   border: 1px solid var(--line);
   font-weight: 600;
-  font-size: 13px;
+  font-size: 11px;
   word-spacing: normal;
 }
 
-.rules { margin: 8mm 0; }
-.rules-title { font-weight: 700; margin-bottom: 4mm; font-size: 15px; }
-.rules-inner ul, .rules-inner ol { margin: 0 0 3mm 6mm; padding: 0; }
+.rules { margin: 3.5mm 0; }
+.rules-title { font-weight: 700; margin-bottom: 2mm; font-size: 12px; }
+.rules-inner ul, .rules-inner ol { margin: 0 0 1mm 5mm; padding: 0; }
+.rules-inner li { margin-bottom: 0.5mm; }
 
 .signature-row {
   display: flex;
@@ -129,5 +130,5 @@ html, body {
   html, body { background: #fff; }
   .print-actions { display: none !important; }
   .page { box-shadow: none; width: auto; margin: 0; }
-  @page { size: A4 portrait; margin: 10mm; }
+  @page { size: A4 portrait; margin: 8mm; }
 }
