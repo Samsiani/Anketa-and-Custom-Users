@@ -52,6 +52,21 @@ $format_phone = function ( string $raw ): string {
 };
 $phone = $format_phone( $billing_raw );
 
+// Format date to dd-mm-yyyy regardless of stored format
+$format_date = function ( string $raw ): string {
+	if ( $raw === '' ) {
+		return $raw;
+	}
+	$formats = [ 'Y-m-d', 'd/m/Y', 'd.m.Y', 'd-m-Y', 'm/d/Y', 'Y/m/d' ];
+	foreach ( $formats as $fmt ) {
+		$dt = DateTime::createFromFormat( $fmt, $raw );
+		if ( $dt && $dt->format( $fmt ) === $raw ) {
+			return $dt->format( 'd-m-Y' );
+		}
+	}
+	return $raw; // Return as-is if format is unrecognised
+};
+
 // Render boxed digit cells
 $boxed = function ( string $text, int $boxes = 11 ): string {
 	$chars = preg_split( '//u', $text, -1, PREG_SPLIT_NO_EMPTY );
@@ -120,7 +135,7 @@ $edit_anketa_url = $anketa_page_id
 	<?php if ( $dob !== '' ) : ?>
 	<div class="row">
 		<div class="label">დაბადების თარიღი</div>
-		<div class="value value-line"><?php echo esc_html( $dob ); ?></div>
+		<div class="value value-line"><?php echo esc_html( $format_date( $dob ) ); ?></div>
 	</div>
 	<?php endif; ?>
 
@@ -189,7 +204,7 @@ $edit_anketa_url = $anketa_page_id
 	<?php if ( $form_date !== '' ) : ?>
 	<div class="row">
 		<div class="label">თარიღი</div>
-		<div class="value value-line"><?php echo esc_html( $form_date ); ?></div>
+		<div class="value value-line"><?php echo esc_html( $format_date( $form_date ) ); ?></div>
 	</div>
 	<?php endif; ?>
 
