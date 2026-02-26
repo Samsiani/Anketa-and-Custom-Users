@@ -94,17 +94,12 @@ class ACU_Account {
 		$first_name   = isset( $_POST['account_first_name'] ) ? esc_attr( wp_unslash( (string) $_POST['account_first_name'] ) ) : '';
 		$last_name    = isset( $_POST['account_last_name'] )  ? esc_attr( wp_unslash( (string) $_POST['account_last_name'] ) )  : '';
 		$personal_id  = isset( $_POST['_acu_personal_id'] )   ? esc_attr( wp_unslash( (string) $_POST['_acu_personal_id'] ) )   : '';
-		$phone        = isset( $_POST['billing_phone'] )       ? esc_attr( wp_unslash( (string) $_POST['billing_phone'] ) )       : '';
-		$sms_consent  = isset( $_POST['_sms_consent'] )        ? strtolower( (string) wp_unslash( $_POST['_sms_consent'] ) ) : 'yes';
-		$call_consent = isset( $_POST['_call_consent'] )       ? strtolower( (string) wp_unslash( $_POST['_call_consent'] ) ) : 'yes';
-		if ( ! in_array( $sms_consent,  [ 'yes', 'no' ], true ) ) $sms_consent  = 'yes';
-		if ( ! in_array( $call_consent, [ 'yes', 'no' ], true ) ) $call_consent = 'yes';
+		$phone     = isset( $_POST['billing_phone'] ) ? esc_attr( wp_unslash( (string) $_POST['billing_phone'] ) ) : '';
 		$email_raw = isset( $_POST['email'] ) ? (string) wp_unslash( $_POST['email'] ) : '';
 		$email_val = str_ends_with( $email_raw, '@no-email.local' ) ? '' : esc_attr( sanitize_email( $email_raw ) );
 
 		$terms_html = ACU_Helpers::get_terms_content_html();
 		$terms_url  = ACU_Helpers::get_terms_url();
-		$print_url  = home_url( '/signature-terms/' );
 		?>
 		<div class="acu-reg-fields">
 
@@ -130,11 +125,8 @@ class ACU_Account {
 						<input type="text" class="input-text" name="_acu_personal_id" id="reg_personal_id" value="<?php echo $personal_id; ?>"
 							inputmode="numeric" maxlength="11" placeholder="<?php esc_attr_e( '11 digits', 'acu' ); ?>" />
 					</div>
-					<div class="acu-field acu-phone-field">
-						<div class="acu-phone-label-row">
-							<label for="reg_billing_phone"><?php esc_html_e( 'Phone', 'acu' ); ?> <span class="acu-required" aria-hidden="true">*</span></label>
-							<span class="acu-optional"><?php esc_html_e( 'ვერიფიკაცია სავალდებულოა', 'acu' ); ?></span>
-						</div>
+					<div class="acu-field">
+						<label for="reg_billing_phone"><?php esc_html_e( 'Phone', 'acu' ); ?> <span class="acu-required" aria-hidden="true">*</span></label>
 						<input type="tel" class="input-text" name="billing_phone" id="reg_billing_phone" value="<?php echo $phone; ?>"
 							placeholder="<?php esc_attr_e( 'e.g. 599 123 456', 'acu' ); ?>" inputmode="tel" />
 					</div>
@@ -152,41 +144,7 @@ class ACU_Account {
 				</div>
 			</div>
 
-			<!-- ── Card 2: Notifications (consent) ── -->
-			<div class="acu-section">
-				<div class="acu-section__header">
-					<span class="acu-section__icon">
-						<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-					</span>
-					<span class="acu-section__label"><?php esc_html_e( 'Notifications', 'acu' ); ?></span>
-				</div>
-				<div class="acu-consent-row">
-					<span class="acu-consent-label">
-						<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline;vertical-align:-1px;margin-right:5px;flex-shrink:0"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-						<?php esc_html_e( 'SMS notifications', 'acu' ); ?>
-					</span>
-					<div class="acu-consent-toggle">
-						<input type="radio" name="_sms_consent" id="reg_sms_yes" value="yes" <?php checked( $sms_consent, 'yes' ); ?> />
-						<label for="reg_sms_yes"><?php esc_html_e( 'Yes', 'acu' ); ?></label>
-						<input type="radio" name="_sms_consent" id="reg_sms_no" value="no" <?php checked( $sms_consent, 'no' ); ?> />
-						<label for="reg_sms_no"><?php esc_html_e( 'No', 'acu' ); ?></label>
-					</div>
-				</div>
-				<div class="acu-consent-row">
-					<span class="acu-consent-label">
-						<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline;vertical-align:-1px;margin-right:5px;flex-shrink:0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.72 16.92z"/></svg>
-						<?php esc_html_e( 'Phone call consent', 'acu' ); ?>
-					</span>
-					<div class="acu-consent-toggle">
-						<input type="radio" name="_call_consent" id="reg_call_yes" value="yes" <?php checked( $call_consent, 'yes' ); ?> />
-						<label for="reg_call_yes"><?php esc_html_e( 'Yes', 'acu' ); ?></label>
-						<input type="radio" name="_call_consent" id="reg_call_no" value="no" <?php checked( $call_consent, 'no' ); ?> />
-						<label for="reg_call_no"><?php esc_html_e( 'No', 'acu' ); ?></label>
-					</div>
-				</div>
-			</div>
-
-			<!-- ── Card 3: Terms & Conditions ── -->
+			<!-- ── Card 2: Terms & Conditions ── -->
 			<div class="acu-section">
 				<div class="acu-section__header">
 					<span class="acu-section__icon">
@@ -213,7 +171,6 @@ class ACU_Account {
 			</div>
 
 		</div><!-- /.acu-reg-fields -->
-		<input type="hidden" name="otp_verification_token" value="" class="otp-verification-token" />
 		<?php
 	}
 
@@ -306,17 +263,6 @@ class ACU_Account {
 		}
 		if ( isset( $_POST['acu_terms_agree'] ) ) {
 			update_user_meta( $customer_id, '_acu_terms_accepted', current_time( 'mysql' ) );
-		}
-
-		$sms = isset( $_POST['_sms_consent'] ) ? strtolower( (string) wp_unslash( $_POST['_sms_consent'] ) ) : '';
-		if ( in_array( $sms, [ 'yes', 'no' ], true ) ) {
-			update_user_meta( $customer_id, '_sms_consent', $sms );
-			ACU_Helpers::maybe_send_consent_notification( $customer_id, '', $sms, 'wc_registration' );
-		}
-
-		$call = isset( $_POST['_call_consent'] ) ? strtolower( (string) wp_unslash( $_POST['_call_consent'] ) ) : '';
-		if ( in_array( $call, [ 'yes', 'no' ], true ) ) {
-			update_user_meta( $customer_id, '_call_consent', $call );
 		}
 
 		ACU_Helpers::link_coupon_to_user( $customer_id );
