@@ -27,6 +27,13 @@ class ACU_Shortcodes {
 	// -------------------------------------------------------------------------
 
 	public static function shortcode_user_data_check(): string {
+		if ( ! is_user_logged_in() ) {
+			return ACU_Helpers::render_login_form();
+		}
+		if ( ! ACU_Helpers::current_user_can_manage_members() ) {
+			return '<p class="wcu-error">' . esc_html__( 'Permission denied.', 'acu' ) . '</p>';
+		}
+
 		wp_enqueue_style( 'acu-shortcode', ACU_URL . 'assets/css/shortcode.css', [], ACU_VERSION );
 		wp_enqueue_script( 'acu-shortcode', ACU_URL . 'assets/js/shortcode.js', [], ACU_VERSION, true );
 		// Find the page that hosts [club_anketa_form] so the Edit button has a URL.

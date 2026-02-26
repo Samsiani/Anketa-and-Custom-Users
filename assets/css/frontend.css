@@ -1039,6 +1039,59 @@ body.club-anketa-modal-open { overflow: hidden !important; }
   .acu-club-card-inline { grid-template-columns: 1fr; gap: 8px; }
 }
 
+/* ---- Staff login form ---- */
+.acu-login-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 40px 16px;
+}
+.acu-login-card {
+  background: var(--acu-surface);
+  border: 1px solid var(--acu-border);
+  border-radius: 0;
+  padding: 32px 36px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  box-sizing: border-box;
+}
+.acu-login-title {
+  margin: 0 0 20px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--acu-text);
+  font-family: var(--acu-font);
+  border: none;
+  padding: 0;
+}
+.acu-login-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: var(--acu-error);
+  border-radius: 0;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+.acu-login-form .acu-field { margin-bottom: 14px; }
+.acu-login-submit-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+.acu-login-lost-pw {
+  font-size: 12.5px;
+  color: var(--acu-text-muted);
+  text-decoration: underline;
+}
+.acu-login-lost-pw:hover { color: var(--acu-text); }
+@media (max-width: 480px) {
+  .acu-login-card { padding: 24px 18px; }
+}
+
 /* ---- WC Registration form — section cards wrapper ---- */
 .acu-reg-fields {
   margin-bottom: 4px;

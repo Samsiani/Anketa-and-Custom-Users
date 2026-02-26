@@ -14,6 +14,52 @@ class ACU_Auth {
 
 	public static function init(): void {
 		add_filter( 'authenticate', [ self::class, 'phone_authenticate' ], 20, 3 );
+		add_action( 'template_redirect', [ self::class, 'maybe_process_staff_login' ], 0 );
+	}
+
+	// -------------------------------------------------------------------------
+	// Staff login form processor
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Process the ACU staff login form submitted from a shortcode page.
+	 * Runs before any output (priority 0 on template_redirect).
+	 */
+	public static function maybe_process_staff_login(): void {
+		if ( 'POST' !== $_SERVER['REQUEST_METHOD'] || empty( $_POST['acu_staff_login'] ) ) {
+			return;
+		}
+
+		if ( ! wp_verify_nonce(
+			sanitize_text_field( wp_unslash( $_POST['acu_staff_login_nonce'] ?? '' ) ),
+			'acu_staff_login'
+		) ) {
+			return;
+		}
+
+		$username = sanitize_user( wp_unslash( $_POST['acu_login_username'] ?? '' ) );
+		$password = (string) wp_unslash( $_POST['acu_login_password'] ?? '' );
+
+		// Redirect target: hidden field set by render_login_form(); fall back to current URI.
+		$redirect = (string) wp_unslash( $_POST['acu_login_redirect'] ?? '' );
+		if ( ! $redirect || ! wp_validate_redirect( $redirect ) ) {
+			$redirect = home_url( wp_unslash( $_SERVER['REQUEST_URI'] ?? '/' ) );
+		}
+		$redirect = remove_query_arg( 'acu_lerr', $redirect );
+
+		$result = wp_signon( [
+			'user_login'    => $username,
+			'user_password' => $password,
+			'remember'      => true,
+		] );
+
+		if ( is_wp_error( $result ) ) {
+			wp_safe_redirect( add_query_arg( 'acu_lerr', '1', $redirect ) );
+			exit;
+		}
+
+		wp_safe_redirect( $redirect );
+		exit;
 	}
 
 	/**

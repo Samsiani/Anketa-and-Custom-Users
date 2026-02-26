@@ -427,6 +427,83 @@ class ACU_Helpers {
 	}
 
 	// -------------------------------------------------------------------------
+	// Staff login form
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Render a styled staff login form.
+	 * Used by shortcodes when the visitor is not logged in.
+	 * Reads ?acu_lerr=1 from the URL to display an error after a failed attempt.
+	 */
+	public static function render_login_form(): string {
+		wp_enqueue_style( 'acu-frontend', ACU_URL . 'assets/css/frontend.css', [], ACU_VERSION );
+
+		$error    = ! empty( $_GET['acu_lerr'] )
+			? __( 'Incorrect username, email, phone, or password. Please try again.', 'acu' )
+			: '';
+		$redirect = esc_url_raw( remove_query_arg( 'acu_lerr', home_url( wp_unslash( $_SERVER['REQUEST_URI'] ?? '/' ) ) ) );
+		$username = isset( $_POST['acu_login_username'] )
+			? esc_attr( sanitize_user( wp_unslash( $_POST['acu_login_username'] ) ) )
+			: '';
+
+		ob_start();
+		?>
+		<div class="acu-login-wrap">
+			<div class="acu-login-card">
+				<h2 class="acu-login-title">შესვლა</h2>
+
+				<?php if ( $error !== '' ) : ?>
+				<div class="acu-login-error" role="alert"><?php echo esc_html( $error ); ?></div>
+				<?php endif; ?>
+
+				<form class="acu-login-form" method="post" action="">
+					<?php wp_nonce_field( 'acu_staff_login', 'acu_staff_login_nonce' ); ?>
+					<input type="hidden" name="acu_staff_login"    value="1" />
+					<input type="hidden" name="acu_login_redirect" value="<?php echo esc_attr( $redirect ); ?>" />
+
+					<div class="acu-field">
+						<label for="acu_login_username">
+							<?php esc_html_e( 'Username, email or phone', 'acu' ); ?>
+							<span class="acu-required" aria-hidden="true">*</span>
+						</label>
+						<input
+							type="text"
+							id="acu_login_username"
+							name="acu_login_username"
+							autocomplete="username"
+							required
+							value="<?php echo $username; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>"
+						/>
+					</div>
+
+					<div class="acu-field">
+						<label for="acu_login_password">
+							<?php esc_html_e( 'Password', 'acu' ); ?>
+							<span class="acu-required" aria-hidden="true">*</span>
+						</label>
+						<input
+							type="password"
+							id="acu_login_password"
+							name="acu_login_password"
+							autocomplete="current-password"
+							required
+						/>
+					</div>
+
+					<div class="acu-login-submit-row">
+						<button type="submit" class="acu-submit-btn">შესვლა</button>
+						<a class="acu-login-lost-pw" href="<?php echo esc_url( wp_lostpassword_url() ); ?>">
+							<?php esc_html_e( 'Lost your password?', 'acu' ); ?>
+						</a>
+					</div>
+				</form>
+			</div>
+		</div>
+		<?php
+		return ob_get_clean();
+	}
+
+	// -------------------------------------------------------------------------
 	// HTML sanitizer
 	// -------------------------------------------------------------------------
 

@@ -255,6 +255,9 @@ class ACU_Registration {
 
 	public static function shortcode_form(): string {
 		// ── Auth gate — staff only ────────────────────────────────────────────
+		if ( ! is_user_logged_in() ) {
+			return ACU_Helpers::render_login_form();
+		}
 		if ( ! ACU_Helpers::current_user_can_manage_members() ) {
 			return '<p class="wcu-error">' . esc_html__( 'You do not have permission to access this form.', 'acu' ) . '</p>';
 		}
