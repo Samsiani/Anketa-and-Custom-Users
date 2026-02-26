@@ -146,19 +146,15 @@ $edit_anketa_url = $anketa_page_id
 	</div>
 	<?php endif; ?>
 
-	<?php if ( $address_1 !== '' ) : ?>
 	<div class="row">
 		<div class="label">მისამართი</div>
 		<div class="value value-line"><?php echo esc_html( $address_1 ); ?></div>
 	</div>
-	<?php endif; ?>
 
-	<?php if ( $email_display !== '' ) : ?>
 	<div class="row">
 		<div class="label">E-mail</div>
 		<div class="value value-line"><?php echo esc_html( $email_display ); ?></div>
 	</div>
-	<?php endif; ?>
 
 	<div class="rules">
 		<div class="rules-title">წესები და პირობები</div>
