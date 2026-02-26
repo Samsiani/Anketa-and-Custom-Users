@@ -174,10 +174,10 @@ class ACU_Registration {
 				'last_name'    => $data['anketa_last_name'],
 				'display_name' => trim( $data['anketa_first_name'] . ' ' . $data['anketa_last_name'] ),
 			];
-			// Only update email if a real (non-dummy) address was supplied
-			if ( $data['anketa_email'] !== '' ) {
-				$update_data['user_email'] = $data['anketa_email'];
-			}
+			// Real email → save it. Cleared → revert to dummy so WP user_email is never stale.
+			$update_data['user_email'] = $data['anketa_email'] !== ''
+				? $data['anketa_email']
+				: $local_digits . '@no-email.local';
 			$result = wp_update_user( $update_data );
 			if ( is_wp_error( $result ) ) {
 				self::$errors[] = $result->get_error_message();
