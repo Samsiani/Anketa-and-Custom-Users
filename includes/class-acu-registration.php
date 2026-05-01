@@ -295,6 +295,36 @@ class ACU_Registration {
 			];
 		}
 
+		// Coupon fallback in edit mode: fill empty fields from the linked coupon's cardholder data.
+		// Non-empty user fields are never overwritten.
+		if ( $is_edit && ! empty( $old ) ) {
+			$coupon_id = ACU_Shortcodes::find_coupon_id_for_user( (int) $edit_user->ID );
+			if ( $coupon_id ) {
+				$cdata = ACU_Shortcodes::get_coupon_data( $coupon_id );
+				if ( ( $old['anketa_personal_id'] ?? '' ) === '' && $cdata['inn'] !== '' ) {
+					$old['anketa_personal_id'] = $cdata['inn'];
+				}
+				if ( ( $old['anketa_phone_local'] ?? '' ) === '' && $cdata['mobile'] !== '' ) {
+					$old['anketa_phone_local'] = $cdata['mobile'];
+				}
+				if ( ( $old['anketa_dob'] ?? '' ) === '' && $cdata['dob'] !== '' ) {
+					$old['anketa_dob'] = $cdata['dob'];
+				}
+				if ( $cdata['name'] !== '' ) {
+					$parts = preg_split( '/\s+/u', trim( $cdata['name'] ), 2 );
+					if ( ( $old['anketa_first_name'] ?? '' ) === '' && ! empty( $parts[0] ) ) {
+						$old['anketa_first_name'] = $parts[0];
+					}
+					if ( ( $old['anketa_last_name'] ?? '' ) === '' && ! empty( $parts[1] ) ) {
+						$old['anketa_last_name'] = $parts[1];
+					}
+				}
+				if ( ( $old['anketa_card_no'] ?? '' ) === '' && $cdata['code'] !== '' ) {
+					$old['anketa_card_no'] = $cdata['code'];
+				}
+			}
+		}
+
 		// Pre-fill phone from URL — coupon registration bridge (?prefill_phone=XXXXXXXXX).
 		// Only applied in create mode and only when the field hasn't been filled yet
 		// (e.g. POST re-render after a validation error takes priority).
@@ -302,6 +332,14 @@ class ACU_Registration {
 			$prefill_phone = ACU_Helpers::normalize_phone( sanitize_text_field( wp_unslash( $_GET['prefill_phone'] ) ) );
 			if ( $prefill_phone !== '' && empty( $old['anketa_phone_local'] ) ) {
 				$old['anketa_phone_local'] = $prefill_phone;
+			}
+		}
+
+		// Pre-fill card number from URL — coupon registration bridge (?prefill_card=CODE).
+		if ( ! $is_edit && isset( $_GET['prefill_card'] ) ) {
+			$prefill_card = sanitize_text_field( wp_unslash( $_GET['prefill_card'] ) );
+			if ( $prefill_card !== '' && empty( $old['anketa_card_no'] ) ) {
+				$old['anketa_card_no'] = $prefill_card;
 			}
 		}
 
