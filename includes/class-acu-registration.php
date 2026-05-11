@@ -68,6 +68,31 @@ class ACU_Registration {
 			true
 		);
 
+		// Date picker — flatpickr is only useful where the anketa form
+		// itself is on the page; checkout/account pages don't use it.
+		if ( $has_form ) {
+			wp_enqueue_style(
+				'acu-flatpickr',
+				ACU_URL . 'assets/lib/flatpickr/flatpickr.min.css',
+				[],
+				'4.6.13'
+			);
+			wp_enqueue_script(
+				'acu-flatpickr',
+				ACU_URL . 'assets/lib/flatpickr/flatpickr.min.js',
+				[],
+				'4.6.13',
+				true
+			);
+			wp_enqueue_script(
+				'acu-date-picker',
+				ACU_URL . 'assets/js/date-picker.js',
+				[ 'acu-flatpickr' ],
+				ACU_VERSION,
+				true
+			);
+		}
+
 		$verified_phone = '';
 		if ( is_user_logged_in() ) {
 			$verified_phone = (string) get_user_meta( get_current_user_id(), '_acu_verified_phone', true );
@@ -417,7 +442,7 @@ class ACU_Registration {
 						</div>
 						<div class="acu-field">
 							<label for="anketa_dob"><?php esc_html_e( 'დაბადების თარიღი', 'acu' ); ?> <span class="acu-required" aria-hidden="true">*</span></label>
-							<input type="date" id="anketa_dob" name="anketa_dob" required value="<?php echo $v( 'anketa_dob' ); ?>" />
+							<input type="text" id="anketa_dob" name="anketa_dob" class="acu-date-picker" required autocomplete="bday" placeholder="dd/mm/yyyy" value="<?php echo $v( 'anketa_dob' ); ?>" />
 						</div>
 					</div>
 				</div>
@@ -489,7 +514,7 @@ class ACU_Registration {
 						</div>
 						<div class="acu-field">
 							<label for="anketa_form_date"><?php esc_html_e( 'თარიღი', 'acu' ); ?> <span class="acu-optional"><?php esc_html_e( 'ოფციური', 'acu' ); ?></span></label>
-							<input type="date" id="anketa_form_date" name="anketa_form_date" value="<?php echo $v( 'anketa_form_date' ); ?>" />
+							<input type="text" id="anketa_form_date" name="anketa_form_date" class="acu-date-picker" placeholder="dd/mm/yyyy" value="<?php echo $v( 'anketa_form_date' ); ?>" />
 						</div>
 						<div class="acu-field">
 							<label for="anketa_shop"><?php esc_html_e( 'მაღაზია', 'acu' ); ?> <span class="acu-optional"><?php esc_html_e( 'ოფციური', 'acu' ); ?></span></label>
