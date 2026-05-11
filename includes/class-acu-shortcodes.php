@@ -484,8 +484,15 @@ class ACU_Shortcodes {
 						</small>
 						<?php endif; ?>
 					</h3>
-					<?php if ( $edit_anketa_url && ACU_Helpers::current_user_can_manage_members() ) : ?>
-					<a class="button button-secondary wcu-edit-anketa-btn" href="<?php echo esc_url( $edit_anketa_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Edit Anketa', 'acu' ); ?></a>
+					<?php if ( ACU_Helpers::current_user_can_manage_members() ) : ?>
+					<div class="wcu-udc-actions acu-edit-actions">
+						<?php if ( $edit_anketa_url ) : ?>
+						<a class="button button-secondary wcu-edit-anketa-btn" href="<?php echo esc_url( $edit_anketa_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Edit Anketa', 'acu' ); ?></a>
+						<?php endif; ?>
+						<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( 'user_id', $user_id, home_url( '/print-anketa/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print Anketa', 'acu' ); ?></a>
+						<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type' => 'sms' ], home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print SMS Terms', 'acu' ); ?></a>
+						<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type' => 'call' ], home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print Call Terms', 'acu' ); ?></a>
+					</div>
 					<?php endif; ?>
 				</div>
 				<div class="wcu-udc-panel__body">
@@ -657,12 +664,17 @@ class ACU_Shortcodes {
 							(<?php echo esc_html( sprintf( /* translators: %s: coupon code */ __( 'Found via Coupon: %s', 'acu' ), $coupon['code'] ) ); ?>)
 						</small>
 					</h3>
-					<?php if ( $register_url && ACU_Helpers::current_user_can_manage_members() ) : ?>
-					<a class="button button-secondary wcu-edit-anketa-btn"
-					   href="<?php echo esc_url( $register_url ); ?>"
-					   target="_blank" rel="noopener noreferrer">
-						<?php esc_html_e( 'Register (Anketa)', 'acu' ); ?>
-					</a>
+					<?php if ( ACU_Helpers::current_user_can_manage_members() ) : ?>
+					<div class="wcu-udc-actions acu-edit-actions">
+						<?php if ( $register_url ) : ?>
+						<a class="button button-secondary wcu-edit-anketa-btn" href="<?php echo esc_url( $register_url ); ?>" target="_blank" rel="noopener noreferrer">
+							<?php esc_html_e( 'Register (Anketa)', 'acu' ); ?>
+						</a>
+						<?php endif; ?>
+						<a class="button button-secondary" href="<?php echo esc_url( home_url( '/print-anketa/' ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print Anketa', 'acu' ); ?></a>
+						<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( 'terms_type', 'sms', home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print SMS Terms', 'acu' ); ?></a>
+						<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( 'terms_type', 'call', home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print Call Terms', 'acu' ); ?></a>
+					</div>
 					<?php endif; ?>
 				</div>
 				<div class="wcu-udc-panel__body">

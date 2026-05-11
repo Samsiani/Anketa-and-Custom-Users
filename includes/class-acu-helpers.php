@@ -92,6 +92,10 @@ class ACU_Helpers {
 
 	/**
 	 * Check for phone collision across users (exact match first, LIKE fallback limited to 50).
+	 *
+	 * Excludes the current user at the query level so legacy duplicate billing_phone
+	 * meta on the same user (or coupon-side mirrors) cannot misfire as a conflict
+	 * when staff edits an existing anketa.
 	 */
 	public static function phone_exists_for_another_user( string $normalized_phone, int $current_user_id = 0 ): bool {
 		$normalized_phone = trim( $normalized_phone );
@@ -99,36 +103,33 @@ class ACU_Helpers {
 			return false;
 		}
 
-		// Exact match
+		$exclude = $current_user_id > 0 ? [ $current_user_id ] : [];
+
+		// Exact match — exclude the edit user directly so we never match against self.
 		$exact = new WP_User_Query( [
 			'number'      => 1,
 			'fields'      => 'ids',
 			'count_total' => false,
+			'exclude'     => $exclude,
 			'meta_query'  => [
 				[ 'key' => 'billing_phone', 'value' => $normalized_phone ],
 			],
 		] );
-		$ids = $exact->get_results();
-		if ( ! empty( $ids ) ) {
-			$found_id = (int) $ids[0];
-			if ( $found_id && $found_id !== $current_user_id ) {
-				return true;
-			}
+		if ( ! empty( $exact->get_results() ) ) {
+			return true;
 		}
 
-		// LIKE fallback (catch +995 prefix variants)
+		// LIKE fallback (catch +995 prefix variants), still excluding the edit user.
 		$candidates = new WP_User_Query( [
 			'number'      => 50,
 			'fields'      => 'ids',
 			'count_total' => false,
+			'exclude'     => $exclude,
 			'meta_query'  => [
 				[ 'key' => 'billing_phone', 'value' => $normalized_phone, 'compare' => 'LIKE' ],
 			],
 		] );
 		foreach ( $candidates->get_results() as $uid ) {
-			if ( (int) $uid === $current_user_id ) {
-				continue;
-			}
 			$stored_norm = self::normalize_phone( (string) get_user_meta( $uid, 'billing_phone', true ) );
 			if ( $stored_norm !== '' && $stored_norm === $normalized_phone ) {
 				return true;
