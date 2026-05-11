@@ -286,11 +286,13 @@ class ACU_Helpers {
 		}
 
 		$site_name  = wp_specialchars_decode( (string) get_option( 'blogname' ), ENT_QUOTES );
-		$subject    = sprintf( '[%s] SMS consent update', $site_name );
+		/* translators: %s: site name */
+		$subject    = sprintf( __( '[%s] SMS consent update', 'acu' ), $site_name );
 		$agree_str  = ( $new_val === 'yes' )
 			? __( 'now agrees to receive SMS.', 'acu' )
 			: __( 'does not agree to receive SMS.', 'acu' );
-		$context_str = $context ? sprintf( 'Context: %s', $context ) : '';
+		/* translators: %s: registration context label */
+		$context_str = $context ? sprintf( __( 'Context: %s', 'acu' ), $context ) : '';
 		$body = sprintf(
 			/* translators: 1: name, 2: phone, 3: agreement, 4: context */
 			__( 'User %1$s, phone number: %2$s, %3$s %4$s', 'acu' ),
@@ -451,7 +453,7 @@ class ACU_Helpers {
 		?>
 		<div class="acu-login-wrap">
 			<div class="acu-login-card">
-				<h2 class="acu-login-title">შესვლა</h2>
+				<h2 class="acu-login-title"><?php esc_html_e( 'შესვლა', 'acu' ); ?></h2>
 
 				<?php if ( $error !== '' ) : ?>
 				<div class="acu-login-error" role="alert"><?php echo esc_html( $error ); ?></div>
@@ -492,7 +494,7 @@ class ACU_Helpers {
 					</div>
 
 					<div class="acu-login-submit-row">
-						<button type="submit" class="acu-submit-btn">შესვლა</button>
+						<button type="submit" class="acu-submit-btn"><?php esc_html_e( 'შესვლა', 'acu' ); ?></button>
 						<a class="acu-login-lost-pw" href="<?php echo esc_url( wp_lostpassword_url() ); ?>">
 							<?php esc_html_e( 'Lost your password?', 'acu' ); ?>
 						</a>

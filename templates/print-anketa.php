@@ -108,11 +108,11 @@ $printer_icon = '<svg class="acu-print-icon" viewBox="0 0 24 24" width="13" heig
 </div>
 
 <div class="page">
-	<h1 class="title"><?php echo esc_html( 'გახდი შპს "ართთაიმის" ს/კ 202356672 კლუბის წევრი!' ); ?></h1>
+	<h1 class="title"><?php echo esc_html__( 'გახდი შპს "ართთაიმის" ს/კ 202356672 კლუბის წევრი!', 'acu' ); ?></h1>
 
 	<?php if ( $personal_id !== '' ) : ?>
 	<div class="row">
-		<div class="label">პირადი ნომერი</div>
+		<div class="label"><?php esc_html_e( 'პირადი ნომერი', 'acu' ); ?></div>
 		<div class="value value-boxes">
 			<?php echo $boxed( $personal_id, 11 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</div>
@@ -121,47 +121,47 @@ $printer_icon = '<svg class="acu-print-icon" viewBox="0 0 24 24" width="13" heig
 
 	<?php if ( trim( $first_name ) !== '' ) : ?>
 	<div class="row">
-		<div class="label">სახელი</div>
+		<div class="label"><?php esc_html_e( 'სახელი', 'acu' ); ?></div>
 		<div class="value value-line"><?php echo esc_html( $first_name ); ?></div>
 	</div>
 	<?php endif; ?>
 
 	<?php if ( trim( $last_name ) !== '' ) : ?>
 	<div class="row">
-		<div class="label">გვარი</div>
+		<div class="label"><?php esc_html_e( 'გვარი', 'acu' ); ?></div>
 		<div class="value value-line"><?php echo esc_html( $last_name ); ?></div>
 	</div>
 	<?php endif; ?>
 
 	<?php if ( $dob !== '' ) : ?>
 	<div class="row">
-		<div class="label">დაბადების თარიღი</div>
+		<div class="label"><?php esc_html_e( 'დაბადების თარიღი', 'acu' ); ?></div>
 		<div class="value value-line"><?php echo esc_html( $format_date( $dob ) ); ?></div>
 	</div>
 	<?php endif; ?>
 
 	<?php if ( $phone !== '' ) : ?>
 	<div class="row">
-		<div class="label">ტელეფონის ნომერი</div>
+		<div class="label"><?php esc_html_e( 'ტელეფონის ნომერი', 'acu' ); ?></div>
 		<div class="value value-line"><?php echo esc_html( $phone ); ?></div>
 	</div>
 	<?php endif; ?>
 
 	<div class="row">
-		<div class="label">მისამართი</div>
+		<div class="label"><?php esc_html_e( 'მისამართი', 'acu' ); ?></div>
 		<div class="value value-line"><?php echo esc_html( $address_1 ); ?></div>
 	</div>
 
 	<div class="row">
-		<div class="label">E-mail</div>
+		<div class="label"><?php esc_html_e( 'E-mail', 'acu' ); ?></div>
 		<div class="value value-line"><?php echo esc_html( $email_display ); ?></div>
 	</div>
 
 	<div class="rules">
-		<div class="rules-title">წესები და პირობები</div>
+		<div class="rules-title"><?php esc_html_e( 'წესები და პირობები', 'acu' ); ?></div>
 		<div class="rules-inner">
 			<?php
-			echo wp_kses_post( '<p><strong>Arttime-ის კლუბის წევრები სარგებლობენ შემდეგი უპირატესობით:</strong></p>
+			echo wp_kses_post( __( '<p><strong>Arttime-ის კლუბის წევრები სარგებლობენ შემდეგი უპირატესობით:</strong></p>
 <ul>
 <li>ბარათზე 500-5000 ლარამდე დაგროვების შემთხვევაში ფასდაკლება 5%</li>
 <li>ბარათზე 5001-10000 ლარამდე დაგროვების შემთხვევაში ფასდაკლება 10%;</li>
@@ -177,14 +177,14 @@ $printer_icon = '<svg class="acu-print-icon" viewBox="0 0 24 24" width="13" heig
 <li>დაგროვილი ქულები ბარათზე აისახება 2 სამუშაო დღის ვადაში;</li>
 <li>გაითვალისწინეთ, წინამდებარე წესებით დადგენილი პირობები შეიძლება შეიცვალოს შპს „ართთაიმის" მიერ;</li>
 <li>ხელმოწერით ვადასტურებ ჩემი პირადი მონაცემების სიზუსტეს და ბარათის მიღებას.</li>
-</ol>' );
+</ol>', 'acu' ) );
 			?>
 		</div>
 	</div>
 
 	<?php if ( $card_no !== '' ) : ?>
 	<div class="row">
-		<div class="label">მივიღე ბარათი №</div>
+		<div class="label"><?php esc_html_e( 'მივიღე ბარათი №', 'acu' ); ?></div>
 		<div class="value value-boxes">
 			<?php echo $boxed( $card_no, 10 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</div>
@@ -193,27 +193,27 @@ $printer_icon = '<svg class="acu-print-icon" viewBox="0 0 24 24" width="13" heig
 
 	<?php if ( $responsible !== '' ) : ?>
 	<div class="row">
-		<div class="label">პასუხისმგებელი პირი</div>
+		<div class="label"><?php esc_html_e( 'პასუხისმგებელი პირი', 'acu' ); ?></div>
 		<div class="value value-line"><?php echo esc_html( $responsible ); ?></div>
 	</div>
 	<?php endif; ?>
 
 	<?php if ( $form_date !== '' ) : ?>
 	<div class="row">
-		<div class="label">თარიღი</div>
+		<div class="label"><?php esc_html_e( 'თარიღი', 'acu' ); ?></div>
 		<div class="value value-line"><?php echo esc_html( $format_date( $form_date ) ); ?></div>
 	</div>
 	<?php endif; ?>
 
 	<?php if ( $shop !== '' ) : ?>
 	<div class="row">
-		<div class="label">მაღაზია</div>
+		<div class="label"><?php esc_html_e( 'მაღაზია', 'acu' ); ?></div>
 		<div class="value value-line"><?php echo esc_html( $shop ); ?></div>
 	</div>
 	<?php endif; ?>
 
 	<div class="row signature-row no-break">
-		<div class="label">მომხმარებლის ხელმოწერა</div>
+		<div class="label"><?php esc_html_e( 'მომხმარებლის ხელმოწერა', 'acu' ); ?></div>
 		<div class="value value-line"></div>
 	</div>
 </div>
