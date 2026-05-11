@@ -79,10 +79,16 @@ if ( trim( $terms_html_raw ) !== '' ) {
 </style>
 </head>
 <body>
+<?php
+$print_label = $terms_type === 'sms'
+	? __( 'Print SMS Terms', 'acu' )
+	: ( $terms_type === 'call' ? __( 'Print Call Terms', 'acu' ) : __( 'Print Terms', 'acu' ) );
+$printer_icon = '<svg class="acu-print-icon" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>';
+?>
 <div class="print-actions">
-	<button onclick="window.print()"><?php echo esc_html__( 'Print Terms', 'acu' ); ?></button>
+	<button onclick="window.print()"><?php echo $printer_icon; // safe inline SVG ?><span><?php echo esc_html( $print_label ); ?></span></button>
 	<?php if ( $user_id ) : ?>
-		<a class="button button-secondary print-terms-btn" href="<?php echo $anketa_url; ?>"><?php echo esc_html__( 'Print Anketa', 'acu' ); ?></a>
+		<a class="button button-secondary print-terms-btn" href="<?php echo $anketa_url; ?>"><?php echo esc_html__( 'Anketa', 'acu' ); ?></a>
 	<?php endif; ?>
 </div>
 

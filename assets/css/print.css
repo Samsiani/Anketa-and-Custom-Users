@@ -19,6 +19,8 @@ html, body {
   word-spacing: var(--anketa-word-spacing);
 }
 
+.acu-print-icon { display: inline-block; width: 13px; height: 13px; margin-right: 6px; flex-shrink: 0; vertical-align: -2px; }
+
 .print-actions {
   width: var(--a4-width);
   margin: 10px auto;

@@ -95,10 +95,13 @@ $edit_anketa_url = $anketa_page_id
 <link rel="stylesheet" href="<?php echo esc_url( ACU_URL . 'assets/css/print.css?v=' . urlencode( ACU_VERSION ) ); ?>" media="all" />
 </head>
 <body>
+<?php
+$printer_icon = '<svg class="acu-print-icon" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>';
+?>
 <div class="print-actions">
-	<button onclick="window.print()"><?php echo esc_html__( 'Print Anketa', 'acu' ); ?></button>
-	<a class="button button-secondary print-terms-btn" href="<?php echo $sms_terms_link; ?>"><?php echo esc_html__( 'Print SMS Terms', 'acu' ); ?></a>
-	<a class="button button-secondary print-terms-btn" href="<?php echo $call_terms_link; ?>"><?php echo esc_html__( 'Print Phone Call Terms', 'acu' ); ?></a>
+	<button onclick="window.print()"><?php echo $printer_icon; // safe inline SVG ?><span><?php echo esc_html__( 'Print Anketa', 'acu' ); ?></span></button>
+	<a class="button button-secondary print-terms-btn" href="<?php echo $sms_terms_link; ?>"><?php echo esc_html__( 'SMS Terms', 'acu' ); ?></a>
+	<a class="button button-secondary print-terms-btn" href="<?php echo $call_terms_link; ?>"><?php echo esc_html__( 'Call Terms', 'acu' ); ?></a>
 	<?php if ( $edit_anketa_url !== '' ) : ?>
 	<a class="button button-secondary print-terms-btn" href="<?php echo $edit_anketa_url; ?>"><?php echo esc_html__( 'Edit Anketa', 'acu' ); ?></a>
 	<?php endif; ?>
