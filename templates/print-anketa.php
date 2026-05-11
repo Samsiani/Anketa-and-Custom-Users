@@ -36,8 +36,6 @@ $card_no     = $meta( '_acu_card_no' );
 $responsible = $meta( '_acu_responsible_person' );
 $form_date   = $meta( '_acu_form_date' );
 $shop         = $meta( '_acu_shop' );
-$sms_consent  = $meta( '_sms_consent' );
-$call_consent = $meta( '_call_consent' );
 
 // Format phone: prefer "+995 9digits"
 $format_phone = function ( string $raw ): string {
@@ -208,20 +206,6 @@ $edit_anketa_url = $anketa_page_id
 	<div class="row">
 		<div class="label">მაღაზია</div>
 		<div class="value value-line"><?php echo esc_html( $shop ); ?></div>
-	</div>
-	<?php endif; ?>
-
-	<?php if ( $sms_consent === 'yes' || $sms_consent === 'no' ) : ?>
-	<div class="row">
-		<div class="label">SMS შეტყობინებების მიღების თანხმობა</div>
-		<div class="value value-line"><?php echo esc_html( $sms_consent === 'yes' ? 'დიახ' : 'არა' ); ?></div>
-	</div>
-	<?php endif; ?>
-
-	<?php if ( $call_consent === 'yes' || $call_consent === 'no' ) : ?>
-	<div class="row">
-		<div class="label">თანხმობა სატელეფონო ზარზე</div>
-		<div class="value value-line"><?php echo esc_html( $call_consent === 'yes' ? 'დიახ' : 'არა' ); ?></div>
 	</div>
 	<?php endif; ?>
 
