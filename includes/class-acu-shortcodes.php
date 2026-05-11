@@ -489,9 +489,9 @@ class ACU_Shortcodes {
 						<?php if ( $edit_anketa_url ) : ?>
 						<a class="button button-secondary wcu-edit-anketa-btn" href="<?php echo esc_url( $edit_anketa_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Edit Anketa', 'acu' ); ?></a>
 						<?php endif; ?>
-						<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( 'user_id', $user_id, home_url( '/print-anketa/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print Anketa', 'acu' ); ?></a>
-						<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type' => 'sms' ], home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print SMS Terms', 'acu' ); ?></a>
-						<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type' => 'call' ], home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print Call Terms', 'acu' ); ?></a>
+						<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( 'user_id', $user_id, home_url( '/print-anketa/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Anketa', 'acu' ); ?></a>
+						<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type' => 'sms' ], home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'SMS Terms', 'acu' ); ?></a>
+						<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( [ 'user_id' => $user_id, 'terms_type' => 'call' ], home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Call Terms', 'acu' ); ?></a>
 					</div>
 					<?php endif; ?>
 				</div>
@@ -671,9 +671,9 @@ class ACU_Shortcodes {
 							<?php esc_html_e( 'Register (Anketa)', 'acu' ); ?>
 						</a>
 						<?php endif; ?>
-						<a class="button button-secondary" href="<?php echo esc_url( home_url( '/print-anketa/' ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print Anketa', 'acu' ); ?></a>
-						<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( 'terms_type', 'sms', home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print SMS Terms', 'acu' ); ?></a>
-						<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( 'terms_type', 'call', home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print Call Terms', 'acu' ); ?></a>
+						<a class="button button-secondary" href="<?php echo esc_url( home_url( '/print-anketa/' ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Anketa', 'acu' ); ?></a>
+						<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( 'terms_type', 'sms', home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'SMS Terms', 'acu' ); ?></a>
+						<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( 'terms_type', 'call', home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Call Terms', 'acu' ); ?></a>
 					</div>
 					<?php endif; ?>
 				</div>

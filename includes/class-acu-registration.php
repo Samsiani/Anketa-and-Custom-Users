@@ -366,9 +366,9 @@ class ACU_Registration {
 			<?php if ( $is_edit ) : ?>
 			<div class="acu-edit-actions">
 				<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( 'edit_user', $edit_user_id, get_permalink() ) ); ?>"><?php esc_html_e( 'Edit Anketa', 'acu' ); ?></a>
-				<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( 'user_id', $edit_user_id, home_url( '/print-anketa/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print Anketa', 'acu' ); ?></a>
-				<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( [ 'user_id' => $edit_user_id, 'terms_type' => 'sms' ], home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print SMS Terms', 'acu' ); ?></a>
-				<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( [ 'user_id' => $edit_user_id, 'terms_type' => 'call' ], home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Print Call Terms', 'acu' ); ?></a>
+				<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( 'user_id', $edit_user_id, home_url( '/print-anketa/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Anketa', 'acu' ); ?></a>
+				<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( [ 'user_id' => $edit_user_id, 'terms_type' => 'sms' ], home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'SMS Terms', 'acu' ); ?></a>
+				<a class="button button-secondary" href="<?php echo esc_url( add_query_arg( [ 'user_id' => $edit_user_id, 'terms_type' => 'call' ], home_url( '/signature-terms/' ) ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Call Terms', 'acu' ); ?></a>
 			</div>
 			<?php endif; ?>
 
