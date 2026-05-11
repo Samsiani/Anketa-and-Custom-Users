@@ -630,7 +630,19 @@ class ACU_Registration {
 			self::$errors[] = __( 'Phone number must be exactly 9 digits.', 'acu' );
 		}
 
-		if ( $local_digits !== '' ) {
+		// In edit mode, skip uniqueness checks when the phone hasn't changed —
+		// otherwise legacy duplicate accounts that share this phone as user_login
+		// or billing_phone (pre-existing data on this install) block updates to
+		// every other field on the form.
+		$phone_changed = true;
+		if ( self::$edit_user_id > 0 && $local_digits !== '' ) {
+			$stored_phone_n = ACU_Helpers::normalize_phone( (string) get_user_meta( self::$edit_user_id, 'billing_phone', true ) );
+			if ( $stored_phone_n !== '' && $stored_phone_n === $local_digits ) {
+				$phone_changed = false;
+			}
+		}
+
+		if ( $local_digits !== '' && $phone_changed ) {
 			if ( self::$edit_user_id === 0 ) {
 				// Create mode: any existing login with this phone is a conflict
 				if ( username_exists( $local_digits ) ) {
