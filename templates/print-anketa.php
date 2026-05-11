@@ -95,7 +95,7 @@ $edit_anketa_url = $anketa_page_id
 <link rel="stylesheet" href="<?php echo esc_url( ACU_URL . 'assets/css/print.css?v=' . urlencode( ACU_VERSION ) ); ?>" media="all" />
 </head>
 <body>
-<div class="print-actions" style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem;">
+<div class="print-actions">
 	<button onclick="window.print()"><?php echo esc_html__( 'Print Anketa', 'acu' ); ?></button>
 	<a class="button button-secondary print-terms-btn" href="<?php echo $sms_terms_link; ?>"><?php echo esc_html__( 'Print SMS Terms', 'acu' ); ?></a>
 	<a class="button button-secondary print-terms-btn" href="<?php echo $call_terms_link; ?>"><?php echo esc_html__( 'Print Phone Call Terms', 'acu' ); ?></a>
