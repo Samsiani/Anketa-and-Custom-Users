@@ -429,7 +429,10 @@ class ACU_Account {
 		$badge_html = '';
 		if ( $discount > 0 ) {
 			$badge_html = '<div class="acu-card-banner__right">'
-				. '<span class="acu-card-banner__badge">' . esc_html( wc_format_decimal( $discount, 0 ) ) . '% OFF</span>'
+				. '<span class="acu-card-banner__badge">'
+				/* translators: %s: percentage discount */
+				. esc_html( sprintf( __( '%s%% OFF', 'acu' ), wc_format_decimal( $discount, 0 ) ) )
+				. '</span>'
 				. '</div>';
 		}
 
@@ -437,7 +440,7 @@ class ACU_Account {
 			. '<div class="acu-card-banner__left">'
 				. '<span class="acu-card-banner__icon">&#10022;</span>'
 				. '<div>'
-					. '<div class="acu-card-banner__title">ARTTIME CLUB</div>'
+					. '<div class="acu-card-banner__title">' . esc_html__( 'ARTTIME CLUB', 'acu' ) . '</div>'
 					. '<div class="acu-card-banner__code">' . esc_html( $coupon_code ) . '</div>'
 				. '</div>'
 			. '</div>'

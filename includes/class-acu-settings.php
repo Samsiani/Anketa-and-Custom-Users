@@ -156,10 +156,10 @@ class ACU_Settings {
 				fetch(' . wp_json_encode( $ajax_url ) . ',{method:"POST",body:fd,credentials:"same-origin"})
 					.then(function(r){return r.json();})
 					.then(function(r){
-						status.textContent=r.success?(r.data.message||"OK"):(r.data.message||"Error");
+						status.textContent=r.success?(r.data.message||' . wp_json_encode( __( 'OK', 'acu' ) ) . '):(r.data.message||' . wp_json_encode( __( 'Error', 'acu' ) ) . ');
 						status.style.color=r.success?"#2e7d32":"#c62828";
 						btn.disabled=false;
-					}).catch(function(){status.textContent="Request failed";btn.disabled=false;});
+					}).catch(function(){status.textContent=' . wp_json_encode( __( 'Request failed', 'acu' ) ) . ';btn.disabled=false;});
 			});
 		})();
 		</script>';
