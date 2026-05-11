@@ -1207,3 +1207,28 @@ body.club-anketa-modal-open { overflow: hidden !important; }
   height: 20px;
   stroke: #15803d;
 }
+
+/* ---- Flatpickr: year dropdown matching the month dropdown ---- */
+.flatpickr-current-month .acu-flatpickr-year {
+  appearance: menulist;
+  -webkit-appearance: menulist;
+  -moz-appearance: menulist;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-sizing: border-box;
+  color: inherit;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: 300;
+  height: auto;
+  line-height: inherit;
+  margin: -1px 0 0 4px;
+  outline: none;
+  padding: 0 0 0 .5ch;
+  width: auto;
+  vertical-align: initial;
+}
+.flatpickr-current-month .acu-flatpickr-year:hover { background: rgba(0,0,0,.05); }
+.flatpickr-current-month .acu-flatpickr-year:focus { outline: none; }
