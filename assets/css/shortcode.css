@@ -18,8 +18,9 @@
 .wcu-udc-results-layout { display: flex; gap: 24px; flex-wrap: wrap; }
 .wcu-udc-panel { flex: 1 1 480px; background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; box-shadow: 0 1px 2px rgba(16,24,40,.06),0 4px 12px -2px rgba(16,24,40,.04); overflow: hidden; position: relative; }
 .wcu-udc-panel--details { background: linear-gradient(#f5f9ff,#f5f9ff) padding-box,#f5f9ff; border: 1px solid #e0e7ef; }
-.wcu-udc-panel__header { padding: 12px 18px; border-bottom: 1px solid #eceff3; background: #f1f5fa; }
+.wcu-udc-panel__header { padding: 12px 18px; border-bottom: 1px solid #eceff3; background: #f1f5fa; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .wcu-udc-panel__header h3 { margin: 0; font-size: 15px; font-weight: 600; }
+.wcu-udc-panel__header .wcu-udc-actions { margin: 0; padding: 0; background: transparent; border: 0; gap: 6px; }
 .wcu-udc-panel__body { padding: 16px 20px; font-size: 14px; }
 .wcu-detail-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .wcu-detail-list li { display: flex; flex-wrap: wrap; gap: 6px; line-height: 1.4; }
@@ -56,3 +57,54 @@
 /* Smooth fade-in for panels */
 .wcu-udc-panel { animation: wcu-fade .25s ease; }
 @keyframes wcu-fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ---- Action bar (mirrors frontend.css for [user_data_check] page) ---- */
+.acu-edit-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.acu-edit-actions .button,
+.acu-edit-actions .button-secondary,
+.acu-edit-actions a.button,
+.acu-edit-actions a.button-secondary {
+  display: inline-flex !important;
+  align-items: center !important;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif !important;
+  font-size: 11.5px !important;
+  line-height: 1.4 !important;
+  font-weight: 600 !important;
+  letter-spacing: .01em !important;
+  text-transform: none !important;
+  text-decoration: none !important;
+  padding: 4px 10px !important;
+  min-height: 0 !important;
+  height: auto !important;
+  background: #ffffff !important;
+  color: #1f2937 !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.acu-edit-actions .button:hover,
+.acu-edit-actions .button-secondary:hover,
+.acu-edit-actions a.button:hover,
+.acu-edit-actions a.button-secondary:hover {
+  background: #1e293b !important;
+  color: #ffffff !important;
+  border-color: #1e293b !important;
+}
+.acu-edit-actions .wcu-edit-anketa-btn,
+.acu-edit-actions a.wcu-edit-anketa-btn {
+  background: #1e293b !important;
+  color: #ffffff !important;
+  border-color: #1e293b !important;
+}
+.acu-edit-actions .wcu-edit-anketa-btn:hover,
+.acu-edit-actions a.wcu-edit-anketa-btn:hover {
+  background: #0f172a !important;
+  border-color: #0f172a !important;
+}
