@@ -505,20 +505,20 @@ class ACU_Registration {
 					</div>
 					<div class="acu-grid-2">
 						<div class="acu-field">
-							<label for="anketa_card_no"><?php esc_html_e( 'მივიღე ბარათი №', 'acu' ); ?> <span class="acu-optional"><?php esc_html_e( 'ოფციური', 'acu' ); ?></span></label>
-							<input type="text" id="anketa_card_no" name="anketa_card_no" value="<?php echo $v( 'anketa_card_no' ); ?>" />
+							<label for="anketa_card_no"><?php esc_html_e( 'მივიღე ბარათი №', 'acu' ); ?> <span class="acu-required" aria-hidden="true">*</span></label>
+							<input type="text" id="anketa_card_no" name="anketa_card_no" required value="<?php echo $v( 'anketa_card_no' ); ?>" />
 						</div>
 						<div class="acu-field">
-							<label for="anketa_responsible_person"><?php esc_html_e( 'პასუხისმგებელი პირი', 'acu' ); ?> <span class="acu-optional"><?php esc_html_e( 'ოფციური', 'acu' ); ?></span></label>
-							<input type="text" id="anketa_responsible_person" name="anketa_responsible_person" value="<?php echo $v( 'anketa_responsible_person' ); ?>" />
+							<label for="anketa_responsible_person"><?php esc_html_e( 'პასუხისმგებელი პირი', 'acu' ); ?> <span class="acu-required" aria-hidden="true">*</span></label>
+							<input type="text" id="anketa_responsible_person" name="anketa_responsible_person" required value="<?php echo $v( 'anketa_responsible_person' ); ?>" />
 						</div>
 						<div class="acu-field">
-							<label for="anketa_form_date"><?php esc_html_e( 'თარიღი', 'acu' ); ?> <span class="acu-optional"><?php esc_html_e( 'ოფციური', 'acu' ); ?></span></label>
-							<input type="text" id="anketa_form_date" name="anketa_form_date" class="acu-date-picker" placeholder="dd/mm/yyyy" value="<?php echo $v( 'anketa_form_date' ); ?>" />
+							<label for="anketa_form_date"><?php esc_html_e( 'თარიღი', 'acu' ); ?> <span class="acu-required" aria-hidden="true">*</span></label>
+							<input type="text" id="anketa_form_date" name="anketa_form_date" class="acu-date-picker" required placeholder="dd/mm/yyyy" value="<?php echo $v( 'anketa_form_date' ); ?>" />
 						</div>
 						<div class="acu-field">
-							<label for="anketa_shop"><?php esc_html_e( 'მაღაზია', 'acu' ); ?> <span class="acu-optional"><?php esc_html_e( 'ოფციური', 'acu' ); ?></span></label>
-							<input type="text" id="anketa_shop" name="anketa_shop" value="<?php echo $v( 'anketa_shop' ); ?>" />
+							<label for="anketa_shop"><?php esc_html_e( 'მაღაზია', 'acu' ); ?> <span class="acu-required" aria-hidden="true">*</span></label>
+							<input type="text" id="anketa_shop" name="anketa_shop" required value="<?php echo $v( 'anketa_shop' ); ?>" />
 						</div>
 					</div>
 				</div>
@@ -613,11 +613,15 @@ class ACU_Registration {
 
 	private static function validate_form_data( array $data ): void {
 		$required = [
-			'anketa_personal_id' => __( 'Personal ID is required.', 'acu' ),
-			'anketa_first_name'  => __( 'First name is required.', 'acu' ),
-			'anketa_last_name'   => __( 'Last name is required.', 'acu' ),
-			'anketa_dob'         => __( 'Date of birth is required.', 'acu' ),
-			'anketa_phone_local' => __( 'Phone number is required.', 'acu' ),
+			'anketa_personal_id'        => __( 'Personal ID is required.', 'acu' ),
+			'anketa_first_name'         => __( 'First name is required.', 'acu' ),
+			'anketa_last_name'          => __( 'Last name is required.', 'acu' ),
+			'anketa_dob'                => __( 'Date of birth is required.', 'acu' ),
+			'anketa_phone_local'        => __( 'Phone number is required.', 'acu' ),
+			'anketa_card_no'            => __( 'Card number is required.', 'acu' ),
+			'anketa_responsible_person' => __( 'Responsible person is required.', 'acu' ),
+			'anketa_form_date'          => __( 'Form date is required.', 'acu' ),
+			'anketa_shop'               => __( 'Shop is required.', 'acu' ),
 		];
 
 		foreach ( $required as $key => $message ) {
