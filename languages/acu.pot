@@ -1,0 +1,1240 @@
+# Copyright (C) 2026 Samsiani
+# This file is distributed under the same license as the Anketa and Custom Users plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Anketa and Custom Users 1.2.31\n"
+"Report-Msgid-Bugs-To: https://github.com/Samsiani/Anketa-and-Custom-Users\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-05-28T21:51:42+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: acu\n"
+
+#. Plugin Name of the plugin
+#: arttime-club-member.php
+msgid "Anketa and Custom Users"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: arttime-club-member.php
+msgid "https://github.com/Samsiani/Anketa-and-Custom-Users"
+msgstr ""
+
+#. Description of the plugin
+#: arttime-club-member.php
+msgid "Unified club membership plugin: Anketa registration form, SMS OTP verification, phone-based login, WooCommerce custom fields (personal ID, consents, club card), user data search, CSV tools, and ERP coupon linking."
+msgstr ""
+
+#. Author of the plugin
+#: arttime-club-member.php
+msgid "Samsiani"
+msgstr ""
+
+#: arttime-club-member.php:34
+msgid "Anketa and Custom Users requires WooCommerce to be active."
+msgstr ""
+
+#: includes/class-acu-account.php:112
+#: templates/myaccount/form-edit-account.php:42
+msgid "Account Details"
+msgstr ""
+
+#: includes/class-acu-account.php:116
+msgid "First name"
+msgstr ""
+
+#: includes/class-acu-account.php:120
+msgid "Last name"
+msgstr ""
+
+#: includes/class-acu-account.php:124
+msgid "Personal ID"
+msgstr ""
+
+#: includes/class-acu-account.php:124
+#: templates/myaccount/form-edit-account.php:103
+#: templates/myaccount/form-edit-account.php:164
+msgid "optional"
+msgstr ""
+
+#: includes/class-acu-account.php:126
+#: templates/myaccount/form-edit-account.php:107
+msgid "11 digits"
+msgstr ""
+
+#: includes/class-acu-account.php:129
+msgid "Phone"
+msgstr ""
+
+#: includes/class-acu-account.php:131
+msgid "e.g. 599 123 456"
+msgstr ""
+
+#: includes/class-acu-account.php:134
+msgid "Email address"
+msgstr ""
+
+#: includes/class-acu-account.php:137
+msgid "e.g. name@example.com"
+msgstr ""
+
+#: includes/class-acu-account.php:140
+#: includes/class-acu-helpers.php:484
+msgid "Password"
+msgstr ""
+
+#: includes/class-acu-account.php:142
+msgid "Choose a password"
+msgstr ""
+
+#: includes/class-acu-account.php:157
+#: templates/myaccount/form-edit-account.php:118
+msgid "Notifications"
+msgstr ""
+
+#: includes/class-acu-account.php:161
+#: templates/myaccount/form-edit-account.php:122
+msgid "SMS notifications"
+msgstr ""
+
+#: includes/class-acu-account.php:164
+#: includes/class-acu-account.php:174
+#: includes/class-acu-admin.php:67
+#: includes/class-acu-admin.php:151
+#: templates/myaccount/form-edit-account.php:125
+#: templates/myaccount/form-edit-account.php:136
+msgid "Yes"
+msgstr ""
+
+#: includes/class-acu-account.php:166
+#: includes/class-acu-account.php:176
+#: includes/class-acu-admin.php:70
+#: includes/class-acu-admin.php:152
+#: templates/myaccount/form-edit-account.php:127
+#: templates/myaccount/form-edit-account.php:138
+msgid "No"
+msgstr ""
+
+#: includes/class-acu-account.php:171
+#: templates/myaccount/form-edit-account.php:133
+msgid "Phone call consent"
+msgstr ""
+
+#: includes/class-acu-account.php:187
+#: templates/myaccount/form-edit-account.php:178
+msgid "Terms &amp; Conditions"
+msgstr ""
+
+#: includes/class-acu-account.php:193
+#: includes/class-acu-account.php:195
+msgid "I agree to the"
+msgstr ""
+
+#: includes/class-acu-account.php:193
+#: includes/class-acu-account.php:197
+msgid "terms and conditions"
+msgstr ""
+
+#: includes/class-acu-account.php:201
+#: templates/myaccount/form-edit-account.php:184
+msgid "I agree to the terms and conditions"
+msgstr ""
+
+#: includes/class-acu-account.php:264
+#: includes/class-acu-registration.php:617
+msgid "First name is required."
+msgstr ""
+
+#: includes/class-acu-account.php:267
+#: includes/class-acu-registration.php:618
+msgid "Last name is required."
+msgstr ""
+
+#: includes/class-acu-account.php:270
+msgid "You must agree to the terms and conditions to register."
+msgstr ""
+
+#: includes/class-acu-account.php:274
+msgid "A valid 9-digit phone number is required."
+msgstr ""
+
+#: includes/class-acu-account.php:279
+#: includes/class-acu-registration.php:678
+#: includes/class-acu-registration.php:684
+#: includes/class-acu-registration.php:689
+msgid "This phone number is already registered."
+msgstr ""
+
+#: includes/class-acu-account.php:392
+#: includes/class-acu-registration.php:117
+msgid "Verify"
+msgstr ""
+
+#. translators: %s: percentage discount
+#: includes/class-acu-account.php:458
+#, php-format
+msgid "%s%% OFF"
+msgstr ""
+
+#: includes/class-acu-account.php:467
+msgid "ARTTIME CLUB"
+msgstr ""
+
+#: includes/class-acu-account.php:496
+msgid "Phone verification required. Please verify your new phone number."
+msgstr ""
+
+#: includes/class-acu-admin.php:46
+msgid "Phone Number"
+msgstr ""
+
+#: includes/class-acu-admin.php:47
+msgid "SMS Accept"
+msgstr ""
+
+#: includes/class-acu-admin.php:48
+msgid "Call Accept"
+msgstr ""
+
+#: includes/class-acu-admin.php:72
+msgid "(blank)"
+msgstr ""
+
+#: includes/class-acu-admin.php:88
+msgid "Processing…"
+msgstr ""
+
+#: includes/class-acu-admin.php:89
+msgid "Completed!"
+msgstr ""
+
+#: includes/class-acu-admin.php:90
+msgid "Error occurred."
+msgstr ""
+
+#: includes/class-acu-admin.php:91
+msgid "Request failed."
+msgstr ""
+
+#: includes/class-acu-admin.php:92
+msgid "users processed"
+msgstr ""
+
+#: includes/class-acu-admin.php:93
+msgid "coupons linked"
+msgstr ""
+
+#: includes/class-acu-admin.php:94
+msgid "errors"
+msgstr ""
+
+#: includes/class-acu-admin.php:126
+msgid "External phone database cleared."
+msgstr ""
+
+#: includes/class-acu-admin.php:140
+msgid "Bulk Import: Set SMS Consent from CSV"
+msgstr ""
+
+#: includes/class-acu-admin.php:141
+msgid "Upload a CSV with the first column being a phone number. Matched users will have their SMS consent updated."
+msgstr ""
+
+#: includes/class-acu-admin.php:142
+msgid "Download import example CSV"
+msgstr ""
+
+#: includes/class-acu-admin.php:146
+msgid "CSV File"
+msgstr ""
+
+#: includes/class-acu-admin.php:150
+msgid "Set consent status to:"
+msgstr ""
+
+#: includes/class-acu-admin.php:154
+msgid "Run Import"
+msgstr ""
+
+#: includes/class-acu-admin.php:158
+msgid "Export Users (CSV)"
+msgstr ""
+
+#: includes/class-acu-admin.php:159
+msgid "Exports users with phone & SMS consent (only users with a saved phone number)."
+msgstr ""
+
+#: includes/class-acu-admin.php:160
+msgid "Export users CSV"
+msgstr ""
+
+#: includes/class-acu-admin.php:163
+msgid "External Phone Database (SMS Consent Whitelist)"
+msgstr ""
+
+#: includes/class-acu-admin.php:164
+msgid "Import phone numbers of non-registered users who have given SMS consent. Searchable via the user data check shortcode."
+msgstr ""
+
+#: includes/class-acu-admin.php:165
+#, php-format
+msgid "Current entries in database: %d"
+msgstr ""
+
+#: includes/class-acu-admin.php:170
+msgid "CSV File (phone numbers)"
+msgstr ""
+
+#: includes/class-acu-admin.php:173
+msgid "Import External Phones"
+msgstr ""
+
+#: includes/class-acu-admin.php:176
+msgid "Are you sure you want to clear all external phone numbers?"
+msgstr ""
+
+#: includes/class-acu-admin.php:178
+msgid "Clear All External Phones"
+msgstr ""
+
+#: includes/class-acu-admin.php:182
+#: includes/class-acu-admin.php:185
+msgid "Link Club Cards to All Users"
+msgstr ""
+
+#: includes/class-acu-admin.php:183
+msgid "Scan all users and link Club Card coupons from ERP Sync by matching phone numbers. Processes 100 users per batch."
+msgstr ""
+
+#: includes/class-acu-admin.php:205
+#: includes/class-acu-admin.php:270
+msgid "Please select a file to upload."
+msgstr ""
+
+#: includes/class-acu-admin.php:211
+#: includes/class-acu-admin.php:276
+msgid "Please upload a CSV file."
+msgstr ""
+
+#: includes/class-acu-admin.php:219
+#: includes/class-acu-admin.php:283
+msgid "Unable to read file."
+msgstr ""
+
+#. translators: 1: updated count, 2: skipped count
+#: includes/class-acu-admin.php:256
+#, php-format
+msgid "Import completed. Updated: %1$d, Skipped: %2$d"
+msgstr ""
+
+#. translators: 1: imported count, 2: skipped count
+#: includes/class-acu-admin.php:316
+#, php-format
+msgid "Import completed. Imported: %1$d, Skipped: %2$d"
+msgstr ""
+
+#: includes/class-acu-admin.php:344
+#: includes/class-acu-admin.php:415
+#: includes/class-acu-admin.php:441
+#: includes/class-acu-admin.php:513
+#: includes/class-acu-shortcodes.php:34
+#: includes/class-acu-shortcodes.php:84
+msgid "Permission denied."
+msgstr ""
+
+#: includes/class-acu-admin.php:518
+msgid "No valid admin email configured."
+msgstr ""
+
+#: includes/class-acu-admin.php:523
+msgid "ACU Plugin – Test Email"
+msgstr ""
+
+#: includes/class-acu-admin.php:524
+msgid "This is a test email from the Anketa & Custom Users plugin. If you received this, your SMTP configuration is working correctly."
+msgstr ""
+
+#: includes/class-acu-admin.php:528
+#, php-format
+msgid "Test email sent to %s."
+msgstr ""
+
+#: includes/class-acu-admin.php:530
+msgid "Failed to send test email. Please check your SMTP settings."
+msgstr ""
+
+#: includes/class-acu-auth.php:109
+msgid "<strong>Error</strong>: The password you entered for the phone number is incorrect."
+msgstr ""
+
+#: includes/class-acu-core.php:190
+msgid "Anketa and Custom Users plugin activated successfully."
+msgstr ""
+
+#: includes/class-acu-core.php:198
+msgid "The following legacy plugins were automatically deactivated:"
+msgstr ""
+
+#: includes/class-acu-helpers.php:285
+msgid "(not provided)"
+msgstr ""
+
+#. translators: %s: site name
+#: includes/class-acu-helpers.php:290
+#, php-format
+msgid "[%s] SMS consent update"
+msgstr ""
+
+#: includes/class-acu-helpers.php:292
+msgid "now agrees to receive SMS."
+msgstr ""
+
+#: includes/class-acu-helpers.php:293
+msgid "does not agree to receive SMS."
+msgstr ""
+
+#. translators: %s: registration context label
+#: includes/class-acu-helpers.php:295
+#, php-format
+msgid "Context: %s"
+msgstr ""
+
+#. translators: 1: name, 2: phone, 3: agreement, 4: context
+#: includes/class-acu-helpers.php:298
+#, php-format
+msgid "User %1$s, phone number: %2$s, %3$s %4$s"
+msgstr ""
+
+#: includes/class-acu-helpers.php:445
+msgid "Incorrect username, email, phone, or password. Please try again."
+msgstr ""
+
+#: includes/class-acu-helpers.php:456
+#: includes/class-acu-helpers.php:497
+msgid "შესვლა"
+msgstr ""
+
+#: includes/class-acu-helpers.php:469
+#: templates/myaccount/form-login.php:17
+msgid "Username, email or phone"
+msgstr ""
+
+#: includes/class-acu-helpers.php:499
+msgid "Lost your password?"
+msgstr ""
+
+#: includes/class-acu-otp.php:54
+msgid "Too many attempts. Please try again later."
+msgstr ""
+
+#. translators: %s: 6-digit OTP code
+#: includes/class-acu-otp.php:62
+#, php-format
+msgid "SMS Code: %s"
+msgstr ""
+
+#: includes/class-acu-otp.php:70
+msgid "OTP sent successfully."
+msgstr ""
+
+#: includes/class-acu-otp.php:80
+#: includes/class-acu-sms.php:98
+msgid "SMS sending failed."
+msgstr ""
+
+#: includes/class-acu-otp.php:95
+msgid "OTP expired. Please request a new code."
+msgstr ""
+
+#: includes/class-acu-otp.php:102
+msgid "Invalid OTP code."
+msgstr ""
+
+#: includes/class-acu-otp.php:121
+msgid "Phone verified successfully."
+msgstr ""
+
+#: includes/class-acu-otp.php:184
+msgid "Invalid phone number. Must be 9 digits."
+msgstr ""
+
+#: includes/class-acu-otp.php:207
+msgid "Invalid phone or code format."
+msgstr ""
+
+#: includes/class-acu-otp.php:214
+msgid "Too many attempts. Please request a new code."
+msgstr ""
+
+#: includes/class-acu-registration.php:106
+msgid "იგზავნება..."
+msgstr ""
+
+#: includes/class-acu-registration.php:107
+msgid "შეიყვანეთ 6-ნიშნა კოდი"
+msgstr ""
+
+#: includes/class-acu-registration.php:108
+msgid "მოწმდება..."
+msgstr ""
+
+#: includes/class-acu-registration.php:109
+msgid "დადასტურებულია!"
+msgstr ""
+
+#: includes/class-acu-registration.php:110
+msgid "შეცდომა"
+msgstr ""
+
+#: includes/class-acu-registration.php:111
+msgid "არასწორი კოდი"
+msgstr ""
+
+#: includes/class-acu-registration.php:112
+msgid "კოდის ვადა ამოიწურა"
+msgstr ""
+
+#: includes/class-acu-registration.php:113
+msgid "ხელახლა გაგზავნა:"
+msgstr ""
+
+#: includes/class-acu-registration.php:114
+msgid "ხელახლა გაგზავნა"
+msgstr ""
+
+#: includes/class-acu-registration.php:115
+msgid "დახურვა"
+msgstr ""
+
+#: includes/class-acu-registration.php:116
+msgid "დადასტურება"
+msgstr ""
+
+#: includes/class-acu-registration.php:118
+msgid "ტელეფონის ნომერი სავალდებულოა"
+msgstr ""
+
+#: includes/class-acu-registration.php:119
+msgid "ზედმეტად ბევრი მცდელობა. გთხოვთ სცადეთ მოგვიანებით."
+msgstr ""
+
+#: includes/class-acu-registration.php:120
+msgid "ტელეფონის ვერიფიკაცია"
+msgstr ""
+
+#: includes/class-acu-registration.php:121
+msgid "SMS კოდი გამოგზავნილია ნომერზე:"
+msgstr ""
+
+#: includes/class-acu-registration.php:122
+msgid "ტელეფონის ვერიფიკაცია სავალდებულოა"
+msgstr ""
+
+#: includes/class-acu-registration.php:159
+#: includes/class-acu-registration.php:296
+msgid "You do not have permission to edit users."
+msgstr ""
+
+#: includes/class-acu-registration.php:163
+#: templates/print-anketa.php:14
+msgid "User not found."
+msgstr ""
+
+#: includes/class-acu-registration.php:287
+msgid "You do not have permission to access this form."
+msgstr ""
+
+#: includes/class-acu-registration.php:385
+msgid "განახლება"
+msgstr ""
+
+#: includes/class-acu-registration.php:385
+msgid "რეგისტრაცია"
+msgstr ""
+
+#: includes/class-acu-registration.php:393
+#: includes/class-acu-shortcodes.php:490
+#: templates/print-anketa.php:106
+msgid "Edit Anketa"
+msgstr ""
+
+#: includes/class-acu-registration.php:394
+#: includes/class-acu-shortcodes.php:492
+#: includes/class-acu-shortcodes.php:674
+#: templates/signature-terms.php:91
+msgid "Anketa"
+msgstr ""
+
+#: includes/class-acu-registration.php:395
+#: includes/class-acu-shortcodes.php:493
+#: includes/class-acu-shortcodes.php:675
+#: templates/print-anketa.php:103
+msgid "SMS Terms"
+msgstr ""
+
+#: includes/class-acu-registration.php:396
+#: includes/class-acu-shortcodes.php:494
+#: includes/class-acu-shortcodes.php:676
+#: templates/print-anketa.php:104
+msgid "Call Terms"
+msgstr ""
+
+#: includes/class-acu-registration.php:416
+msgid "Leave this empty"
+msgstr ""
+
+#: includes/class-acu-registration.php:426
+msgid "პირადი ინფორმაცია"
+msgstr ""
+
+#: includes/class-acu-registration.php:430
+#: includes/class-acu-shortcodes.php:447
+#: includes/class-acu-shortcodes.php:690
+#: templates/print-anketa.php:115
+msgid "პირადი ნომერი"
+msgstr ""
+
+#: includes/class-acu-registration.php:432
+msgid "11-ნიშნა კოდი"
+msgstr ""
+
+#: includes/class-acu-registration.php:436
+#: templates/print-anketa.php:124
+msgid "სახელი"
+msgstr ""
+
+#: includes/class-acu-registration.php:440
+#: templates/print-anketa.php:131
+msgid "გვარი"
+msgstr ""
+
+#: includes/class-acu-registration.php:444
+#: includes/class-acu-shortcodes.php:448
+#: includes/class-acu-shortcodes.php:700
+#: templates/print-anketa.php:138
+msgid "დაბადების თარიღი"
+msgstr ""
+
+#: includes/class-acu-registration.php:456
+msgid "საკონტაქტო ინფორმაცია"
+msgstr ""
+
+#: includes/class-acu-registration.php:461
+#: includes/class-acu-shortcodes.php:446
+#: includes/class-acu-shortcodes.php:596
+#: includes/class-acu-shortcodes.php:695
+#: templates/print-anketa.php:145
+msgid "ტელეფონის ნომერი"
+msgstr ""
+
+#: includes/class-acu-registration.php:462
+msgid "ვერიფიკაცია სავალდებულოა"
+msgstr ""
+
+#: includes/class-acu-registration.php:472
+msgid "Verify phone number via SMS"
+msgstr ""
+
+#: includes/class-acu-registration.php:474
+msgid "SMS-ით ვერიფიკაცია"
+msgstr ""
+
+#: includes/class-acu-registration.php:476
+msgid "Phone verified"
+msgstr ""
+
+#: includes/class-acu-registration.php:478
+msgid "ტელეფონი დადასტურებულია"
+msgstr ""
+
+#: includes/class-acu-registration.php:485
+#: templates/print-anketa.php:151
+msgid "მისამართი"
+msgstr ""
+
+#: includes/class-acu-registration.php:485
+#: includes/class-acu-registration.php:489
+msgid "ოფციური"
+msgstr ""
+
+#: includes/class-acu-registration.php:489
+#: templates/print-anketa.php:156
+msgid "E-mail"
+msgstr ""
+
+#: includes/class-acu-registration.php:491
+msgid "საიტზე რეგისტრაციისთვის"
+msgstr ""
+
+#: includes/class-acu-registration.php:504
+#: includes/class-acu-shortcodes.php:449
+#: includes/class-acu-shortcodes.php:705
+msgid "კლუბის ბარათი"
+msgstr ""
+
+#: includes/class-acu-registration.php:508
+#: templates/print-anketa.php:187
+msgid "მივიღე ბარათი №"
+msgstr ""
+
+#: includes/class-acu-registration.php:512
+#: templates/print-anketa.php:196
+msgid "პასუხისმგებელი პირი"
+msgstr ""
+
+#: includes/class-acu-registration.php:516
+#: templates/print-anketa.php:203
+msgid "თარიღი"
+msgstr ""
+
+#: includes/class-acu-registration.php:520
+#: templates/print-anketa.php:210
+msgid "მაღაზია"
+msgstr ""
+
+#: includes/class-acu-registration.php:532
+#: templates/print-anketa.php:161
+#: templates/signature-terms.php:38
+msgid "წესები და პირობები"
+msgstr ""
+
+#: includes/class-acu-registration.php:545
+msgid "თანხმობა"
+msgstr ""
+
+#: includes/class-acu-registration.php:551
+msgid "SMS შეტყობინებების მიღება"
+msgstr ""
+
+#: includes/class-acu-registration.php:555
+#: includes/class-acu-registration.php:568
+msgid "დიახ"
+msgstr ""
+
+#: includes/class-acu-registration.php:557
+#: includes/class-acu-registration.php:570
+#: includes/class-acu-shortcodes.php:726
+msgid "არა"
+msgstr ""
+
+#: includes/class-acu-registration.php:564
+#: includes/class-acu-shortcodes.php:452
+msgid "თანხმობა სატელეფონო ზარზე"
+msgstr ""
+
+#: includes/class-acu-registration.php:616
+msgid "Personal ID is required."
+msgstr ""
+
+#: includes/class-acu-registration.php:619
+msgid "Date of birth is required."
+msgstr ""
+
+#: includes/class-acu-registration.php:620
+msgid "Phone number is required."
+msgstr ""
+
+#: includes/class-acu-registration.php:621
+msgid "Card number is required."
+msgstr ""
+
+#: includes/class-acu-registration.php:622
+msgid "Responsible person is required."
+msgstr ""
+
+#: includes/class-acu-registration.php:623
+msgid "Form date is required."
+msgstr ""
+
+#: includes/class-acu-registration.php:624
+msgid "Shop is required."
+msgstr ""
+
+#: includes/class-acu-registration.php:634
+msgid "Please enter a valid email address."
+msgstr ""
+
+#: includes/class-acu-registration.php:645
+msgid "Personal ID must be exactly 11 digits."
+msgstr ""
+
+#: includes/class-acu-registration.php:653
+msgid "Date of birth format is invalid."
+msgstr ""
+
+#: includes/class-acu-registration.php:659
+msgid "Phone number must be exactly 9 digits."
+msgstr ""
+
+#: includes/class-acu-registration.php:696
+msgid "This email is already registered."
+msgstr ""
+
+#: includes/class-acu-registration.php:712
+#: templates/print-anketa.php:164
+msgid ""
+"<p><strong>Arttime-ის კლუბის წევრები სარგებლობენ შემდეგი უპირატესობით:</strong></p>\n"
+"<ul>\n"
+"<li>ბარათზე 500-5000 ლარამდე დაგროვების შემთხვევაში ფასდაკლება 5%</li>\n"
+"<li>ბარათზე 5001-10000 ლარამდე დაგროვების შემთხვევაში ფასდაკლება 10%;</li>\n"
+"<li>ბარათზე 10 000 ლარზე მეტის დაგროვების შემთხვევაში ფასდაკლება 15%.</li>\n"
+"</ul>\n"
+"<p>&nbsp;</p>\n"
+"<p><strong>გთხოვთ გაითვალისწინოთ:</strong></p>\n"
+"<ol>\n"
+"<li>ართთაიმის კლუბის ბარათით გათვალისწინებული ფასდაკლება არ მოქმედებს ფასდაკლებელ პროდუქციაზე;</li>\n"
+"<li>ფასდაკლებული პროდუქციის შეძენის შემთხვევაში ბარათზე მხოლოდ ქულები დაგერიცხებათ;</li>\n"
+"<li>ფასდაკლება მოქმედებს, მაგრამ ქულები არ გერიცხებათ პროდუქციის სასაჩუქრე ვაუჩერით შემენისას;</li>\n"
+"<li>სასაჩუქრე ვაუჩერის შეძენისას ფასდაკლება არ მოქმედებს, მაგრამ ქულები გროვდება;</li>\n"
+"<li>დაგროვილი ქულები ბარათზე აისახება 2 სამუშაო დღის ვადაში;</li>\n"
+"<li>გაითვალისწინეთ, წინამდებარე წესებით დადგენილი პირობები შეიძლება შეიცვალოს შპს „ართთაიმის\" მიერ;</li>\n"
+"<li>ხელმოწერით ვადასტურებ ჩემი პირადი მონაცემების სიზუსტეს და ბარათის მიღებას.</li>\n"
+"</ol>"
+msgstr ""
+
+#: includes/class-acu-settings.php:28
+#: includes/class-acu-settings.php:29
+#: includes/class-acu-settings.php:244
+msgid "Club Member Settings"
+msgstr ""
+
+#: includes/class-acu-settings.php:58
+msgid "SMS Gateway (MS Group)"
+msgstr ""
+
+#: includes/class-acu-settings.php:59
+msgid "Email Notifications"
+msgstr ""
+
+#: includes/class-acu-settings.php:60
+msgid "Terms & Conditions"
+msgstr ""
+
+#: includes/class-acu-settings.php:61
+#: templates/myaccount/form-edit-account.php:149
+msgid "Club Card"
+msgstr ""
+
+#: includes/class-acu-settings.php:64
+msgid "API Username"
+msgstr ""
+
+#: includes/class-acu-settings.php:65
+msgid "API Password"
+msgstr ""
+
+#: includes/class-acu-settings.php:66
+msgid "Client ID"
+msgstr ""
+
+#: includes/class-acu-settings.php:67
+msgid "Service ID"
+msgstr ""
+
+#: includes/class-acu-settings.php:70
+msgid "Enable notifications"
+msgstr ""
+
+#: includes/class-acu-settings.php:71
+msgid "Notification email"
+msgstr ""
+
+#: includes/class-acu-settings.php:74
+msgid "Terms & Conditions URL"
+msgstr ""
+
+#: includes/class-acu-settings.php:75
+msgid "Default Terms HTML"
+msgstr ""
+
+#: includes/class-acu-settings.php:76
+msgid "SMS Consent Terms HTML"
+msgstr ""
+
+#: includes/class-acu-settings.php:77
+msgid "Phone Call Consent Terms HTML"
+msgstr ""
+
+#: includes/class-acu-settings.php:80
+msgid "Auto-apply club card at checkout"
+msgstr ""
+
+#: includes/class-acu-settings.php:88
+msgid "Configure your MS Group SMS API credentials for OTP verification."
+msgstr ""
+
+#: includes/class-acu-settings.php:92
+msgid "Configure where to send SMS consent change notifications."
+msgstr ""
+
+#: includes/class-acu-settings.php:96
+msgid "Provide the Terms & Conditions content. If a URL is set it takes precedence on the print page fallback."
+msgstr ""
+
+#: includes/class-acu-settings.php:100
+msgid "Settings related to Club Card coupon."
+msgstr ""
+
+#: includes/class-acu-settings.php:134
+msgid "Send an email when SMS consent changes."
+msgstr ""
+
+#: includes/class-acu-settings.php:141
+msgid "Send Test Email"
+msgstr ""
+
+#: includes/class-acu-settings.php:152
+msgid "Sending…"
+msgstr ""
+
+#: includes/class-acu-settings.php:159
+msgid "OK"
+msgstr ""
+
+#: includes/class-acu-settings.php:159
+msgid "Error"
+msgstr ""
+
+#: includes/class-acu-settings.php:162
+msgid "Request failed"
+msgstr ""
+
+#: includes/class-acu-settings.php:175
+msgid "Used as fallback if editor content is empty."
+msgstr ""
+
+#: includes/class-acu-settings.php:183
+#, php-format
+msgid "WooCommerce Terms page detected (auto-fallback): %s"
+msgstr ""
+
+#: includes/class-acu-settings.php:192
+msgid "Default Terms & Conditions HTML (for print page and registration form)."
+msgstr ""
+
+#: includes/class-acu-settings.php:203
+msgid "Content for Print SMS Terms page (/signature-terms/?terms_type=sms)."
+msgstr ""
+
+#: includes/class-acu-settings.php:214
+msgid "Content for Print Phone Call Terms page (/signature-terms/?terms_type=call)."
+msgstr ""
+
+#: includes/class-acu-settings.php:230
+msgid "Automatically apply the saved Club Card coupon (once per session)."
+msgstr ""
+
+#: includes/class-acu-settings.php:257
+msgid "Available Shortcodes"
+msgstr ""
+
+#: includes/class-acu-settings.php:259
+msgid "Anketa registration form."
+msgstr ""
+
+#: includes/class-acu-settings.php:260
+msgid "Staff user data search (email/phone/personal ID/club card)."
+msgstr ""
+
+#: includes/class-acu-settings.php:261
+msgid "Print Terms button. Attrs: label, class, type (default/sms/call)."
+msgstr ""
+
+#: includes/class-acu-settings.php:263
+msgid "Print pages: /print-anketa/?user_id=ID | /signature-terms/?user_id=ID&terms_type=sms|call"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:47
+#: includes/class-acu-shortcodes.php:68
+msgid "Searching…"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:48
+#: includes/class-acu-shortcodes.php:96
+msgid "Please enter a value to search."
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:49
+msgid "Something went wrong. Please try again."
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:57
+msgid "ტელეფონით, ელფოსტით, პირადი ID-ით ან კლუბის ბარათით ძიება"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:60
+msgid "მაგ: user@example.com, +995 599..., 12345678901, CARD2024"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:61
+msgid "ძიება"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:90
+msgid "Too many requests. Please wait."
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:187
+msgid "No matching user was found."
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:372
+#: includes/class-acu-shortcodes.php:380
+msgid "მომხმ."
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:384
+msgid "ვეთანხმები"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:385
+msgid "არ ვეთანხმები"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:386
+msgid "არ არის არჩეული"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:443
+msgid "სახელი და გვარი"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:444
+#: includes/class-acu-shortcodes.php:684
+msgid "ბარათის მფლობელი"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:445
+msgid "ელ.ფოსტა"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:450
+#: includes/class-acu-shortcodes.php:710
+msgid "საბაზო ფასდაკლება"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:451
+msgid "SMS შეტყობინებების მიღების თანხმობა"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:480
+msgid "მომხმარებელი"
+msgstr ""
+
+#. translators: %s: coupon code
+#: includes/class-acu-shortcodes.php:483
+#, php-format
+msgid "Linked to coupon: %s"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:502
+#: includes/class-acu-shortcodes.php:512
+#: includes/class-acu-shortcodes.php:516
+#: includes/class-acu-shortcodes.php:520
+#: includes/class-acu-shortcodes.php:525
+#: includes/class-acu-shortcodes.php:530
+msgid "არ არის"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:552
+msgid "ინფორმაცია"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:556
+msgid "შევსებული ველები"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:562
+#: includes/class-acu-shortcodes.php:573
+msgid "არაფერი"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:567
+msgid "შეუვსებელი ველები"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:591
+msgid "ნომერი SMS ბაზაში"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:600
+#: includes/class-acu-shortcodes.php:715
+msgid "სტატუსი"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:602
+#: includes/class-acu-shortcodes.php:717
+msgid "არ არის რეგისტრირებული"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:606
+#: includes/class-acu-shortcodes.php:721
+msgid "SMS თანხმობა"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:608
+#: includes/class-acu-shortcodes.php:724
+msgid "კი"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:613
+msgid "ინფორმაცია:"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:614
+msgid "ნომერი ნაპოვნია SMS თანხმობის ბაზაში, მაგრამ არ არის რეგისტრირებული საიტზე."
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:662
+msgid "Unregistered User"
+msgstr ""
+
+#. translators: %s: coupon code
+#: includes/class-acu-shortcodes.php:664
+#, php-format
+msgid "Found via Coupon: %s"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:671
+msgid "Register (Anketa)"
+msgstr ""
+
+#: includes/class-acu-shortcodes.php:744
+#: templates/signature-terms.php:85
+msgid "Print Terms"
+msgstr ""
+
+#: includes/class-acu-sms.php:30
+msgid "SMS API not configured."
+msgstr ""
+
+#: includes/class-acu-sms.php:74
+#: includes/class-acu-sms.php:120
+msgid "Unexpected API response."
+msgstr ""
+
+#: includes/class-acu-sms.php:93
+msgid "Invalid API credentials or forbidden IP."
+msgstr ""
+
+#: includes/class-acu-sms.php:94
+msgid "Invalid phone number."
+msgstr ""
+
+#: includes/class-acu-sms.php:95
+msgid "Insufficient SMS balance."
+msgstr ""
+
+#: templates/myaccount/form-edit-account.php:71
+#: templates/myaccount/form-edit-account.php:75
+msgid "leave blank to keep unchanged"
+msgstr ""
+
+#: templates/myaccount/form-edit-account.php:92
+msgid "Contact"
+msgstr ""
+
+#: templates/myaccount/form-edit-account.php:96
+msgid "Phone number"
+msgstr ""
+
+#: templates/myaccount/form-edit-account.php:100
+msgid "e.g. 599123456"
+msgstr ""
+
+#: templates/myaccount/form-edit-account.php:103
+msgid "Personal ID Number"
+msgstr ""
+
+#: templates/myaccount/form-edit-account.php:130
+msgid "SMS notifications are set during registration and cannot be changed here."
+msgstr ""
+
+#: templates/myaccount/form-edit-account.php:157
+msgid "I have a Club Card"
+msgstr ""
+
+#: templates/myaccount/form-edit-account.php:159
+msgid "Check to enter your card code"
+msgstr ""
+
+#: templates/myaccount/form-edit-account.php:164
+msgid "Card code"
+msgstr ""
+
+#: templates/myaccount/form-edit-account.php:188
+#: templates/myaccount/form-edit-account.php:191
+msgid "Read full T&C"
+msgstr ""
+
+#: templates/print-anketa.php:20
+#: templates/signature-terms.php:22
+msgid "Access denied."
+msgstr ""
+
+#: templates/print-anketa.php:94
+#: templates/print-anketa.php:102
+msgid "Print Anketa"
+msgstr ""
+
+#: templates/print-anketa.php:111
+msgid "გახდი შპს \"ართთაიმის\" ს/კ 202356672 კლუბის წევრი!"
+msgstr ""
+
+#: templates/print-anketa.php:216
+msgid "მომხმარებლის ხელმოწერა"
+msgstr ""
+
+#: templates/signature-terms.php:30
+msgid "SMS შეტყობინების პირობები"
+msgstr ""
+
+#: templates/signature-terms.php:34
+msgid "სატელეფონო ზარის პირობები"
+msgstr ""
+
+#: templates/signature-terms.php:43
+msgid ""
+"\n"
+"<p><strong>Arttime-ის კლუბის წევრები სარგებლობენ შემდეგი უპირატესობით:</strong></p>\n"
+"<ul>\n"
+"<li>ბარათზე 500-5000 ლარამდე დაგროვების შემთხვევაში ფასდაკლება 5%</li>\n"
+"<li>ბარათზე 5001-10000 ლარამდე დაგროვების შემთხვევაში ფასდაკლება 10%;</li>\n"
+"<li>ბარათზე 10 000 ლარზე მეტის დაგროვების შემთხვევაში ფასდაკლება 15%.</li>\n"
+"</ul>\n"
+"<p>&nbsp;</p>\n"
+"<p><strong>გთხოვთ გაითვალისწინოთ:</strong></p>\n"
+"<ol>\n"
+"<li>ართთაიმის კლუბის ბარათით გათვალისწინებული ფასდაკლება არ მოქმედებს ფასდაკლებელ პროდუქციაზე;</li>\n"
+"<li>ფასდაკლებული პროდუქციის შეძენის შემთხვევაში ბარათზე მხოლოდ ქულები დაგერიცხებათ;</li>\n"
+"<li>ფასდაკლება მოქმედებს, მაგრამ ქულები არ გერიცხებათ პროდუქციის სასაჩუქრე ვაუჩერით შემენისას</li>\n"
+"<li>სასაჩუქრე ვაუჩერის შეძენისას ფასდაკლება არ მოქმედებს, მაგრამ ქულები გროვდება:</li>\n"
+"<li>დაგროვილი ქულები ბარათზე აისახება 2 სამუშაო დღის ვადაში;</li>\n"
+"<li>გაითვალისწინეთ, წინამდებარე წესებით დადგენილი პირობები შეიძლება შეიცვალოს შპს „ართთაიმის\" მიერ, რომელიც სავალდებულო იქნება ბარათების პროექტში ჩართული მომხმარებლებისთვის.</li>\n"
+"<li>ხელმოწერით ვადასტურებ ჩემი პირადი მონაცემების სიზუსტეს და ბარათის მიღებას</li>\n"
+"</ol>"
+msgstr ""
+
+#: templates/signature-terms.php:72
+msgid "Terms & Signature"
+msgstr ""
+
+#: templates/signature-terms.php:84
+msgid "Print SMS Terms"
+msgstr ""
+
+#: templates/signature-terms.php:85
+msgid "Print Call Terms"
+msgstr ""
+
+#: templates/signature-terms.php:104
+msgid "No content has been configured for this terms type. Please configure it in the Club Member Settings."
+msgstr ""
+
+#: templates/signature-terms.php:108
+msgid "Loaded from configured URL (no custom editor content provided)."
+msgstr ""
