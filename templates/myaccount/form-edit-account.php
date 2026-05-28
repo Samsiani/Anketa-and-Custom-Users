@@ -120,13 +120,14 @@ do_action( 'woocommerce_before_edit_account_form' );
 
 		<div class="acu-consent-row">
 			<span class="acu-consent-label"><?php esc_html_e( 'SMS notifications', 'acu' ); ?></span>
-			<div class="acu-consent-toggle">
-				<input type="radio" name="account_sms_consent" id="acu_acct_sms_yes" value="yes" <?php checked( $sms_consent, 'yes' ); ?> class="sms-consent-radio" />
+			<div class="acu-consent-toggle acu-consent-toggle--locked" aria-disabled="true">
+				<input type="radio" id="acu_acct_sms_yes" value="yes" <?php checked( $sms_consent, 'yes' ); ?> disabled />
 				<label for="acu_acct_sms_yes"><?php esc_html_e( 'Yes', 'acu' ); ?></label>
-				<input type="radio" name="account_sms_consent" id="acu_acct_sms_no" value="no" <?php checked( $sms_consent, 'no' ); ?> class="sms-consent-radio" />
+				<input type="radio" id="acu_acct_sms_no" value="no" <?php checked( $sms_consent, 'no' ); ?> disabled />
 				<label for="acu_acct_sms_no"><?php esc_html_e( 'No', 'acu' ); ?></label>
 			</div>
 		</div>
+		<p class="acu-consent-note"><?php esc_html_e( 'SMS notifications are set during registration and cannot be changed here.', 'acu' ); ?></p>
 
 		<div class="acu-consent-row">
 			<span class="acu-consent-label"><?php esc_html_e( 'Phone call consent', 'acu' ); ?></span>

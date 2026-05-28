@@ -114,11 +114,11 @@ class ACU_Account {
 				<div class="acu-grid-2">
 					<div class="acu-field">
 						<label for="reg_first_name"><?php esc_html_e( 'First name', 'acu' ); ?> <span class="acu-required" aria-hidden="true">*</span></label>
-						<input type="text" class="input-text" name="account_first_name" id="reg_first_name" value="<?php echo $first_name; ?>" autocomplete="given-name" />
+						<input type="text" class="input-text" name="account_first_name" id="reg_first_name" value="<?php echo $first_name; ?>" autocomplete="given-name" required />
 					</div>
 					<div class="acu-field">
 						<label for="reg_last_name"><?php esc_html_e( 'Last name', 'acu' ); ?> <span class="acu-required" aria-hidden="true">*</span></label>
-						<input type="text" class="input-text" name="account_last_name" id="reg_last_name" value="<?php echo $last_name; ?>" autocomplete="family-name" />
+						<input type="text" class="input-text" name="account_last_name" id="reg_last_name" value="<?php echo $last_name; ?>" autocomplete="family-name" required />
 					</div>
 					<div class="acu-field">
 						<label for="reg_personal_id"><?php esc_html_e( 'Personal ID', 'acu' ); ?> <span class="acu-optional"><?php esc_html_e( 'optional', 'acu' ); ?></span></label>
@@ -128,23 +128,57 @@ class ACU_Account {
 					<div class="acu-field">
 						<label for="reg_billing_phone"><?php esc_html_e( 'Phone', 'acu' ); ?> <span class="acu-required" aria-hidden="true">*</span></label>
 						<input type="tel" class="input-text" name="billing_phone" id="reg_billing_phone" value="<?php echo $phone; ?>"
-							placeholder="<?php esc_attr_e( 'e.g. 599 123 456', 'acu' ); ?>" inputmode="tel" />
+							placeholder="<?php esc_attr_e( 'e.g. 599 123 456', 'acu' ); ?>" inputmode="tel" required />
 					</div>
 					<div class="acu-field">
-						<label for="reg_email"><?php esc_html_e( 'Email address', 'acu' ); ?> <span class="acu-optional"><?php esc_html_e( 'optional', 'acu' ); ?></span></label>
+						<label for="reg_email"><?php esc_html_e( 'Email address', 'acu' ); ?> <span class="acu-required" aria-hidden="true">*</span></label>
 						<input type="email" class="input-text" name="email" id="reg_email"
 							value="<?php echo $email_val; ?>"
-							autocomplete="email" placeholder="<?php esc_attr_e( 'e.g. name@example.com', 'acu' ); ?>" />
+							autocomplete="email" placeholder="<?php esc_attr_e( 'e.g. name@example.com', 'acu' ); ?>" required />
 					</div>
 					<div class="acu-field">
-						<label for="reg_password"><?php esc_html_e( 'Password', 'acu' ); ?> <span class="acu-optional"><?php esc_html_e( 'optional', 'acu' ); ?></span></label>
+						<label for="reg_password"><?php esc_html_e( 'Password', 'acu' ); ?> <span class="acu-required" aria-hidden="true">*</span></label>
 						<input type="password" class="input-text" name="password" id="reg_password"
-							autocomplete="new-password" placeholder="<?php esc_attr_e( 'Leave blank to auto-generate', 'acu' ); ?>" />
+							autocomplete="new-password" placeholder="<?php esc_attr_e( 'Choose a password', 'acu' ); ?>" required />
 					</div>
 				</div>
 			</div>
 
-			<!-- ── Card 2: Terms & Conditions ── -->
+			<!-- ── Card 2: Notifications consent ── -->
+			<?php
+			$acu_sms_def  = ( isset( $_POST['acu_reg_sms_consent'] ) && 'no' === strtolower( (string) wp_unslash( $_POST['acu_reg_sms_consent'] ) ) ) ? 'no' : 'yes'; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$acu_call_def = ( isset( $_POST['acu_reg_call_consent'] ) && 'no' === strtolower( (string) wp_unslash( $_POST['acu_reg_call_consent'] ) ) ) ? 'no' : 'yes'; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			?>
+			<div class="acu-section">
+				<div class="acu-section__header">
+					<span class="acu-section__icon">
+						<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+					</span>
+					<span class="acu-section__label"><?php esc_html_e( 'Notifications', 'acu' ); ?></span>
+				</div>
+
+				<div class="acu-consent-row">
+					<span class="acu-consent-label"><?php esc_html_e( 'SMS notifications', 'acu' ); ?></span>
+					<div class="acu-consent-toggle">
+						<input type="radio" name="acu_reg_sms_consent" id="acu_reg_sms_yes" value="yes" <?php checked( $acu_sms_def, 'yes' ); ?> />
+						<label for="acu_reg_sms_yes"><?php esc_html_e( 'Yes', 'acu' ); ?></label>
+						<input type="radio" name="acu_reg_sms_consent" id="acu_reg_sms_no" value="no" <?php checked( $acu_sms_def, 'no' ); ?> />
+						<label for="acu_reg_sms_no"><?php esc_html_e( 'No', 'acu' ); ?></label>
+					</div>
+				</div>
+
+				<div class="acu-consent-row">
+					<span class="acu-consent-label"><?php esc_html_e( 'Phone call consent', 'acu' ); ?></span>
+					<div class="acu-consent-toggle">
+						<input type="radio" name="acu_reg_call_consent" id="acu_reg_call_yes" value="yes" <?php checked( $acu_call_def, 'yes' ); ?> />
+						<label for="acu_reg_call_yes"><?php esc_html_e( 'Yes', 'acu' ); ?></label>
+						<input type="radio" name="acu_reg_call_consent" id="acu_reg_call_no" value="no" <?php checked( $acu_call_def, 'no' ); ?> />
+						<label for="acu_reg_call_no"><?php esc_html_e( 'No', 'acu' ); ?></label>
+					</div>
+				</div>
+			</div>
+
+			<!-- ── Card 3: Terms & Conditions ── -->
 			<div class="acu-section">
 				<div class="acu-section__header">
 					<span class="acu-section__icon">
@@ -154,7 +188,7 @@ class ACU_Account {
 				</div>
 				<div class="acu-tc-row">
 					<label>
-						<input type="checkbox" name="acu_terms_agree" id="acu_terms_agree" value="1" <?php checked( isset( $_POST['acu_terms_agree'] ) ); ?> />
+						<input type="checkbox" name="acu_terms_agree" id="acu_terms_agree" value="1" required <?php checked( isset( $_POST['acu_terms_agree'] ) ); ?> />
 						<?php if ( $terms_url ) : ?>
 							<?php esc_html_e( 'I agree to the', 'acu' ); ?> <a class="wcu-link" href="<?php echo esc_url( $terms_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'terms and conditions', 'acu' ); ?></a>
 						<?php elseif ( $terms_html ) : ?>
@@ -180,8 +214,8 @@ class ACU_Account {
 
 	/**
 	 * Runs on 'init' priority 5 — before WC_Form_Handler::process_registration() (priority 20).
-	 * If no email is supplied in the WC registration POST, generates a dummy address from the
-	 * phone number so WooCommerce's email-required validation does not block registration.
+	 * Email is a required field and is no longer auto-filled. When WooCommerce requires a manually
+	 * entered username, the normalized phone number is used as the username fallback.
 	 */
 	public static function maybe_set_registration_email(): void {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing
@@ -195,10 +229,6 @@ class ACU_Account {
 
 		if ( strlen( $phone ) !== 9 ) {
 			return;
-		}
-
-		if ( empty( $_POST['email'] ) ) {
-			$_POST['email'] = $phone . '@no-email.local';
 		}
 
 		// If WC is set to require a manually entered username, provide the phone as fallback.
@@ -226,6 +256,19 @@ class ACU_Account {
 			? ACU_Helpers::normalize_phone( sanitize_text_field( wp_unslash( $_POST['billing_phone'] ) ) )
 			: '';
 		// phpcs:enable WordPress.Security.NonceVerification.Missing
+
+		// Required fields (Personal ID is the only optional field on the form).
+		$acu_first = isset( $_POST['account_first_name'] ) ? trim( (string) wp_unslash( $_POST['account_first_name'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$acu_last  = isset( $_POST['account_last_name'] )  ? trim( (string) wp_unslash( $_POST['account_last_name'] ) )  : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( $acu_first === '' ) {
+			$validation_errors->add( 'first_name_required', __( 'First name is required.', 'acu' ) );
+		}
+		if ( $acu_last === '' ) {
+			$validation_errors->add( 'last_name_required', __( 'Last name is required.', 'acu' ) );
+		}
+		if ( empty( $_POST['acu_terms_agree'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$validation_errors->add( 'terms_required', __( 'You must agree to the terms and conditions to register.', 'acu' ) );
+		}
 
 		if ( $phone === '' || strlen( $phone ) !== 9 ) {
 			$validation_errors->add( 'phone_required', __( 'A valid 9-digit phone number is required.', 'acu' ) );
@@ -264,6 +307,13 @@ class ACU_Account {
 		if ( isset( $_POST['acu_terms_agree'] ) ) {
 			update_user_meta( $customer_id, '_acu_terms_accepted', current_time( 'mysql' ) );
 		}
+
+		// SMS / Call consent — default ON unless explicitly set to "no" on the registration form.
+		$acu_sms  = ( isset( $_POST['acu_reg_sms_consent'] ) && 'no' === strtolower( sanitize_text_field( wp_unslash( $_POST['acu_reg_sms_consent'] ) ) ) ) ? 'no' : 'yes';
+		$acu_call = ( isset( $_POST['acu_reg_call_consent'] ) && 'no' === strtolower( sanitize_text_field( wp_unslash( $_POST['acu_reg_call_consent'] ) ) ) ) ? 'no' : 'yes';
+		update_user_meta( $customer_id, '_sms_consent', $acu_sms );
+		update_user_meta( $customer_id, '_call_consent', $acu_call );
+		ACU_Helpers::maybe_send_consent_notification( $customer_id, '', $acu_sms, 'registration' );
 
 		ACU_Helpers::link_coupon_to_user( $customer_id );
 	}
@@ -309,34 +359,8 @@ class ACU_Account {
 			}
 		}
 
-		// SMS consent (requires OTP verification if changing from no→yes)
-		if ( isset( $_POST['account_sms_consent'] ) ) {
-			$old_sms = ACU_Helpers::get_sms_consent( $user_id );
-			$new_sms = strtolower( sanitize_text_field( wp_unslash( $_POST['account_sms_consent'] ) ) );
-
-			if ( in_array( $new_sms, [ 'yes', 'no' ], true ) ) {
-				// If enabling SMS consent, require phone verification
-				if ( $new_sms === 'yes' && $old_sms !== 'yes' ) {
-					$phone_digits = ACU_Helpers::normalize_phone( ACU_Helpers::get_user_phone( $user_id ) );
-					$token        = isset( $_POST['otp_verification_token'] ) ? sanitize_text_field( wp_unslash( $_POST['otp_verification_token'] ) ) : '';
-
-					if ( $phone_digits !== '' && ! ACU_OTP::is_phone_verified( $phone_digits, $token ) ) {
-						if ( function_exists( 'wc_add_notice' ) ) {
-							wc_add_notice( __( 'Phone verification required to enable SMS notifications.', 'acu' ), 'error' );
-						}
-						return;
-					}
-					update_user_meta( $user_id, '_acu_verified_phone', $phone_digits );
-				}
-
-				if ( $new_sms === 'no' ) {
-					delete_user_meta( $user_id, '_acu_verified_phone' );
-				}
-
-				update_user_meta( $user_id, '_sms_consent', $new_sms );
-				ACU_Helpers::maybe_send_consent_notification( $user_id, $old_sms, $new_sms, 'account_update' );
-			}
-		}
+		// SMS consent is intentionally NOT editable from My Account -> Edit Account.
+		// It is set once during registration (default: yes); any posted value is ignored here.
 
 		ACU_Helpers::link_coupon_to_user( $user_id );
 	}

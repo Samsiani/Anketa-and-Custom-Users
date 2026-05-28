@@ -278,6 +278,17 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 
 ## Changelog
 
+### v1.2.32 — 2026-05-29
+
+**Registration form: enforced required fields + consent toggles; SMS locked on edit-account; shipped translation template.**
+
+- **Feat: All WC registration fields are required except Personal ID.** `registration_form_fields()` adds the HTML `required` attribute to First name, Last name, Phone, Email, and Password; Personal ID stays optional. `validate_registration_fields()` now enforces First name, Last name, and Terms agreement server-side (Phone was already validated; Email + Password are enforced by WooCommerce core). The "Leave blank to auto-generate" password placeholder is replaced with "Choose a password" — the field is mandatory now.
+- **Feat: Email is mandatory.** The dummy `{phone}@no-email.local` auto-fill was removed from `maybe_set_registration_email()` (the username-from-phone fallback is kept for `generate_username = no` sites).
+- **Feat: SMS + Phone-call consent on the registration form.** A new "Notifications" card mirrors the Anketa form's toggles (`acu_reg_sms_consent` / `acu_reg_call_consent`); both default to **Yes**. `created_customer()` persists `_sms_consent` / `_call_consent` and fires the registration consent notification.
+- **Feat: Terms agreement is required to register** (HTML `required` + server validation).
+- **Change: SMS notifications are read-only on My Account → Edit Account.** The SMS toggle renders disabled (no `name`, so it is never submitted) with an explanatory note; `save_account_details()` no longer reads `account_sms_consent`, so SMS consent is only set at registration. Phone-call consent stays editable (Yes ↔ No).
+- **i18n: Shipped `languages/acu.pot`** (266 strings, `acu` domain) so every string is WPML / translation ready. All PHP output and JS (via `wp_localize_script`) was already wrapped in gettext with the `acu` domain.
+
 ### v1.2.12 — 2026-02-24
 
 **WC Registration: password field + inset phone verify button.**

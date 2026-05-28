@@ -794,6 +794,14 @@ body.club-anketa-modal-open { overflow: hidden !important; }
   background: #111;
   color: #fff;
 }
+.acu-consent-toggle--locked label { cursor: not-allowed; }
+.acu-consent-toggle--locked input[type="radio"]:checked + label { background: #6b7280; }
+.acu-consent-note {
+  margin: 6px 0 0;
+  font-size: 11px;
+  color: #6b7280;
+  line-height: 1.4;
+}
 
 /* ---- Rules block ---- */
 .acu-rules-block {
