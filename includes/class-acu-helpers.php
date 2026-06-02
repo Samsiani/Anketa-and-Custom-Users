@@ -79,6 +79,17 @@ class ACU_Helpers {
 	}
 
 	/**
+	 * Whether the user still needs to make a one-time notification-consent choice.
+	 *
+	 * True for legacy customers who registered before the SMS/Call consent fields
+	 * existed: at least one of the two consents has never been set to 'yes'/'no'.
+	 * Once both are set, consent is locked and this returns false.
+	 */
+	public static function account_needs_consent_update( int $user_id ): bool {
+		return self::get_sms_consent( $user_id ) === '' || self::get_call_consent( $user_id ) === '';
+	}
+
+	/**
 	 * Raw billing_phone meta value.
 	 */
 	public static function get_user_phone( int $user_id ): string {

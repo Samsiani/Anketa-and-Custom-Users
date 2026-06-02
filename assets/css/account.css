@@ -65,3 +65,38 @@
   color: #111;
   letter-spacing: .04em;
 }
+
+/* One-time consent prompt banner (legacy users) */
+.acu-consent-banner {
+  border-color: #b91c1c;
+  background: #fef2f2;
+}
+.acu-consent-banner .acu-card-banner__icon { color: #b91c1c; }
+.acu-consent-banner .acu-card-banner__title { color: #b91c1c; }
+.acu-consent-banner__btn {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  border: 2px solid #b91c1c;
+  border-radius: 0;
+  background: #b91c1c;
+  color: #fff !important;
+  text-decoration: none;
+  letter-spacing: .02em;
+  transition: background .15s ease, color .15s ease;
+}
+.acu-consent-banner__btn:hover {
+  background: #fff;
+  color: #b91c1c !important;
+}
+
+/* Highlight the Notifications card when a one-time choice is pending */
+.acu-section--highlight {
+  border: 1px solid #b91c1c;
+  box-shadow: 0 0 0 3px rgba(185, 28, 28, .12);
+}
+.acu-consent-note--prompt {
+  color: #b91c1c;
+  font-weight: 600;
+}
