@@ -40,8 +40,9 @@ class ACU_Account {
 		add_action( 'woocommerce_after_edit_address_form_billing', [ self::class, 'after_billing_address_form' ] );
 		add_action( 'woocommerce_save_account_details_errors', [ self::class, 'validate_account_phone' ], 10, 1 );
 
-		// My Account dashboard — club card info panel
-		add_action( 'woocommerce_account_dashboard', [ self::class, 'render_dashboard_club_card' ] );
+		// My Account dashboard — one-time consent update prompt (legacy users) + club card info panel
+		add_action( 'woocommerce_account_dashboard', [ self::class, 'render_consent_update_notice' ], 5 );
+		add_action( 'woocommerce_account_dashboard', [ self::class, 'render_dashboard_club_card' ], 10 );
 
 		// WC registration: auto-fill email from phone (must run before WC processes the POST)
 		add_action( 'init', [ self::class, 'maybe_set_registration_email' ], 5 );
@@ -351,16 +352,27 @@ class ACU_Account {
 			delete_user_meta( $user_id, '_acu_terms_accepted' );
 		}
 
-		// Call consent
-		if ( isset( $_POST['account_call_consent'] ) ) {
-			$call = strtolower( sanitize_text_field( wp_unslash( $_POST['account_call_consent'] ) ) );
+		// One-time notification consent.
+		// Legacy users (blank consent) may set SMS + Call once from Edit Account; both
+		// then lock permanently. Once set, the toggles render disabled (no `name`) and any
+		// posted value is ignored here, so consent can never be silently overwritten.
+		if ( ACU_Helpers::account_needs_consent_update( $user_id ) ) {
+			$sms  = isset( $_POST['account_sms_consent'] ) ? strtolower( sanitize_text_field( wp_unslash( $_POST['account_sms_consent'] ) ) ) : '';
+			$call = isset( $_POST['account_call_consent'] ) ? strtolower( sanitize_text_field( wp_unslash( $_POST['account_call_consent'] ) ) ) : '';
+
+			$saved = false;
+			if ( in_array( $sms, [ 'yes', 'no' ], true ) ) {
+				update_user_meta( $user_id, '_sms_consent', $sms );
+				$saved = true;
+			}
 			if ( in_array( $call, [ 'yes', 'no' ], true ) ) {
 				update_user_meta( $user_id, '_call_consent', $call );
+				$saved = true;
+			}
+			if ( $saved ) {
+				ACU_Helpers::maybe_send_consent_notification( $user_id, '', $sms, 'account_update' );
 			}
 		}
-
-		// SMS consent is intentionally NOT editable from My Account -> Edit Account.
-		// It is set once during registration (default: yes); any posted value is ignored here.
 
 		ACU_Helpers::link_coupon_to_user( $user_id );
 	}
@@ -432,6 +444,39 @@ class ACU_Account {
 	// -------------------------------------------------------------------------
 	// Validate phone on account save
 	// -------------------------------------------------------------------------
+
+	// -------------------------------------------------------------------------
+	// My Account dashboard: one-time consent update prompt
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Legacy customers (registered before the consent fields existed) have blank
+	 * SMS/Call consent. Show a prominent banner inviting them to confirm their
+	 * notification preferences once. Hidden as soon as both consents are set.
+	 */
+	public static function render_consent_update_notice(): void {
+		$user_id = get_current_user_id();
+		if ( ! $user_id || ! ACU_Helpers::account_needs_consent_update( $user_id ) ) {
+			return;
+		}
+
+		$edit_url = wc_get_account_endpoint_url( 'edit-account' ) . '#acu-consent';
+
+		echo '<div class="acu-card-banner acu-consent-banner">'
+			. '<div class="acu-card-banner__left">'
+				. '<span class="acu-card-banner__icon">&#9888;</span>'
+				. '<div>'
+					. '<div class="acu-card-banner__title">' . esc_html__( 'ACTION REQUIRED', 'acu' ) . '</div>'
+					. '<div class="acu-card-banner__code">' . esc_html__( 'Please confirm your notification preferences', 'acu' ) . '</div>'
+				. '</div>'
+			. '</div>'
+			. '<div class="acu-card-banner__right">'
+				. '<a class="acu-consent-banner__btn" href="' . esc_url( $edit_url ) . '">'
+					. esc_html__( 'Update your account', 'acu' )
+				. '</a>'
+			. '</div>'
+			. '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
 
 	// -------------------------------------------------------------------------
 	// My Account dashboard: club card info

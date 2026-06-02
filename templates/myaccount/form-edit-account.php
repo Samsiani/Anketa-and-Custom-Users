@@ -12,6 +12,9 @@ defined( 'ABSPATH' ) || exit;
 $user_id      = get_current_user_id();
 $current_user = wp_get_current_user();
 
+// Legacy users with blank consent may set SMS + Call once; afterwards both lock.
+$consent_needs_update = ACU_Helpers::account_needs_consent_update( $user_id );
+
 $sms_consent  = ACU_Helpers::get_sms_consent( $user_id );
 if ( $sms_consent === '' ) {
 	$sms_consent = 'yes';
@@ -110,7 +113,7 @@ do_action( 'woocommerce_before_edit_account_form' );
 	</div>
 
 	<!-- ── Card 3: Consents ── -->
-	<div class="acu-section">
+	<div class="acu-section<?php echo $consent_needs_update ? ' acu-section--highlight' : ''; ?>" id="acu-consent">
 		<div class="acu-section__header">
 			<span class="acu-section__icon">
 				<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
@@ -118,26 +121,51 @@ do_action( 'woocommerce_before_edit_account_form' );
 			<span class="acu-section__label"><?php esc_html_e( 'Notifications', 'acu' ); ?></span>
 		</div>
 
+		<?php if ( $consent_needs_update ) : ?>
+			<p class="acu-consent-note acu-consent-note--prompt"><?php esc_html_e( 'Please choose Yes or No for each. Once saved, these preferences cannot be changed here.', 'acu' ); ?></p>
+		<?php endif; ?>
+
 		<div class="acu-consent-row">
 			<span class="acu-consent-label"><?php esc_html_e( 'SMS notifications', 'acu' ); ?></span>
-			<div class="acu-consent-toggle acu-consent-toggle--locked" aria-disabled="true">
-				<input type="radio" id="acu_acct_sms_yes" value="yes" <?php checked( $sms_consent, 'yes' ); ?> disabled />
-				<label for="acu_acct_sms_yes"><?php esc_html_e( 'Yes', 'acu' ); ?></label>
-				<input type="radio" id="acu_acct_sms_no" value="no" <?php checked( $sms_consent, 'no' ); ?> disabled />
-				<label for="acu_acct_sms_no"><?php esc_html_e( 'No', 'acu' ); ?></label>
-			</div>
+			<?php if ( $consent_needs_update ) : ?>
+				<div class="acu-consent-toggle">
+					<input type="radio" name="account_sms_consent" id="acu_acct_sms_yes" value="yes" <?php checked( $sms_consent, 'yes' ); ?> />
+					<label for="acu_acct_sms_yes"><?php esc_html_e( 'Yes', 'acu' ); ?></label>
+					<input type="radio" name="account_sms_consent" id="acu_acct_sms_no" value="no" <?php checked( $sms_consent, 'no' ); ?> />
+					<label for="acu_acct_sms_no"><?php esc_html_e( 'No', 'acu' ); ?></label>
+				</div>
+			<?php else : ?>
+				<div class="acu-consent-toggle acu-consent-toggle--locked" aria-disabled="true">
+					<input type="radio" id="acu_acct_sms_yes" value="yes" <?php checked( $sms_consent, 'yes' ); ?> disabled />
+					<label for="acu_acct_sms_yes"><?php esc_html_e( 'Yes', 'acu' ); ?></label>
+					<input type="radio" id="acu_acct_sms_no" value="no" <?php checked( $sms_consent, 'no' ); ?> disabled />
+					<label for="acu_acct_sms_no"><?php esc_html_e( 'No', 'acu' ); ?></label>
+				</div>
+			<?php endif; ?>
 		</div>
-		<p class="acu-consent-note"><?php esc_html_e( 'SMS notifications are set during registration and cannot be changed here.', 'acu' ); ?></p>
 
 		<div class="acu-consent-row">
 			<span class="acu-consent-label"><?php esc_html_e( 'Phone call consent', 'acu' ); ?></span>
-			<div class="acu-consent-toggle">
-				<input type="radio" name="account_call_consent" id="acu_acct_call_yes" value="yes" <?php checked( $call_consent, 'yes' ); ?> class="call-consent-radio" />
-				<label for="acu_acct_call_yes"><?php esc_html_e( 'Yes', 'acu' ); ?></label>
-				<input type="radio" name="account_call_consent" id="acu_acct_call_no" value="no" <?php checked( $call_consent, 'no' ); ?> class="call-consent-radio" />
-				<label for="acu_acct_call_no"><?php esc_html_e( 'No', 'acu' ); ?></label>
-			</div>
+			<?php if ( $consent_needs_update ) : ?>
+				<div class="acu-consent-toggle">
+					<input type="radio" name="account_call_consent" id="acu_acct_call_yes" value="yes" <?php checked( $call_consent, 'yes' ); ?> class="call-consent-radio" />
+					<label for="acu_acct_call_yes"><?php esc_html_e( 'Yes', 'acu' ); ?></label>
+					<input type="radio" name="account_call_consent" id="acu_acct_call_no" value="no" <?php checked( $call_consent, 'no' ); ?> class="call-consent-radio" />
+					<label for="acu_acct_call_no"><?php esc_html_e( 'No', 'acu' ); ?></label>
+				</div>
+			<?php else : ?>
+				<div class="acu-consent-toggle acu-consent-toggle--locked" aria-disabled="true">
+					<input type="radio" id="acu_acct_call_yes" value="yes" <?php checked( $call_consent, 'yes' ); ?> disabled />
+					<label for="acu_acct_call_yes"><?php esc_html_e( 'Yes', 'acu' ); ?></label>
+					<input type="radio" id="acu_acct_call_no" value="no" <?php checked( $call_consent, 'no' ); ?> disabled />
+					<label for="acu_acct_call_no"><?php esc_html_e( 'No', 'acu' ); ?></label>
+				</div>
+			<?php endif; ?>
 		</div>
+
+		<?php if ( ! $consent_needs_update ) : ?>
+			<p class="acu-consent-note"><?php esc_html_e( 'Your notification preferences are locked. Contact us to change them.', 'acu' ); ?></p>
+		<?php endif; ?>
 	</div>
 
 	<!-- ── Card 4: Club Card ── -->
