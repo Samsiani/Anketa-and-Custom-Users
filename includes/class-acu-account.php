@@ -497,11 +497,15 @@ class ACU_Account {
 
 		$badge_html = '';
 		if ( $discount > 0 ) {
+			$cake = ACU_Helpers::is_club_birthday_boost( $discount, null, $coupon_code )
+				? ACU_Helpers::club_birthday_badge_html()
+				: '';
 			$badge_html = '<div class="acu-card-banner__right">'
 				. '<span class="acu-card-banner__badge">'
 				/* translators: %s: percentage discount */
 				. esc_html( sprintf( __( '%s%% OFF', 'acu' ), wc_format_decimal( $discount, 0 ) ) )
 				. '</span>'
+				. $cake
 				. '</div>';
 		}
 

@@ -431,6 +431,9 @@ class ACU_Shortcodes {
 			$club_html = esc_html( $club_code );
 			if ( $club_amount > 0 ) {
 				$club_html .= ' &mdash; <strong>' . esc_html( $club_amount . '%' ) . '</strong>';
+				if ( ACU_Helpers::is_club_birthday_boost( (float) $club_amount, $c_base, $club_code ) ) {
+					$club_html .= ACU_Helpers::club_birthday_badge_html();
+				}
 			}
 		} else {
 			$club_html = '';
@@ -651,6 +654,9 @@ class ACU_Shortcodes {
 		$coupon_display = esc_html( $coupon['code'] );
 		if ( $coupon['discount_amount'] > 0 ) {
 			$coupon_display .= ' &mdash; <strong>' . esc_html( $coupon['discount_amount'] . '%' ) . '</strong>';
+			if ( ACU_Helpers::is_club_birthday_boost( (float) $coupon['discount_amount'], $coupon['base_discount'], (string) $coupon['code'] ) ) {
+				$coupon_display .= ACU_Helpers::club_birthday_badge_html();
+			}
 		}
 
 		ob_start();

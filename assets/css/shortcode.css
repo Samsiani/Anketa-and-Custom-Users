@@ -109,3 +109,6 @@
   background: #0f172a !important;
   border-color: #0f172a !important;
 }
+
+/* Birthday-boost cake badge next to a boosted club-card discount */
+.acu-birthday-badge{font-size:1.15em;line-height:1;vertical-align:middle;margin-left:3px;cursor:default;}

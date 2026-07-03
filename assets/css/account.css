@@ -100,3 +100,6 @@
   color: #b91c1c;
   font-weight: 600;
 }
+
+/* Birthday-boost cake badge next to the club card "% OFF" banner */
+.acu-birthday-badge{font-size:1.1em;line-height:1;vertical-align:middle;margin-left:4px;cursor:default;}
