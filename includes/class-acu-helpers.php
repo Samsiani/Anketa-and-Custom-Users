@@ -567,4 +567,38 @@ class ACU_Helpers {
 
 		return wp_kses( $html, $allowed );
 	}
+
+	/**
+	 * True when a club-card coupon's effective discount is higher than its base
+	 * discount — i.e. the birthday-window boost (Coupon_Dynamic in the ERP Sync
+	 * plugin: 20% for 2 days before → 2 days after the cardholder's birthday) is
+	 * currently active.
+	 *
+	 * @param float           $effective     Effective discount now (WC_Coupon::get_amount()).
+	 * @param string|int|null $base_discount Card base discount (_erp_sync_base_discount); read from the coupon when null/''.
+	 * @param string          $code          Coupon code, used to look up the base when not supplied.
+	 */
+	public static function is_club_birthday_boost( float $effective, $base_discount = null, string $code = '' ): bool {
+		if ( $effective <= 0 ) {
+			return false;
+		}
+		$base = ( $base_discount !== null && $base_discount !== '' ) ? (float) $base_discount : -1.0;
+		if ( $base < 0 && $code !== '' && function_exists( 'wc_get_coupon_id_by_code' ) ) {
+			$cid = wc_get_coupon_id_by_code( $code );
+			if ( $cid ) {
+				$base = (float) get_post_meta( $cid, '_erp_sync_base_discount', true );
+			}
+		}
+		return $base >= 0 && $effective > $base;
+	}
+
+	/**
+	 * Birthday-cake badge shown next to a boosted club-card discount so staff and
+	 * customers can see the higher % is a birthday bonus. Returns safe HTML — a
+	 * single emoji span (🎂 as an HTML entity, encoding-safe) with an a11y label.
+	 */
+	public static function club_birthday_badge_html(): string {
+		$label = esc_attr__( 'დაბადების დღის ფასდაკლება', 'acu' );
+		return ' <span class="acu-birthday-badge" role="img" title="' . $label . '" aria-label="' . $label . '">&#127874;</span>';
+	}
 }
