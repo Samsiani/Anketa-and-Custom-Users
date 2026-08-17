@@ -1,57 +1,84 @@
 <?php
 /**
- * WooCommerce login form — overridden to add phone-login hint.
+ * WooCommerce login form — overridden by the ACU plugin.
+ *
+ * Single centred column: Register on top, Login below (WooCommerce ships them
+ * side by side). Phone-login hint kept on the username label.
  *
  * @see https://woocommerce.com/document/template-structure/
  */
 defined( 'ABSPATH' ) || exit;
+
 do_action( 'woocommerce_before_customer_login_form' );
-if ( 'yes' === get_option( 'woocommerce_enable_myaccount_registration' ) ) : ?>
-<div class="u-columns col2-set" id="customer_login">
-	<div class="u-column1 col-1">
-<?php endif; ?>
-	<h2><?php esc_html_e( 'Login', 'woocommerce' ); ?></h2>
-	<form class="woocommerce-form woocommerce-form-login login" method="post">
-		<?php do_action( 'woocommerce_login_form_start' ); ?>
-		<p class="form-row form-row-wide">
-			<label for="username"><?php esc_html_e( 'Username, email or phone', 'acu' ); ?> <span class="required">*</span></label>
-			<input type="text" class="input-text" name="username" id="username" autocomplete="username"
-				value="<?php echo ! empty( $_POST['username'] ) ? esc_attr( wp_unslash( $_POST['username'] ) ) : ''; ?>" />
-		</p>
-		<p class="form-row form-row-wide">
-			<label for="password"><?php esc_html_e( 'Password', 'woocommerce' ); ?> <span class="required">*</span></label>
-			<input class="input-text" type="password" name="password" id="password" autocomplete="current-password" />
-		</p>
-		<?php do_action( 'woocommerce_login_form' ); ?>
-		<p class="form-row">
-			<label class="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme">
-				<input class="woocommerce-form__input woocommerce-form__input-checkbox" name="rememberme" type="checkbox" id="rememberme" value="forever" />
-				<span><?php esc_html_e( 'Remember me', 'woocommerce' ); ?></span>
-			</label>
-			<?php wp_nonce_field( 'woocommerce-login', 'woocommerce-login-nonce' ); ?>
-			<button type="submit" class="woocommerce-button button woocommerce-form-login__submit" name="login"
-				value="<?php esc_attr_e( 'Log in', 'woocommerce' ); ?>"><?php esc_html_e( 'Log in', 'woocommerce' ); ?></button>
-		</p>
-		<p class="woocommerce-LostPassword lost_password">
-			<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>"><?php esc_html_e( 'Lost your password?', 'woocommerce' ); ?></a>
-		</p>
-		<?php do_action( 'woocommerce_login_form_end' ); ?>
-	</form>
-<?php if ( 'yes' === get_option( 'woocommerce_enable_myaccount_registration' ) ) : ?>
-	</div>
-	<div class="u-column2 col-2">
-		<h2><?php esc_html_e( 'Register', 'woocommerce' ); ?></h2>
+
+$acu_registration_enabled = 'yes' === get_option( 'woocommerce_enable_myaccount_registration' );
+?>
+<div class="acu-auth" id="customer_login">
+
+	<?php if ( $acu_registration_enabled ) : ?>
+	<section class="acu-auth__block acu-auth__block--register">
+		<div class="acu-auth__head">
+			<h2 class="acu-auth__title"><?php esc_html_e( 'Register', 'woocommerce' ); ?></h2>
+			<p class="acu-auth__sub"><?php esc_html_e( 'Create an account to join the Arttime club.', 'acu' ); ?></p>
+		</div>
+
 		<form method="post" class="woocommerce-form woocommerce-form-register register">
 			<?php do_action( 'woocommerce_register_form_start' ); ?>
 			<?php do_action( 'woocommerce_register_form' ); ?>
 			<?php do_action( 'woocommerce_register_form_end' ); ?>
-			<p class="woocommerce-FormRow form-row">
+
+			<div class="woocommerce-FormRow form-row acu-submit-row">
 				<?php wp_nonce_field( 'woocommerce-register', 'woocommerce-register-nonce' ); ?>
-				<button type="submit" class="woocommerce-Button button" name="register"
+				<button type="submit" class="woocommerce-Button button acu-submit-btn" name="register"
 					value="<?php esc_attr_e( 'Register', 'woocommerce' ); ?>"><?php esc_html_e( 'Register', 'woocommerce' ); ?></button>
-			</p>
+			</div>
 		</form>
-	</div>
+	</section>
+
+	<div class="acu-auth__divider"><span><?php esc_html_e( 'Already have an account?', 'acu' ); ?></span></div>
+	<?php endif; ?>
+
+	<section class="acu-auth__block acu-auth__block--login">
+		<div class="acu-auth__head">
+			<h2 class="acu-auth__title"><?php esc_html_e( 'Login', 'woocommerce' ); ?></h2>
+		</div>
+
+		<form class="woocommerce-form woocommerce-form-login login" method="post">
+			<?php do_action( 'woocommerce_login_form_start' ); ?>
+
+			<div class="acu-section acu-auth__card">
+				<div class="acu-field">
+					<label for="username"><?php esc_html_e( 'Username, email or phone', 'acu' ); ?> <span class="acu-required" aria-hidden="true">*</span></label>
+					<input type="text" class="input-text" name="username" id="username" autocomplete="username" required
+						value="<?php echo ! empty( $_POST['username'] ) ? esc_attr( wp_unslash( $_POST['username'] ) ) : ''; ?>" />
+				</div>
+
+				<div class="acu-field">
+					<label for="password"><?php esc_html_e( 'Password', 'woocommerce' ); ?> <span class="acu-required" aria-hidden="true">*</span></label>
+					<input class="input-text" type="password" name="password" id="password" autocomplete="current-password" required />
+				</div>
+
+				<?php do_action( 'woocommerce_login_form' ); ?>
+
+				<div class="acu-auth__actions">
+					<label class="woocommerce-form__label woocommerce-form__label-for-checkbox woocommerce-form-login__rememberme acu-auth__remember">
+						<input class="woocommerce-form__input woocommerce-form__input-checkbox" name="rememberme" type="checkbox" id="rememberme" value="forever" />
+						<span><?php esc_html_e( 'Remember me', 'woocommerce' ); ?></span>
+					</label>
+					<a class="acu-login-lost-pw" href="<?php echo esc_url( wp_lostpassword_url() ); ?>"><?php esc_html_e( 'Lost your password?', 'woocommerce' ); ?></a>
+				</div>
+
+				<div class="acu-submit-row">
+					<?php wp_nonce_field( 'woocommerce-login', 'woocommerce-login-nonce' ); ?>
+					<button type="submit" class="woocommerce-button button woocommerce-form-login__submit acu-submit-btn" name="login"
+						value="<?php esc_attr_e( 'Log in', 'woocommerce' ); ?>"><?php esc_html_e( 'Log in', 'woocommerce' ); ?></button>
+				</div>
+			</div>
+
+			<?php do_action( 'woocommerce_login_form_end' ); ?>
+		</form>
+	</section>
+
 </div>
-<?php endif;
+<?php
 do_action( 'woocommerce_after_customer_login_form' );
