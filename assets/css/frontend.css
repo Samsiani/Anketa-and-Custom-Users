@@ -1139,9 +1139,14 @@ body.club-anketa-modal-open { overflow: hidden !important; }
 
 /* ---- My Account auth page — single column, Register on top, Login below ---- */
 .acu-auth {
-  max-width: 620px;
-  margin: 0 auto;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
   font-family: var(--acu-font);
+}
+/* Tablet and below — nearly full width, still centred */
+@media (max-width: 1024px) {
+  .acu-auth { width: 95%; }
 }
 .acu-auth .acu-auth__block { width: 100%; }
 .acu-auth .acu-auth__head { margin-bottom: 12px; }
