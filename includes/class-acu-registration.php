@@ -182,6 +182,13 @@ class ACU_Registration {
 		$call_consent = in_array( strtolower( $data['anketa_call_consent'] ), [ 'yes', 'no' ], true )
 			? strtolower( $data['anketa_call_consent'] ) : 'yes';
 
+		// Consent is frozen once the phone is verified: the stored values win over
+		// anything posted, so a forged/stale POST cannot flip them either.
+		if ( self::$edit_user_id > 0 && ACU_Helpers::consent_locked( self::$edit_user_id ) ) {
+			$sms_consent  = ACU_Helpers::get_sms_consent( self::$edit_user_id ) ?: 'yes';
+			$call_consent = ACU_Helpers::get_call_consent( self::$edit_user_id ) ?: 'yes';
+		}
+
 		$local_digits = ACU_Helpers::normalize_phone( $data['anketa_phone_local'] );
 
 		// OTP verification — preserved from stored meta in edit mode, checked from token in create mode
@@ -381,6 +388,15 @@ class ACU_Registration {
 			$call_old = 'yes';
 		}
 
+		// A verified phone number freezes both consents — staff included. The stored
+		// values are rendered read-only (no `name`, so nothing is ever submitted) and
+		// the POST handler re-writes the stored values regardless.
+		$consent_locked = $is_edit && ACU_Helpers::consent_locked( (int) $edit_user->ID );
+		if ( $consent_locked ) {
+			$sms_old  = ACU_Helpers::get_sms_consent( (int) $edit_user->ID ) ?: 'yes';
+			$call_old = ACU_Helpers::get_call_consent( (int) $edit_user->ID ) ?: 'yes';
+		}
+
 		$rules_html   = apply_filters( 'acu_anketa_rules_text', self::default_rules_html() );
 		$submit_label = $is_edit ? __( 'განახლება', 'acu' ) : __( 'რეგისტრაცია', 'acu' );
 
@@ -550,12 +566,21 @@ class ACU_Registration {
 							<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline;vertical-align:-1px;margin-right:5px;flex-shrink:0"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
 							<?php esc_html_e( 'SMS შეტყობინებების მიღება', 'acu' ); ?>
 						</span>
+						<?php if ( $consent_locked ) : ?>
+						<div class="acu-consent-toggle acu-consent-toggle--locked" aria-disabled="true">
+							<input type="radio" id="acu_sms_yes" value="yes" <?php checked( $sms_old, 'yes' ); ?> disabled />
+							<label for="acu_sms_yes"><?php esc_html_e( 'დიახ', 'acu' ); ?></label>
+							<input type="radio" id="acu_sms_no" value="no" <?php checked( $sms_old, 'no' ); ?> disabled />
+							<label for="acu_sms_no"><?php esc_html_e( 'არა', 'acu' ); ?></label>
+						</div>
+						<?php else : ?>
 						<div class="acu-consent-toggle">
 							<input type="radio" name="anketa_sms_consent" id="acu_sms_yes" value="yes" <?php checked( $sms_old, 'yes' ); ?> />
 							<label for="acu_sms_yes"><?php esc_html_e( 'დიახ', 'acu' ); ?></label>
 							<input type="radio" name="anketa_sms_consent" id="acu_sms_no" value="no" <?php checked( $sms_old, 'no' ); ?> />
 							<label for="acu_sms_no"><?php esc_html_e( 'არა', 'acu' ); ?></label>
 						</div>
+						<?php endif; ?>
 					</div>
 
 					<div class="acu-consent-row club-anketa-sms-consent" data-context="registration">
@@ -563,13 +588,26 @@ class ACU_Registration {
 							<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline;vertical-align:-1px;margin-right:5px;flex-shrink:0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.72 16.92z"/></svg>
 							<?php esc_html_e( 'თანხმობა სატელეფონო ზარზე', 'acu' ); ?>
 						</span>
+						<?php if ( $consent_locked ) : ?>
+						<div class="acu-consent-toggle acu-consent-toggle--locked" aria-disabled="true">
+							<input type="radio" id="acu_call_yes" value="yes" <?php checked( $call_old, 'yes' ); ?> disabled />
+							<label for="acu_call_yes"><?php esc_html_e( 'დიახ', 'acu' ); ?></label>
+							<input type="radio" id="acu_call_no" value="no" <?php checked( $call_old, 'no' ); ?> disabled />
+							<label for="acu_call_no"><?php esc_html_e( 'არა', 'acu' ); ?></label>
+						</div>
+						<?php else : ?>
 						<div class="acu-consent-toggle">
 							<input type="radio" name="anketa_call_consent" id="acu_call_yes" value="yes" <?php checked( $call_old, 'yes' ); ?> />
 							<label for="acu_call_yes"><?php esc_html_e( 'დიახ', 'acu' ); ?></label>
 							<input type="radio" name="anketa_call_consent" id="acu_call_no" value="no" <?php checked( $call_old, 'no' ); ?> />
 							<label for="acu_call_no"><?php esc_html_e( 'არა', 'acu' ); ?></label>
 						</div>
+						<?php endif; ?>
 					</div>
+
+					<?php if ( $consent_locked ) : ?>
+					<p class="acu-consent-note"><?php esc_html_e( 'ტელეფონის ნომერი დადასტურებულია — თანხმობის შეცვლა აღარ არის შესაძლებელი.', 'acu' ); ?></p>
+					<?php endif; ?>
 				</div>
 
 				<!-- ── Submit ── -->
