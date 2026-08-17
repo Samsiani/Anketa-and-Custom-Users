@@ -19,7 +19,7 @@ $acu_registration_enabled = 'yes' === get_option( 'woocommerce_enable_myaccount_
 	<section class="acu-auth__block acu-auth__block--register">
 		<div class="acu-auth__head">
 			<h2 class="acu-auth__title"><?php esc_html_e( 'Register', 'woocommerce' ); ?></h2>
-			<p class="acu-auth__sub"><?php esc_html_e( 'Create an account to join the Arttime club.', 'acu' ); ?></p>
+			<p class="acu-auth__sub"><?php esc_html_e( 'შექმენით ანგარიში და გახდით ართთაიმის კლუბის წევრი.', 'acu' ); ?></p>
 		</div>
 
 		<form method="post" class="woocommerce-form woocommerce-form-register register">
@@ -35,7 +35,7 @@ $acu_registration_enabled = 'yes' === get_option( 'woocommerce_enable_myaccount_
 		</form>
 	</section>
 
-	<div class="acu-auth__divider"><span><?php esc_html_e( 'Already have an account?', 'acu' ); ?></span></div>
+	<div class="acu-auth__divider"><span><?php esc_html_e( 'უკვე გაქვთ ანგარიში?', 'acu' ); ?></span></div>
 	<?php endif; ?>
 
 	<section class="acu-auth__block acu-auth__block--login">
