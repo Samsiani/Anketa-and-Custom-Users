@@ -79,6 +79,40 @@ class ACU_Helpers {
 	}
 
 	/**
+	 * Whether the user's phone number has been confirmed by OTP.
+	 *
+	 * True only when `_acu_verified_phone` is set AND still matches the current
+	 * `billing_phone` — a number changed after verification is not verified.
+	 */
+	public static function has_verified_phone( int $user_id ): bool {
+		$verified = self::normalize_phone( (string) get_user_meta( $user_id, '_acu_verified_phone', true ) );
+		if ( $verified === '' ) {
+			return false;
+		}
+		$phone = self::normalize_phone( self::get_user_phone( $user_id ) );
+
+		return $phone !== '' && $phone === $verified;
+	}
+
+	/**
+	 * Whether SMS / call consent is frozen for this user.
+	 *
+	 * A verified phone number locks a recorded consent everywhere — My Account and
+	 * the staff Anketa form alike. Nobody may flip it through the UI afterwards.
+	 *
+	 * A legacy user whose consent was never recorded is NOT locked even with a
+	 * verified number: the one-time capture (My Account prompt / staff Anketa) must
+	 * still be possible. It locks as soon as both values exist.
+	 */
+	public static function consent_locked( int $user_id ): bool {
+		if ( ! self::has_verified_phone( $user_id ) ) {
+			return false;
+		}
+
+		return self::get_sms_consent( $user_id ) !== '' && self::get_call_consent( $user_id ) !== '';
+	}
+
+	/**
 	 * Whether the user still needs to make a one-time notification-consent choice.
 	 *
 	 * True for legacy customers who registered before the SMS/Call consent fields
