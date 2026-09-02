@@ -95,6 +95,7 @@
 | `acu_rate_{md5(phone9+ip)}` | 600s | OTP send rate limit counter |
 | `acu_vrate_{md5(phone9)}` | 300s | OTP verify rate limit counter (max 5 attempts) |
 | `acu_vtoken_{phone9}` | 1200s | Verification token |
+| `acu_cooldown_{phone9}` | 120s | Unix timestamp until a new OTP may be requested for this number (`ACU_OTP::cooldown_remaining()`) |
 | `acu_udc_rate_{md5(ip)}` | 60s | UDC search rate limit |
 | `acu_anketa_page_id` | 3600s | Cached ID of page containing `[club_anketa_form]` |
 
@@ -278,6 +279,14 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 ---
 
 ## Changelog
+
+### v1.2.41 — 2026-09-02
+
+**OTP: one code per number per 2 minutes.**
+
+- `ACU_OTP::send_otp()` refuses a second code for the same phone within `COOLDOWN_SECONDS` (120s) and returns `retry_after` (seconds left) — keyed by phone, not by visitor/IP, so a reload or another device does not reset it. The previous code stays valid (5-minute TTL). On a successful send the response carries `cooldown` (120).
+- `sms-verification.js`: the resend countdown is now driven by the server (`cooldown` on success, `retry_after` on refusal) instead of a hard-coded 60s; default 120s. A refusal with `retry_after` is shown as an info message with the countdown and keeps the code inputs usable — it is not treated as a send failure, so checkout's verification-on-demand and the Verify button simply reopen the modal on the existing code.
+- Applies everywhere OTP is used: Anketa form, WC registration, My Account phone change, billing address, checkout. The existing 3-per-10-minutes per-IP limit is unchanged and still applies on top.
 
 ### v1.2.40 — 2026-09-02
 
