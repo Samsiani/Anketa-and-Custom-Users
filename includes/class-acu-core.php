@@ -135,6 +135,7 @@ class ACU_Core {
 			'class-acu-print.php',
 			'class-acu-shortcodes.php',
 			'class-acu-admin.php',
+			'class-acu-consent-lock.php',
 		];
 
 		foreach ( $includes as $file ) {
@@ -150,6 +151,7 @@ class ACU_Core {
 		ACU_Print::init();
 		ACU_Shortcodes::init();
 		ACU_Admin::init();
+		ACU_Consent_Lock::init();
 		$this->init_update_checker();
 
 		// Activation notices

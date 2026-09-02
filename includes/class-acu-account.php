@@ -352,26 +352,24 @@ class ACU_Account {
 			delete_user_meta( $user_id, '_acu_terms_accepted' );
 		}
 
-		// One-time notification consent.
-		// Legacy users (blank consent) may set SMS + Call once from Edit Account; both
-		// then lock permanently. Once set, the toggles render disabled (no `name`) and any
-		// posted value is ignored here, so consent can never be silently overwritten.
-		if ( ACU_Helpers::account_needs_consent_update( $user_id ) ) {
-			$sms  = isset( $_POST['account_sms_consent'] ) ? strtolower( sanitize_text_field( wp_unslash( $_POST['account_sms_consent'] ) ) ) : '';
-			$call = isset( $_POST['account_call_consent'] ) ? strtolower( sanitize_text_field( wp_unslash( $_POST['account_call_consent'] ) ) ) : '';
+		// One-time notification consent. Each toggle may be set exactly once (legacy
+		// users with a blank value); a recorded value is final. A locked toggle renders
+		// disabled with no `name`, and its posted value — forged or stale — is ignored
+		// here. ACU_Consent_Lock blocks the meta write as well.
+		$sms  = isset( $_POST['account_sms_consent'] ) ? strtolower( sanitize_text_field( wp_unslash( $_POST['account_sms_consent'] ) ) ) : '';
+		$call = isset( $_POST['account_call_consent'] ) ? strtolower( sanitize_text_field( wp_unslash( $_POST['account_call_consent'] ) ) ) : '';
 
-			$saved = false;
-			if ( in_array( $sms, [ 'yes', 'no' ], true ) ) {
-				update_user_meta( $user_id, '_sms_consent', $sms );
-				$saved = true;
-			}
-			if ( in_array( $call, [ 'yes', 'no' ], true ) ) {
-				update_user_meta( $user_id, '_call_consent', $call );
-				$saved = true;
-			}
-			if ( $saved ) {
-				ACU_Helpers::maybe_send_consent_notification( $user_id, '', $sms, 'account_update' );
-			}
+		$saved = false;
+		if ( in_array( $sms, [ 'yes', 'no' ], true ) && ! ACU_Helpers::is_sms_consent_locked( $user_id ) ) {
+			update_user_meta( $user_id, '_sms_consent', $sms );
+			$saved = true;
+		}
+		if ( in_array( $call, [ 'yes', 'no' ], true ) && ! ACU_Helpers::is_call_consent_locked( $user_id ) ) {
+			update_user_meta( $user_id, '_call_consent', $call );
+			$saved = true;
+		}
+		if ( $saved ) {
+			ACU_Helpers::maybe_send_consent_notification( $user_id, '', $sms, 'account_update' );
 		}
 
 		ACU_Helpers::link_coupon_to_user( $user_id );

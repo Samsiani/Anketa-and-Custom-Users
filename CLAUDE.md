@@ -33,6 +33,7 @@
 | `includes/class-acu-print.php` | `ACU_Print` | Rewrite rules + template loader for print pages |
 | `includes/class-acu-shortcodes.php` | `ACU_Shortcodes` | `[user_data_check]`, `[acm_print_terms_button]`, `[wcu_print_terms_button]` |
 | `includes/class-acu-admin.php` | `ACU_Admin` | User list columns, CSV import/export, bulk link AJAX |
+| `includes/class-acu-consent-lock.php` | `ACU_Consent_Lock` | One-shot consent guard at the user-meta layer (`update/add/delete_user_metadata` filters) — a recorded `_sms_consent` / `_call_consent` can never be changed by any code path; override via `acu_consent_lock_enabled` filter |
 
 ## AJAX Actions
 
@@ -75,8 +76,8 @@
 |---|---|---|
 | `billing_phone` | string | Phone number (stored as `+995XXXXXXXXX`) |
 | `_acu_personal_id` | string | 11-digit personal ID (migrated from `_personal_id`) |
-| `_sms_consent` | `'yes'`/`'no'`/`''` | SMS marketing consent |
-| `_call_consent` | `'yes'`/`'no'`/`''` | Phone call consent |
+| `_sms_consent` | `'yes'`/`'no'`/`''` | SMS marketing consent — **one-shot**: locked for good once set; a phone present in `acu_external_phones` counts as a recorded `'yes'` (`ACU_Helpers::effective_sms_consent()`) |
+| `_call_consent` | `'yes'`/`'no'`/`''` | Phone call consent — **one-shot**: locked for good once set |
 | `_acu_club_card_coupon` | string | Linked ERP coupon code (migrated from `_club_card_coupon`) |
 | `_acu_terms_accepted` | datetime string | When T&C was accepted (migrated from `_wcu_terms_accepted`) |
 | `_acu_verified_phone` | string | Last OTP-verified 9-digit phone (migrated from `_verified_phone_number`) |
@@ -277,6 +278,17 @@ Push a new patch release with the fix. Do not delete and re-push tags.
 ---
 
 ## Changelog
+
+### v1.2.40 — 2026-09-02
+
+**Consent is a one-shot choice — locked everywhere once recorded.**
+
+- **Rule:** once `_sms_consent` or `_call_consent` holds Yes/No it can never be changed or removed — not by the customer (My Account), not by staff (Anketa edit), not by the CSV import, REST, wp-cli `user meta update` or any other plugin. Each consent locks individually; a blank one may still be set exactly once (legacy users).
+- **Uploaded SMS whitelist counts as consent.** A user whose phone is in `acu_external_phones` (Settings → External Phone Database) has an effective SMS consent of `'yes'` and is locked to it, even with no `_sms_consent` row. `ACU_Helpers::effective_sms_consent()` / `phone_in_external_whitelist()` (single indexed lookup — rows are stored normalized).
+- **New `ACU_Consent_Lock`** enforces the rule at the user-meta layer via `update_user_metadata` / `add_user_metadata` / `delete_user_metadata` short-circuit filters. Same-value writes pass; anything else returns `false`. Deliberate data corrections: `add_filter( 'acu_consent_lock_enabled', '__return_false' )`.
+- **UI:** `ACU_Helpers::is_sms_consent_locked()` / `is_call_consent_locked()` drive per-toggle disabled rendering (no `name`, so nothing is submitted) on the Anketa form (edit mode) and My Account → Edit Account; `account_needs_consent_update()` = at least one toggle still unlocked. The POST handlers re-assert the stored value regardless of what was posted.
+- **CSV consent import** reports a third counter, "Already recorded (locked)", for rows it refused to overwrite.
+- Supersedes the v1.2.36 verified-phone lock (`has_verified_phone()` / `consent_locked()` removed).
 
 ### v1.2.32 — 2026-05-29
 
