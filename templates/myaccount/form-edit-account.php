@@ -12,10 +12,13 @@ defined( 'ABSPATH' ) || exit;
 $user_id      = get_current_user_id();
 $current_user = wp_get_current_user();
 
-// Legacy users with blank consent may set SMS + Call once; afterwards both lock.
+// Each consent is a one-time choice: a blank one may be set once; a recorded one
+// (or an SMS "yes" inherited from the uploaded whitelist) is locked for good.
 $consent_needs_update = ACU_Helpers::account_needs_consent_update( $user_id );
+$sms_locked           = ACU_Helpers::is_sms_consent_locked( $user_id );
+$call_locked          = ACU_Helpers::is_call_consent_locked( $user_id );
 
-$sms_consent  = ACU_Helpers::get_sms_consent( $user_id );
+$sms_consent = ACU_Helpers::effective_sms_consent( $user_id );
 if ( $sms_consent === '' ) {
 	$sms_consent = 'yes';
 }
@@ -122,12 +125,12 @@ do_action( 'woocommerce_before_edit_account_form' );
 		</div>
 
 		<?php if ( $consent_needs_update ) : ?>
-			<p class="acu-consent-note acu-consent-note--prompt"><?php esc_html_e( 'Please choose Yes or No for each. Once saved, these preferences cannot be changed here.', 'acu' ); ?></p>
+			<p class="acu-consent-note acu-consent-note--prompt"><?php esc_html_e( 'Please choose Yes or No. Once saved, a choice can never be changed.', 'acu' ); ?></p>
 		<?php endif; ?>
 
 		<div class="acu-consent-row">
 			<span class="acu-consent-label"><?php esc_html_e( 'SMS notifications', 'acu' ); ?></span>
-			<?php if ( $consent_needs_update ) : ?>
+			<?php if ( ! $sms_locked ) : ?>
 				<div class="acu-consent-toggle">
 					<input type="radio" name="account_sms_consent" id="acu_acct_sms_yes" value="yes" <?php checked( $sms_consent, 'yes' ); ?> />
 					<label for="acu_acct_sms_yes"><?php esc_html_e( 'Yes', 'acu' ); ?></label>
@@ -146,7 +149,7 @@ do_action( 'woocommerce_before_edit_account_form' );
 
 		<div class="acu-consent-row">
 			<span class="acu-consent-label"><?php esc_html_e( 'Phone call consent', 'acu' ); ?></span>
-			<?php if ( $consent_needs_update ) : ?>
+			<?php if ( ! $call_locked ) : ?>
 				<div class="acu-consent-toggle">
 					<input type="radio" name="account_call_consent" id="acu_acct_call_yes" value="yes" <?php checked( $call_consent, 'yes' ); ?> class="call-consent-radio" />
 					<label for="acu_acct_call_yes"><?php esc_html_e( 'Yes', 'acu' ); ?></label>

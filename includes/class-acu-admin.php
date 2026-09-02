@@ -222,6 +222,7 @@ class ACU_Admin {
 
 		$updated = 0;
 		$skipped = 0;
+		$locked  = 0;
 
 		while ( ( $row = fgetcsv( $handle ) ) !== false ) {
 			if ( empty( $row[0] ) ) {
@@ -239,12 +240,19 @@ class ACU_Admin {
 				'count_total' => false,
 				'fields'      => 'ids',
 			] );
-			if ( ! empty( $users ) ) {
-				update_user_meta( (int) $users[0], '_sms_consent', $consent_value );
-				$updated++;
-			} else {
+			if ( empty( $users ) ) {
 				$skipped++;
+				continue;
 			}
+			$uid = (int) $users[0];
+			// A recorded consent is final — the import may only fill blanks (or
+			// re-state the same value). ACU_Consent_Lock would block the write anyway.
+			if ( ACU_Helpers::is_sms_consent_locked( $uid ) && ACU_Helpers::effective_sms_consent( $uid ) !== $consent_value ) {
+				$locked++;
+				continue;
+			}
+			update_user_meta( $uid, '_sms_consent', $consent_value );
+			$updated++;
 		}
 		fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 
@@ -252,10 +260,11 @@ class ACU_Admin {
 			'acu_tools',
 			'import_success',
 			sprintf(
-				/* translators: 1: updated count, 2: skipped count */
-				__( 'Import completed. Updated: %1$d, Skipped: %2$d', 'acu' ),
+				/* translators: 1: updated count, 2: skipped count, 3: locked count */
+				__( 'Import completed. Updated: %1$d, Skipped: %2$d, Already recorded (locked): %3$d', 'acu' ),
 				$updated,
-				$skipped
+				$skipped,
+				$locked
 			),
 			'success'
 		);

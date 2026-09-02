@@ -79,48 +79,57 @@ class ACU_Helpers {
 	}
 
 	/**
-	 * Whether the user's phone number has been confirmed by OTP.
-	 *
-	 * True only when `_acu_verified_phone` is set AND still matches the current
-	 * `billing_phone` — a number changed after verification is not verified.
+	 * Whether a 9-digit phone is in the manually uploaded SMS-consent whitelist
+	 * (Settings → External Phone Database, table `acu_external_phones`).
+	 * Rows are stored normalized, so this is a single indexed lookup.
 	 */
-	public static function has_verified_phone( int $user_id ): bool {
-		$verified = self::normalize_phone( (string) get_user_meta( $user_id, '_acu_verified_phone', true ) );
-		if ( $verified === '' ) {
+	public static function phone_in_external_whitelist( string $phone ): bool {
+		$phone = self::normalize_phone( $phone );
+		if ( strlen( $phone ) !== 9 ) {
 			return false;
 		}
-		$phone = self::normalize_phone( self::get_user_phone( $user_id ) );
-
-		return $phone !== '' && $phone === $verified;
+		global $wpdb;
+		$table = $wpdb->prefix . 'acu_external_phones';
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		return (bool) $wpdb->get_var( $wpdb->prepare( "SELECT 1 FROM {$table} WHERE phone = %s LIMIT 1", $phone ) );
 	}
 
 	/**
-	 * Whether SMS / call consent is frozen for this user.
+	 * SMS consent as it counts for locking: the recorded value, or 'yes' when the
+	 * user's phone is in the uploaded whitelist (that upload IS their consent).
 	 *
-	 * A verified phone number locks a recorded consent everywhere — My Account and
-	 * the staff Anketa form alike. Nobody may flip it through the UI afterwards.
-	 *
-	 * A legacy user whose consent was never recorded is NOT locked even with a
-	 * verified number: the one-time capture (My Account prompt / staff Anketa) must
-	 * still be possible. It locks as soon as both values exist.
+	 * @return string 'yes', 'no', or ''
 	 */
-	public static function consent_locked( int $user_id ): bool {
-		if ( ! self::has_verified_phone( $user_id ) ) {
-			return false;
+	public static function effective_sms_consent( int $user_id ): string {
+		$recorded = self::get_sms_consent( $user_id );
+		if ( $recorded !== '' ) {
+			return $recorded;
 		}
-
-		return self::get_sms_consent( $user_id ) !== '' && self::get_call_consent( $user_id ) !== '';
+		return self::phone_in_external_whitelist( self::get_user_phone( $user_id ) ) ? 'yes' : '';
 	}
 
 	/**
-	 * Whether the user still needs to make a one-time notification-consent choice.
+	 * Consent is a one-shot choice: once a Yes/No exists it can never be changed —
+	 * not by the customer, not by staff, not by an import. These two helpers are the
+	 * single source of truth for the UI; ACU_Consent_Lock enforces the same rule at
+	 * the user-meta layer so no code path can bypass it.
+	 */
+	public static function is_sms_consent_locked( int $user_id ): bool {
+		return self::effective_sms_consent( $user_id ) !== '';
+	}
+
+	public static function is_call_consent_locked( int $user_id ): bool {
+		return self::get_call_consent( $user_id ) !== '';
+	}
+
+	/**
+	 * Whether the user still has at least one notification-consent choice to make.
 	 *
 	 * True for legacy customers who registered before the SMS/Call consent fields
-	 * existed: at least one of the two consents has never been set to 'yes'/'no'.
-	 * Once both are set, consent is locked and this returns false.
+	 * existed. Each consent locks individually the moment it holds a value.
 	 */
 	public static function account_needs_consent_update( int $user_id ): bool {
-		return self::get_sms_consent( $user_id ) === '' || self::get_call_consent( $user_id ) === '';
+		return ! self::is_sms_consent_locked( $user_id ) || ! self::is_call_consent_locked( $user_id );
 	}
 
 	/**
