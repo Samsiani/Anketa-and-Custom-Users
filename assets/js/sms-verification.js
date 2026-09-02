@@ -24,7 +24,7 @@
     var sessionVerifiedPhone  = '';
     var verificationToken     = '';
     var countdownInterval     = null;
-    var resendCountdown       = 60;
+    var resendCountdown       = 120;
     var currentPhoneField     = null;
     var pendingCheckoutSubmit = false;
 
@@ -121,7 +121,7 @@
             '</div>' +
             '<div class="otp-message"></div>' +
             '<div class="otp-resend-container">' +
-            '<span class="otp-countdown" style="display:none;">' + i18n.resendIn + ' <span class="countdown-timer">60</span> წამი</span>' +
+            '<span class="otp-countdown" style="display:none;">' + i18n.resendIn + ' <span class="countdown-timer">120</span> წამი</span>' +
             '<button type="button" class="otp-resend-btn" style="display:none;">' + i18n.resend + '</button>' +
             '</div>' +
             '</div>' +
@@ -245,7 +245,6 @@
             sendOtp(phone, function () {
                 $btn.prop('disabled', false).removeClass('loading');
                 showMessage(i18n.enterCode || 'Enter the 6-digit code', 'success');
-                startResendCountdown(60);
             }, function (errorMessage) {
                 $btn.prop('disabled', false).removeClass('loading');
                 showMessage(errorMessage || i18n.error, 'error');
@@ -294,7 +293,6 @@
         showMessage(i18n.sendingOtp || 'Sending code...', 'info');
         sendOtp(phone, function () {
             showMessage(i18n.enterCode || 'Enter the 6-digit code', 'success');
-            startResendCountdown(60);
         }, function (errorMessage) {
             showMessage(errorMessage || i18n.error, 'error');
             pendingCheckoutSubmit = false;
@@ -338,9 +336,20 @@
             success: function (response) {
                 console.log('[ACU SMS] Send OTP response:', response);
                 if (response.success) {
+                    startResendCountdown((response.data && response.data.cooldown) || 120);
                     if (typeof successCallback === 'function') successCallback();
                 } else {
-                    var msg = response.data && response.data.message ? response.data.message : (i18n.error || 'SMS sending failed');
+                    var msg        = response.data && response.data.message ? response.data.message : (i18n.error || 'SMS sending failed');
+                    var retryAfter = response.data && response.data.retry_after ? parseInt(response.data.retry_after, 10) : 0;
+                    if (retryAfter > 0) {
+                        // A code is already on its way / still valid: keep the inputs open,
+                        // show when a new one may be requested, and don't treat it as a failure
+                        // (the success path re-enables the Verify button / keeps checkout pending).
+                        if (typeof successCallback === 'function') successCallback();
+                        showMessage(msg, 'info');
+                        startResendCountdown(retryAfter);
+                        return;
+                    }
                     showMessage(msg, 'error');
                     if (typeof errorCallback === 'function') errorCallback(msg);
                 }
@@ -472,7 +481,7 @@
     }
 
     function startResendCountdown(seconds) {
-        resendCountdown = seconds || 60;
+        resendCountdown = seconds || 120;
         $('.otp-resend-btn').hide();
         $('.otp-countdown').show();
         clearCountdown();

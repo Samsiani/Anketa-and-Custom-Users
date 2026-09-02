@@ -7,6 +7,7 @@
  * Transient TTLs:
  *  acu_otp_{phone9}          → 300s (OTP code)
  *  acu_rate_{md5(phone+ip)}  → 600s (rate limit counter)
+ *  acu_cooldown_{phone9}     → 120s (timestamp until a new code may be requested)
  *  acu_vtoken_{phone9}       → 1200s (verification token)
  */
 
@@ -21,6 +22,7 @@ class ACU_OTP {
 	const RATE_LIMIT_SECONDS  = 600;  // 10 min
 	const OTP_EXPIRY_SECONDS  = 300;  // 5 min
 	const TOKEN_EXPIRY        = 1200; // 20 min
+	const COOLDOWN_SECONDS    = 120;  // 2 min between two codes for the same number
 
 	// -------------------------------------------------------------------------
 	// Transient key helpers
@@ -38,6 +40,19 @@ class ACU_OTP {
 		return 'acu_vtoken_' . $phone9;
 	}
 
+	private static function cooldown_key( string $phone9 ): string {
+		return 'acu_cooldown_' . $phone9;
+	}
+
+	/**
+	 * Seconds until a new code may be requested for this number (0 = now).
+	 * Keyed by phone only — the cooldown follows the number, not the visitor.
+	 */
+	public static function cooldown_remaining( string $phone9 ): int {
+		$until = (int) get_transient( self::cooldown_key( $phone9 ) );
+		return max( 0, $until - time() );
+	}
+
 	// -------------------------------------------------------------------------
 	// Public API
 	// -------------------------------------------------------------------------
@@ -48,6 +63,18 @@ class ACU_OTP {
 	 * @return array{success: bool, message: string, expires?: int}
 	 */
 	public static function send_otp( string $phone_9_digits ): array {
+		// One code per number per 2 minutes — the previous code is still valid
+		// (5-minute TTL), so the customer simply keeps using it.
+		$wait = self::cooldown_remaining( $phone_9_digits );
+		if ( $wait > 0 ) {
+			return [
+				'success'     => false,
+				/* translators: %d: seconds until a new code may be requested */
+				'message'     => sprintf( __( 'კოდი უკვე გაგზავნილია. ახალი კოდის მოთხოვნა შესაძლებელია %d წამში.', 'acu' ), $wait ),
+				'retry_after' => $wait,
+			];
+		}
+
 		if ( ! self::check_rate_limit( $phone_9_digits ) ) {
 			return [
 				'success' => false,
@@ -65,10 +92,12 @@ class ACU_OTP {
 
 		if ( $result['success'] ) {
 			self::increment_rate_limit( $phone_9_digits );
+			set_transient( self::cooldown_key( $phone_9_digits ), time() + self::COOLDOWN_SECONDS, self::COOLDOWN_SECONDS );
 			return [
-				'success' => true,
-				'message' => __( 'OTP sent successfully.', 'acu' ),
-				'expires' => self::OTP_EXPIRY_SECONDS,
+				'success'  => true,
+				'message'  => __( 'OTP sent successfully.', 'acu' ),
+				'expires'  => self::OTP_EXPIRY_SECONDS,
+				'cooldown' => self::COOLDOWN_SECONDS,
 			];
 		}
 
@@ -189,7 +218,10 @@ class ACU_OTP {
 		if ( $result['success'] ) {
 			wp_send_json_success( $result );
 		} else {
-			wp_send_json_error( [ 'message' => $result['message'] ] );
+			wp_send_json_error( [
+				'message'     => $result['message'],
+				'retry_after' => $result['retry_after'] ?? 0,
+			] );
 		}
 	}
 
